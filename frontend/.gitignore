@@ -24,5 +24,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# secret environment variables
-backend/.env
