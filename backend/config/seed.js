@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const Farmer = require('../models/Farmer'); // Make sure this path is correct
 
 // 1. Load environment variables from the parent directory's .env file
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: './.env' });
 
 // 2. The main seeder function
 const seedData = async () => {
@@ -24,7 +24,7 @@ const seedData = async () => {
       name: 'Sample Farmer',
       cellNumber: '+1234567890',
       nationalId: '23456',
-      season: 'long',
+      season: 'Long',
       farmLocation: { lat: 0, lng: 0 },
       weighStation: 'Station1'
     });

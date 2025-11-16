@@ -12,7 +12,15 @@ const paymentSchema = new mongoose.Schema({
   amountPaid: { 
     type: Number, required: true, min: 0 },
   date: { 
-    type: Date, required: true },
+    type: Date, 
+    required: true,
+    default: Date.now 
+  },
+  status: {
+    type: String,
+    enum: ['Pending', 'Completed', 'Failed'],
+    default: 'Pending'
+  },  
   currency: { 
     type: String, default: 'Ksh' },
   recordedBy: {

@@ -29,8 +29,11 @@ exports.createFarmer = async (req, res) => {
     await farmer.save();
     res.json(farmer);
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error("FARMER CREATION FAILED", err);
+    if (err.name === 'validatorError') {
+      return res.status(400).json({ msg: 'validation failed on required fields' }); }
   }
+  res.status(500).send('Server error');
 };
 
 exports.updateFarmer = async (req, res) => {

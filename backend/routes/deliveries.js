@@ -1,7 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const { getDeliveries, createDelivery } = require('../controllers/deliveryController'); // Add more CRUD as needed
-
+const { getDeliveries, createDelivery } = require('../controllers/deliveryController');
 const router = express.Router();
 
 router.get('/', auth, getDeliveries);
