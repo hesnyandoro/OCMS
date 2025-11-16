@@ -2,6 +2,24 @@ const Delivery = require('../models/Delivery');
 const Payment = require('../models/Payment');
 const Farmer = require('../models/Farmer');
 
+exports.getSummary = async (req, res) => {
+  try {
+    const totalFarmers = await Farmer.countDocuments({});
+    const totalDeliveries = await Delivery.countDocuments({});
+    const pendingPaymentsCount = await Payment.countDocuments({ status: 'pending' });
+
+    res.json({
+      totalFarmers,
+      totalDeliveries,
+      pendingPaymentsCount
+    });
+  
+  } catch (err) {
+    console.error("REPORT SUMMARY FETCH FAILED", err);
+    res.status(500).send({ error: 'Server error' });
+  }
+};
+
 exports.generateReport = async (req, res) => {
   const { region, startDate, endDate, driver, farmer } = req.query;
 

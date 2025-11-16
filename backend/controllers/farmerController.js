@@ -38,15 +38,22 @@ exports.createFarmer = async (req, res) => {
 
 exports.updateFarmer = async (req, res) => {
   try {
-    const farmer = await Farmer.findById(req.params.id);
-    if (!farmer) return res.status(400).json({ msg: 'Farmer not found' });
-    farmer = await Farmer.findByIdAndDeleteAndUpdate(req.params.id,
-      { $set: req.body },
-      { new: true }
+    const updatedFarmer = await Farmer.findByIdAndUpdate(req.params.id,
+      {$set: req.body },
+      { new: true, runValidators: true }
     );
-    res.json(farmer);
+
+
+    if (!updatedFarmer) {
+      return res.status(404).json({ msg: 'Farmer not found' });
+    }
+    res.json(updatedFarmer);
+    
   } catch (err) {
-    console.error(err.message);
+    console.error("FARMER UPDATE FAILED", err.message);
+    if (err.name === 'CastError' || err.name === 'ValidationError') {
+      return res.status(400).json({ msg: 'Invalid ID or validation failed' });
+    }
     res.status(500).send('Server error');
 
   }
@@ -63,5 +70,3 @@ exports.deleteFarmer = async (req, res) => {
     res.status(500).send('Server error');
   }
 }; 
-
-// Similar for updateFarmer, deleteFarmer...
