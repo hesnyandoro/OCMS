@@ -6,7 +6,13 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const frontendDevUrl = 'http://localhost:5173';
+app.use(cors({
+  origin: frontendDevUrl,
+  methods: ['GET','HEAD', 'PATCH', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
@@ -16,7 +22,7 @@ app.use('/api/deliveries', require('./routes/deliveries'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reports', require('./routes/reports'));
 
-// DB Connection
+mongoose.set('strictQuery', true);
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
