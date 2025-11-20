@@ -23,14 +23,21 @@ const Dashboard = () => {
             setLoading(true);
             try {
                 const response = await api.get('/dashboard/summary');
-                const fetchedData = response.data;
-                
+                const fetchedData = response.data || {};
+
+                // Support both the new flat shape and older nested shape (defensive)
+                const totalFarmers = fetchedData.totalFarmers ?? (fetchedData.farmers?.total) ?? 0;
+                const kgsDelivered = fetchedData.kgsDelivered ?? (fetchedData.deliveries?.kgsMonth) ?? 0;
+                const totalPayments = fetchedData.totalPayments ?? (fetchedData.payments?.totalMonth) ?? 0;
+                const pendingReports = fetchedData.pendingReports ?? (fetchedData.reports?.pendingCount) ?? 0;
+                const recentActivities = fetchedData.recentActivities ?? fetchedData.activity ?? [];
+
                 setDashboardData({
-                    totalFarmers: fetchedData?.totalFarmers || 0,
-                    kgsDelivered: fetchedData?.kgsDelivered || 0,
-                    totalPayments: fetchedData?.totalPayments || 0,
-                    pendingReports: fetchedData?.pendingReports || 0,
-                    recentActivities: fetchedData?.recentActivities || [],
+                    totalFarmers,
+                    kgsDelivered,
+                    totalPayments,
+                    pendingReports,
+                    recentActivities,
                 });
                 
             } catch (error) {
@@ -144,7 +151,7 @@ const Dashboard = () => {
     // Main Render Function
     return (
         <div className="p-4 md:p-8 bg-gray-50 min-h-screen font-inter">
-            <h1 className="text-3xl font-extrabold text-gray-800 mb-2">OCMS Overview</h1>
+            <h1 className="text-3xl font-extrabold text-gray-800 mb-2">Online Company Management System Overview</h1>
             <p className="text-gray-500 mb-8">System metrics and quick access for field agents and admin.</p>
             
             {loading && (
@@ -240,7 +247,19 @@ const Dashboard = () => {
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="5" className="text-center py-6 text-gray-500">No recent activity recorded.</td>
+                                                    <td colSpan="5" className="text-center py-8">
+                                                        <div className="flex flex-col items-center justify-center">
+                                                            <List size={48} className="text-gray-300 mb-3" />
+                                                            <div className="text-lg font-semibold text-gray-700">No Recent Activity</div>
+                                                            <div className="text-sm text-gray-500 mt-2 max-w-xl">
+                                                                We don't have any recent deliveries or payments to show yet. Try adding a delivery or recording a payment to populate the activity feed.
+                                                            </div>
+                                                            <div className="mt-4 flex gap-2">
+                                                                <a href="/deliveries" className="btn btn-sm btn-primary">Add Delivery</a>
+                                                                <a href="/payments" className="btn btn-sm btn-outline">Record Payment</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             )}
                                         </tbody>
