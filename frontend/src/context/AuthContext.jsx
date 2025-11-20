@@ -44,22 +44,40 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password) => {
         try {
             // Note: using /api/auth/login assuming your proxy handles the /api prefix
-            const { data } = await api.post('/auth/login', { username, password }); 
-            
-            // Store the new token
-            localStorage.setItem('token', data.token);
-            
-            // Update the state
+            const { data } = await api.post('/auth/login', { username, password });
+
+            // Store the new token immediately
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
+
+            // Prefer user returned by login response; otherwise fetch /auth/me
+            let user = data.user;
+            if (!user && data.token) {
+                try {
+                    const res = await api.get('/auth/me');
+                    user = res.data;
+                } catch (err) {
+                    console.warn('Could not fetch user after login:', err);
+                }
+            }
+
             setAuthState({
-                token: data.token,
-                user: data.user, // Assuming backend sends user object
-                isAuthenticated: true,
+                token: data.token || null,
+                user: user || null,
+                isAuthenticated: !!data.token,
                 loading: false,
             });
-            
-            return data.user; // Return user object if needed
+
+            return user;
         } catch (error) {
             console.error("Login failed:", error);
+            if (error.response && error.response.data) {
+                const errData = error.response.data;
+                if (errData.errors && errData.errors.length > 0) {
+                    throw new Error(errData.errors[0].msg || "Validation Failed: Check your input.");
+                }
+            }
             throw error; // Re-throw for component to handle UI error
         }
     };

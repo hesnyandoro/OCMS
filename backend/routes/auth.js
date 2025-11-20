@@ -8,8 +8,9 @@ const router = express.Router();
 
 router.post('/register', [
   body('username').notEmpty(),
+  body('email').isEmail(),
   body('password').isLength({ min: 6 }),
-  body('role').isIn(['admin', 'fieldagent'])
+  body('role').optional().isIn(['admin', 'fieldagent'])
 ], register);
 
 router.post('/login', [

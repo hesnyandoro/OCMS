@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Truck, Wallet, Filter, List, Loader2, BarChart3, TrendingUp } from 'lucide-react'; 
+import { Link } from 'react-router-dom';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement
+} from 'chart.js';
 import api from '../services/api';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 const Dashboard = () => {
     // --- State Hooks ---
     const [filterDate, setFilterDate] = useState('');
@@ -12,7 +26,9 @@ const Dashboard = () => {
         kgsDelivered: 0,
         totalPayments: 0,
         pendingReports: 0,
-        recentActivities: []
+        recentActivities: [],
+        monthlyKgs: { labels: [], values: [] },
+        paymentsStatus: { Pending: 0, Completed: 0, Failed: 0 }
     });
     
     const [loading, setLoading] = useState(true);
@@ -31,6 +47,8 @@ const Dashboard = () => {
                 const totalPayments = fetchedData.totalPayments ?? (fetchedData.payments?.totalMonth) ?? 0;
                 const pendingReports = fetchedData.pendingReports ?? (fetchedData.reports?.pendingCount) ?? 0;
                 const recentActivities = fetchedData.recentActivities ?? fetchedData.activity ?? [];
+                const monthlyKgs = fetchedData.monthlyKgs ?? { labels: [], values: [] };
+                const paymentsStatus = fetchedData.paymentsStatus ?? { Pending: 0, Completed: 0, Failed: 0 };
 
                 setDashboardData({
                     totalFarmers,
@@ -38,6 +56,8 @@ const Dashboard = () => {
                     totalPayments,
                     pendingReports,
                     recentActivities,
+                    monthlyKgs,
+                    paymentsStatus,
                 });
                 
             } catch (error) {
@@ -201,16 +221,51 @@ const Dashboard = () => {
                                 <h3 className="card-title text-xl text-gray-700 flex items-center mb-4 font-semibold">
                                     <BarChart3 size={20} className="mr-2 text-pink-500" /> Monthly Kgs Trend
                                 </h3>
-                                <div className="h-64 flex items-center justify-center bg-gray-50 text-gray-400 border border-dashed rounded-lg">
-                                    [ Placeholder for Line Chart showing Kgs Delivered by Week ]
+                                <div className="h-64 bg-white rounded-lg p-3 border">
+                                    {/* Bar chart for monthly kgs */}
+                                    <Bar
+                                        data={{
+                                            labels: dashboardData.monthlyKgs.labels,
+                                            datasets: [
+                                                {
+                                                    label: 'Kgs Delivered',
+                                                    data: dashboardData.monthlyKgs.values,
+                                                    backgroundColor: 'rgba(59,130,246,0.8)'
+                                                }
+                                            ]
+                                        }}
+                                        options={{
+                                            responsive: true,
+                                            plugins: { legend: { display: false } },
+                                            scales: { y: { beginAtZero: true } }
+                                        }}
+                                    />
                                 </div>
                             </div>
 
                             {/* Payments Snapshot Chart (1/3 Width) */}
                             <div className="xl:col-span-1 card bg-white shadow-lg p-6 rounded-xl">
                                 <h3 className="card-title text-xl text-gray-700 mb-4 font-semibold">Payment Status</h3>
-                                <div className="h-64 flex items-center justify-center bg-gray-50 text-gray-400 border border-dashed rounded-lg">
-                                    [ Placeholder for Donut Chart (Completed vs Pending) ]
+                                <div className="h-64 p-4 flex items-center justify-center">
+                                    <Doughnut
+                                        data={{
+                                            labels: ['Completed', 'Pending', 'Failed'],
+                                            datasets: [
+                                                {
+                                                    data: [
+                                                        dashboardData.paymentsStatus.Completed || 0,
+                                                        dashboardData.paymentsStatus.Pending || 0,
+                                                        dashboardData.paymentsStatus.Failed || 0
+                                                    ],
+                                                    backgroundColor: ['#10B981', '#FBBF24', '#EF4444']
+                                                }
+                                            ]
+                                        }}
+                                        options={{
+                                            responsive: true,
+                                            plugins: { legend: { position: 'bottom' } }
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -255,8 +310,8 @@ const Dashboard = () => {
                                                                 We don't have any recent deliveries or payments to show yet. Try adding a delivery or recording a payment to populate the activity feed.
                                                             </div>
                                                             <div className="mt-4 flex gap-2">
-                                                                <a href="/deliveries" className="btn btn-sm btn-primary">Add Delivery</a>
-                                                                <a href="/payments" className="btn btn-sm btn-outline">Record Payment</a>
+                                                                <Link to="/deliveries" className="btn btn-sm btn-primary">Add Delivery</Link>
+                                                                <Link to="/payments" className="btn btn-sm btn-outline">Record Payment</Link>
                                                             </div>
                                                         </div>
                                                     </td>

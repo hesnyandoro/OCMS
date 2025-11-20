@@ -16,9 +16,13 @@ const Login = () => {
       toast.success('Login successful');
       navigate('/');
     } catch (err) {
-      toast.error('Login failed: Invalid credentials');
-      console.error('Login failed:', err.message);
-      alert('Login failed');
+      // Try to surface server-side message if available
+      const serverMsg = err?.response?.data?.msg || (err?.response?.data?.errors && err.response.data.errors.map(x=>x.msg).join(', '));
+      const message = serverMsg || err.message || 'Login failed due to server error';
+      toast.error(message);
+      console.error('Login failed:', err);
+      // avoid alert in production; keep for quick feedback
+      alert(message);
     }
   };
 
