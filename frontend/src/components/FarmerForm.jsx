@@ -17,7 +17,7 @@ const schema = yup.object().shape({
 });
 
 const FarmerForm = ({ onSubmit }) => {
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
   });
 
@@ -71,7 +71,7 @@ const FarmerForm = ({ onSubmit }) => {
         <input className="form-control" type="text" {...register('weighStation')} />
         {errors.weighStation && <p className="text-danger">{errors.weighStation.message}</p>}
       </div>
-      <button className="btn btn-primary" type="submit">Submit</button>
+      <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Submit</button>
     </form>
   );
 };

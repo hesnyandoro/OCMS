@@ -15,50 +15,61 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const loadUser = async () => {
             const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    // Call backend endpoint to verify token and get user details
-                    const response = await api.get('/auth/me'); 
-                    
-                    setAuthState({
-                        token: token,
-                        user: response.data,
-                        isAuthenticated: true,
-                        loading: false,
-                    });
-                } catch (error) {
-                    console.error("Token expired or invalid:", error);
+            if (!token) {
+                setAuthState(prev => ({ ...prev, loading: false }));
+                return;
+            }
+
+            try {
+                const response = await api.get('/auth/me');
+                setAuthState({
+                    token,
+                    user: response.data,
+                    isAuthenticated: true,
+                    loading: false,
+                });
+            } catch (error) {
+                // Distinguish between network errors and auth errors
+                const isNetworkError = error.code === 'ERR_NETWORK' || (!error.response && error.request);
+                if (isNetworkError) {
+                    console.error('Auth server unreachable:', error.message);
+                    // Keep token; mark unauthenticated until server returns user
+                    setAuthState({ token, user: null, isAuthenticated: false, loading: false });
+                    return;
+                }
+                const status = error.response?.status;
+                if (status === 401 || status === 403) {
+                    console.error('Token expired or invalid');
                     localStorage.removeItem('token');
                     setAuthState({ token: null, user: null, isAuthenticated: false, loading: false });
+                } else {
+                    console.error('Failed to verify session:', error.message);
+                    setAuthState({ token, user: null, isAuthenticated: false, loading: false });
                 }
-            } else {
-                // No token found, finish loading
-                setAuthState(prev => ({ ...prev, loading: false }));
             }
         };
 
         loadUser();
-    }, []); // Empty array ensures this runs only ONCE on mount
+    }, []); // Runs once on mount
 
     // Login function (Updated to use setAuthState)
     const login = async (username, password) => {
         try {
-            // Note: using /api/auth/login assuming your proxy handles the /api prefix
             const { data } = await api.post('/auth/login', { username, password });
+            if (data.token) localStorage.setItem('token', data.token);
 
-            // Store the new token immediately
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-            }
-
-            // Prefer user returned by login response; otherwise fetch /auth/me
             let user = data.user;
             if (!user && data.token) {
                 try {
                     const res = await api.get('/auth/me');
                     user = res.data;
                 } catch (err) {
-                    console.warn('Could not fetch user after login:', err);
+                    const isNetworkError = err.code === 'ERR_NETWORK' || (!err.response && err.request);
+                    if (isNetworkError) {
+                        console.warn('Login succeeded (token) but user fetch failed: server unreachable');
+                    } else {
+                        console.warn('Could not fetch user after login:', err.message);
+                    }
                 }
             }
 
@@ -68,17 +79,24 @@ export const AuthProvider = ({ children }) => {
                 isAuthenticated: !!data.token,
                 loading: false,
             });
-
             return user;
         } catch (error) {
-            console.error("Login failed:", error);
-            if (error.response && error.response.data) {
+            const isNetworkError = error.code === 'ERR_NETWORK' || (!error.response && error.request);
+            if (isNetworkError) {
+                console.error('Login failed: authentication server unreachable');
+                throw new Error('Cannot reach server. Please check connection and try again.');
+            }
+            console.error('Login failed:', error);
+            if (error.response?.data) {
                 const errData = error.response.data;
-                if (errData.errors && errData.errors.length > 0) {
-                    throw new Error(errData.errors[0].msg || "Validation Failed: Check your input.");
+                if (Array.isArray(errData.errors) && errData.errors.length > 0) {
+                    throw new Error(errData.errors[0].msg || 'Validation Failed: Check your input.');
+                }
+                if (errData.msg) {
+                    throw new Error(errData.msg);
                 }
             }
-            throw error; // Re-throw for component to handle UI error
+            throw new Error('Login failed due to unexpected error.');
         }
     };
     

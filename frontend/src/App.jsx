@@ -11,6 +11,9 @@ import Payments from './pages/Payments.jsx';
 import Reports from './pages/Reports.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import FarmerForm from './components/FarmerForm.jsx';
+import NewFarmer from './pages/NewFarmer.jsx';
+import NewDelivery from './pages/NewDelivery.jsx';
+import NewPayment from './pages/NewPayment.jsx';
 
 
 const App = () => {
@@ -26,10 +29,12 @@ const App = () => {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
-                    <Route path="/farmers/new" element={<FarmerForm />} />
+                    <Route path="/farmers/new" element={<NewFarmer />} />
                     <Route path="/farmers" element={<Farmers />} />
                     <Route path="/deliveries" element={<Deliveries />} />
+                    <Route path="/deliveries/new" element={<NewDelivery />} />
                     <Route path="/payments" element={<Payments />} />
+                    <Route path="/payments/new" element={<NewPayment />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="*"element={
                         <div className="p-10 text-center text-xl font-semibold">

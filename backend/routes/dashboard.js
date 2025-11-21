@@ -9,17 +9,30 @@ const PENDING_STATUS = ['Pending', 'Processing', 'Failed'];
 // Route to fetch summarized dashboard data
 router.get('/summary', async (req, res) => {
     try {
+        const { region, driver, type } = req.query;
+
         const totalFarmers = await Farmer.countDocuments({});
+
+        // Build match filters for deliveries based on provided query params
+        const deliveryMatch = {};
+        if (region) deliveryMatch.region = region;
+        if (driver) deliveryMatch.driver = driver;
+        if (type) deliveryMatch.type = type;
+
         const kgsDeliveredResult = await Delivery.aggregate([
-            ({$group: {_id: null, totalKgs: { $sum: "$kgsDelivered" }}})
+            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
+            { $group: { _id: null, totalKgs: { $sum: "$kgsDelivered" } } }
         ]);
         const totalKgs = kgsDeliveredResult.length > 0 ? kgsDeliveredResult[0].totalKgs : 0;
 
         // Monthly kgs trend (last 6 months)
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+        const monthMatch = { date: { $gte: new Date(new Date(sixMonthsAgo).setHours(0,0,0,0)) } };
+        // merge deliveryMatch into monthMatch
+        if (Object.keys(deliveryMatch).length) Object.assign(monthMatch, deliveryMatch);
         const kgsByMonthAgg = await Delivery.aggregate([
-            { $match: { date: { $gte: new Date(sixMonthsAgo.setHours(0,0,0,0)) } } },
+            { $match: monthMatch },
             { $group: { _id: { year: { $year: "$date" }, month: { $month: "$date" } }, totalKgs: { $sum: "$kgsDelivered" } } },
             { $sort: { "_id.year": 1, "_id.month": 1 } }
         ]);
@@ -58,7 +71,8 @@ router.get('/summary', async (req, res) => {
         paymentStatusAgg.forEach(p => { paymentsStatus[p._id] = p.count || 0; });
         
         // Build a recentActivities feed by combining recent deliveries and payments
-        const recentDeliveries = await Delivery.find({})
+        // Apply same delivery filters to recent deliveries
+        const recentDeliveries = await Delivery.find(Object.keys(deliveryMatch).length ? deliveryMatch : {})
             .sort({ date: -1 })
             .limit(5)
             .populate('farmer', 'name')

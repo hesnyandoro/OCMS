@@ -32,10 +32,10 @@ const Layout = ({ children }) => {
             {/* 3. Main Content Area */}
             {/* The style property handles the push from the left sidebar and the top header (pt-16) */}
             <main 
-                className={`pt-16 transition-all duration-300 ease-in-out w-full min-h-screen bg-gray-50`}
+                className={`pt-16 transition-all duration-300 ease-in-out w-full min-h-screen`}
                 style={{ marginLeft: sidebarOffset }}
             >
-                <div className="p-4 md:p-8">
+                <div className="p-4 md:p-8" style={{ backgroundColor: '#F3F4F6', minHeight: '100vh' }}>
                     {children} 
                 </div>
             </main>

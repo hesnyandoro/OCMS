@@ -20,6 +20,7 @@ const Dashboard = () => {
     const [filterDate, setFilterDate] = useState('');
     const [filterRegion, setFilterRegion] = useState('');
     const [filterDriver, setFilterDriver] = useState('');
+    const [filterDelivery, setFilterDelivery] = useState('');
     
     const [dashboardData, setDashboardData] = useState({
         totalFarmers: 0,
@@ -34,40 +35,41 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
 
     // Fetch Dashboard Data 
+    const fetchDashboardData = async (params = {}) => {
+        setLoading(true);
+        try {
+            const response = await api.get('/dashboard/summary', { params });
+            const fetchedData = response.data || {};
+
+            // Support both the new flat shape and older nested shape (defensive)
+            const totalFarmers = fetchedData.totalFarmers ?? (fetchedData.farmers?.total) ?? 0;
+            const kgsDelivered = fetchedData.kgsDelivered ?? (fetchedData.deliveries?.kgsMonth) ?? 0;
+            const totalPayments = fetchedData.totalPayments ?? (fetchedData.payments?.totalMonth) ?? 0;
+            const pendingReports = fetchedData.pendingReports ?? (fetchedData.reports?.pendingCount) ?? 0;
+            const recentActivities = fetchedData.recentActivities ?? fetchedData.activity ?? [];
+            const monthlyKgs = fetchedData.monthlyKgs ?? { labels: [], values: [] };
+            const paymentsStatus = fetchedData.paymentsStatus ?? { Pending: 0, Completed: 0, Failed: 0 };
+
+            setDashboardData({
+                totalFarmers,
+                kgsDelivered,
+                totalPayments,
+                pendingReports,
+                recentActivities,
+                monthlyKgs,
+                paymentsStatus,
+            });
+
+        } catch (error) {
+            console.error("Failed to fetch dashboard data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchDashboardData = async () => {
-            setLoading(true);
-            try {
-                const response = await api.get('/dashboard/summary');
-                const fetchedData = response.data || {};
-
-                // Support both the new flat shape and older nested shape (defensive)
-                const totalFarmers = fetchedData.totalFarmers ?? (fetchedData.farmers?.total) ?? 0;
-                const kgsDelivered = fetchedData.kgsDelivered ?? (fetchedData.deliveries?.kgsMonth) ?? 0;
-                const totalPayments = fetchedData.totalPayments ?? (fetchedData.payments?.totalMonth) ?? 0;
-                const pendingReports = fetchedData.pendingReports ?? (fetchedData.reports?.pendingCount) ?? 0;
-                const recentActivities = fetchedData.recentActivities ?? fetchedData.activity ?? [];
-                const monthlyKgs = fetchedData.monthlyKgs ?? { labels: [], values: [] };
-                const paymentsStatus = fetchedData.paymentsStatus ?? { Pending: 0, Completed: 0, Failed: 0 };
-
-                setDashboardData({
-                    totalFarmers,
-                    kgsDelivered,
-                    totalPayments,
-                    pendingReports,
-                    recentActivities,
-                    monthlyKgs,
-                    paymentsStatus,
-                });
-                
-            } catch (error) {
-                console.error("Failed to fetch dashboard data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        
         fetchDashboardData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // --- KPI Data Configuration ---
@@ -117,13 +119,13 @@ const Dashboard = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 items-end">
                     {/* Date Input */}
                     <div className="col-span-2 sm:col-span-1">
-                        <label className="text-xs font-medium text-gray-500 mb-1 block">Date Range</label>
+                        <label className="text-xs font-medium text-gray-500 mb-1 block">Date (optional)</label>
                         <input 
                             type="date" 
                             value={filterDate} 
                             onChange={(e) => setFilterDate(e.target.value)} 
                             className="input input-bordered w-full text-sm rounded-lg border-gray-300 p-2" 
-                            placeholder="Date Range" 
+                            placeholder="Date" 
                         />
                     </div>
 
@@ -156,10 +158,29 @@ const Dashboard = () => {
                             <option>Driver C</option>
                         </select>
                     </div>
+                    {/* Delivery Type Select */}
+                    <div className="col-span-1">
+                        <label className="text-xs font-medium text-gray-500 mb-1 block">Delivery Type</label>
+                        <select 
+                            value={filterDelivery} 
+                            onChange={(e) => setFilterDelivery(e.target.value)} 
+                            className="select select-bordered w-full text-sm rounded-lg border-gray-300 p-2 appearance-none"
+                        >
+                            <option value="">All</option>
+                            <option value="Cherry">Cherry</option>
+                            <option value="Parchment">Parchment</option>
+                        </select>
+                    </div>
                     
                     {/* Apply Button */}
                     <div className="col-span-2 sm:col-span-1">
-                        <button className="btn btn-primary rounded-lg shadow-md hover:shadow-lg transition-all duration-200 h-10 w-full text-sm font-semibold mt-4 sm:mt-0">
+                        <button onClick={() => {
+                            const params = {};
+                            if (filterRegion) params.region = filterRegion;
+                            if (filterDriver) params.driver = filterDriver;
+                            if (filterDelivery) params.type = filterDelivery;
+                            fetchDashboardData(params);
+                        }} className="btn btn-primary rounded-lg shadow-md hover:shadow-lg transition-all duration-200 h-10 w-full text-sm font-semibold mt-4 sm:mt-0">
                             Apply Filters
                         </button>
                     </div>
