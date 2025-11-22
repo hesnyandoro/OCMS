@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import Login from './components/Login.jsx';
+import AuthTogglePage from './pages/AuthTogglePage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Farmers from './pages/Farmers.jsx';
 import Deliveries from './pages/Deliveries.jsx';
@@ -21,9 +23,11 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<AuthTogglePage />} />
+          <Route path="/auth" element={<AuthTogglePage />} />
           <Route
-            path="/*"
+            path="/dashboard/*"
             element={
               <PrivateRoute>
                 <Layout>

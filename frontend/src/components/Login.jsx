@@ -14,7 +14,7 @@ const Login = () => {
     try {
       await login(username, password);
       toast.success('Login successful');
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       // Try to surface server-side message if available
       const serverMsg = err?.response?.data?.msg || (err?.response?.data?.errors && err.response.data.errors.map(x=>x.msg).join(', '));

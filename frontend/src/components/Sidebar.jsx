@@ -5,19 +5,19 @@ import { LayoutDashboard, Users, Truck, DollarSign, FileText, Plus, Scale, Walle
 
 // Define navigation items using Lucide icons
 const navItems = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "/" },
-    { name: "Farmers", icon: Users, path: "/farmers" },
-    { name: "Deliveries", icon: Truck, path: "/deliveries" },
-    { name: "Payments", icon: DollarSign, path: "/payments" },
-    { name: "Reports", icon: FileText, path: "/reports" },
+    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+    { name: "Farmers", icon: Users, path: "/dashboard/farmers" },
+    { name: "Deliveries", icon: Truck, path: "/dashboard/deliveries" },
+    { name: "Payments", icon: DollarSign, path: "/dashboard/payments" },
+    { name: "Reports", icon: FileText, path: "/dashboard/reports" },
 ];
 
 // --- Quick Actions Definition ---
 // The 'color' property is used to generate the correct outline button styles.
 const quickActions = [
-    { name: "New Farmer", icon: Plus, path: "/farmers/new", color: "estate" },
-    { name: "Record Delivery", icon: Scale, path: "/deliveries/new", color: "cherry" },
-    { name: "Record Payment", icon: Wallet, path: "/payments/new", color: "estate" },
+    { name: "New Farmer", icon: Plus, path: "/dashboard/farmers/new", color: "estate" },
+    { name: "Record Delivery", icon: Scale, path: "/dashboard/deliveries/new", color: "cherry" },
+    { name: "Record Payment", icon: Wallet, path: "/dashboard/payments/new", color: "estate" },
 ];
 
 /**
