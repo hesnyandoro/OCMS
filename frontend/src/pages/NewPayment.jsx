@@ -49,22 +49,22 @@ const NewPayment = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Record Payment</h1>
+    <div className="min-h-screen bg-[#F1F8F4] p-6">
+      <h1 className="text-3xl font-bold text-[#1B4332] mb-4">Record Payment</h1>
       <div className="bg-white p-6 rounded shadow">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="text-sm">Farmer</label>
-            <select className="select select-bordered w-full" {...register('farmer')}>
+            <label className="form-label">Farmer</label>
+            <select className="form-control" {...register('farmer')}>
               <option value="">Select farmer</option>
               {farmers.map(f => <option key={f._id} value={f._id}>{f.name} ({f.cellNumber})</option>)}
             </select>
-            {errors.farmer && <p className="text-[#D93025] text-sm mt-1">{errors.farmer.message}</p>}
+            {errors.farmer && <p className="text-danger">{errors.farmer.message}</p>}
           </div>
 
           <div>
-            <label className="text-sm">Delivery</label>
-            <select className="select select-bordered w-full" {...register('delivery')}>
+            <label className="form-label">Delivery</label>
+            <select className="form-control" {...register('delivery')}>
               <option value="">Select delivery (optional)</option>
               {deliveries.map(d => (
                 <option key={d._id} value={d._id}>
@@ -76,40 +76,40 @@ const NewPayment = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="text-sm">Amount Paid</label>
-              <input type="number" step="0.01" className="input input-bordered w-full" {...register('amountPaid')} />
+              <label className="form-label">Amount Paid</label>
+              <input type="number" step="0.01" className="form-control" {...register('amountPaid')} />
             </div>
             <div>
-              <label className="text-sm">Date</label>
-              <input type="date" className="input input-bordered w-full" {...register('date')} />
-              {errors.date && <p className="text-[#D93025] text-sm mt-1">{errors.date.message}</p>}
+              <label className="form-label">Date</label>
+              <input type="date" className="form-control" {...register('date')} />
+              {errors.date && <p className="text-danger">{errors.date.message}</p>}
             </div>
             <div>
-              <label className="text-sm">Status</label>
-              <select className="select select-bordered w-full" {...register('status')}>
+              <label className="form-label">Status</label>
+              <select className="form-control" {...register('status')}>
                 <option value="Completed">Completed</option>
                 <option value="Pending">Pending</option>
                 <option value="Failed">Failed</option>
               </select>
-              {errors.status && <p className="text-[#D93025] text-sm mt-1">{errors.status.message}</p>}
+              {errors.status && <p className="text-danger">{errors.status.message}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="text-sm">Currency</label>
-              <input defaultValue="Ksh" className="input input-bordered w-full" {...register('currency')} />
-              {errors.currency && <p className="text-[#D93025] text-sm mt-1">{errors.currency.message}</p>}
+              <label className="form-label">Currency</label>
+              <input defaultValue="Ksh" className="form-control" {...register('currency')} />
+              {errors.currency && <p className="text-danger">{errors.currency.message}</p>}
             </div>
             <div>
-              <label className="text-sm">Recorded By (you)</label>
-              <input readOnly value={authState?.user?.name || ''} className="input input-bordered w-full bg-gray-100" />
+              <label className="form-label">Recorded By (you)</label>
+              <input readOnly value={authState?.user?.name || ''} className="form-control bg-gray-100" />
             </div>
           </div>
 
           <div className="d-flex gap-2">
-            <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Record Payment</button>
-            <button type="button" onClick={() => navigate('/dashboard/payments')} className="btn btn-secondary">Cancel</button>
+            <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Save Payment</button>
+            <button type="button" onClick={() => navigate('/dashboard/payments')} className="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-500 transition-all font-medium">Cancel</button>
           </div>
         </form>
       </div>

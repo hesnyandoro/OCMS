@@ -75,75 +75,75 @@ const NewDelivery = () => {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Record Delivery</h1>
+    <div className="min-h-screen bg-[#F1F8F4] p-6">
+      <h1 className="text-3xl font-bold text-[#1B4332] mb-4">Record Delivery</h1>
       <div className="bg-white p-6 rounded shadow">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="text-sm">Farmer</label>
-            <select className="select select-bordered w-full" {...register('farmer')} onChange={onFarmerChange}>
+            <label className="form-label">Farmer</label>
+            <select className="form-control" {...register('farmer')} onChange={onFarmerChange}>
               <option value="">Select farmer</option>
               {farmers.map(f => (
                 <option key={f._id} value={f._id}>{f.name} ({f.cellNumber})</option>
               ))}
             </select>
-            {errors.farmer && <p className="text-[#D93025] text-sm mt-1">{errors.farmer.message}</p>}
+            {errors.farmer && <p className="text-danger">{errors.farmer.message}</p>}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="text-sm">Type</label>
-              <select className="select select-bordered w-full" {...register('type')}>
+              <label className="form-label">Type</label>
+              <select className="form-control" {...register('type')}>
                 <option value="Cherry">Cherry</option>
                 <option value="Parchment">Parchment</option>
               </select>
-              {errors.type && <p className="text-[#D93025] text-sm mt-1">{errors.type.message}</p>}
+              {errors.type && <p className="text-danger">{errors.type.message}</p>}
             </div>
 
             <div>
-              <label className="text-sm">Kgs Delivered</label>
-              <input type="number" step="0.01" className="input input-bordered w-full" {...register('kgsDelivered')} />
-              {errors.kgsDelivered && <p className="text-[#D93025] text-sm mt-1">{errors.kgsDelivered.message}</p>}
+              <label className="form-label">Kgs Delivered</label>
+              <input type="number" step="0.01" className="form-control" {...register('kgsDelivered')} />
+              {errors.kgsDelivered && <p className="text-danger">{errors.kgsDelivered.message}</p>}
             </div>
 
             <div>
-              <label className="text-sm">
+              <label className="form-label">
                 Region
-                {userHasRegion && <span className="text-gray-500 text-xs ml-2">(Auto-filled)</span>}
+                {userHasRegion && <span className="text-muted ms-2">(Auto-filled from your assigned region)</span>}
               </label>
               <input 
-                className="input input-bordered w-full" 
+                className="form-control" 
                 {...register('region')} 
                 readOnly={!!userHasRegion}
                 style={userHasRegion ? { backgroundColor: '#F3F4F6' } : {}}
               />
-              {errors.region && <p className="text-[#D93025] text-sm mt-1">{errors.region.message}</p>}
-              {!userHasRegion && <p className="text-xs text-gray-500 mt-1">Enter the region for this delivery</p>}
+              {errors.region && <p className="text-danger">{errors.region.message}</p>}
+              {!userHasRegion && <small className="text-muted">Enter the region for this delivery</small>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="text-sm">Driver</label>
-              <input className="input input-bordered w-full" {...register('driver')} />
-              {errors.driver && <p className="text-[#D93025] text-sm mt-1">{errors.driver.message}</p>}
+              <label className="form-label">Driver</label>
+              <input className="form-control" {...register('driver')} />
+              {errors.driver && <p className="text-danger">{errors.driver.message}</p>}
             </div>
             <div>
-              <label className="text-sm">Date</label>
-              <input type="date" className="input input-bordered w-full" {...register('date')} />
-              {errors.date && <p className="text-[#D93025] text-sm mt-1">{errors.date.message}</p>}
+              <label className="form-label">Date</label>
+              <input type="date" className="form-control" {...register('date')} />
+              {errors.date && <p className="text-danger">{errors.date.message}</p>}
             </div>
           </div>
 
           {/* Auto-prefilled Weigh Station (read-only) */}
           <div>
-            <label className="text-sm">Weigh Station (from farmer)</label>
-            <input readOnly value={selectedWeigh} className="input input-bordered w-full bg-[#F3F4F6]" />
+            <label className="form-label">Weigh Station (from farmer)</label>
+            <input readOnly value={selectedWeigh} className="form-control bg-[#F3F4F6]" />
           </div>
 
-          <div className="flex gap-2">
+          <div className="d-flex gap-2">
             <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Save Delivery</button>
-            <button type="button" onClick={() => navigate('/dashboard/deliveries')} className="btn btn-secondary">Cancel</button>
+            <button type="button" onClick={() => navigate('/dashboard/deliveries')} className="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-500 transition-all font-medium">Cancel</button>
           </div>
         </form>
       </div>

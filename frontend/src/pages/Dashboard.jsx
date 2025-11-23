@@ -142,7 +142,7 @@ const Dashboard = () => {
                     <select 
                         value={filterRegion} 
                         onChange={(e) => setFilterRegion(e.target.value)} 
-                        className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
                     >
                         <option value="">All Regions</option>
                         <option>North</option>
@@ -157,7 +157,7 @@ const Dashboard = () => {
                     <select 
                         value={filterDriver} 
                         onChange={(e) => setFilterDriver(e.target.value)} 
-                        className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
                     >
                         <option value="">All Drivers</option>
                         <option>Driver A</option>
@@ -172,7 +172,7 @@ const Dashboard = () => {
                     <select 
                         value={filterDelivery} 
                         onChange={(e) => setFilterDelivery(e.target.value)} 
-                        className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
                     >
                         <option value="">All Types</option>
                         <option value="Cherry">Cherry</option>
@@ -204,7 +204,7 @@ const Dashboard = () => {
         <div className="p-4 md:p-8 bg-[#F3F4F6] min-h-screen">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
+                <h1 className="text-3xl font-bold text-[#1B4332] mb-2">Dashboard Overview</h1>
                 <div className="flex items-center gap-2 text-gray-600">
                     <Calendar size={16} />
                     <p className="text-sm">

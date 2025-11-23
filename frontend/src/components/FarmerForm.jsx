@@ -93,8 +93,8 @@ const FarmerForm = ({ onSubmit, onCancel }) => {
         <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Submit</button>
         {onCancel && (
           <button 
-            type="button" 
-            className="btn btn-secondary" 
+            type="button"
+            className="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-500 transition-all font-medium" 
             onClick={onCancel}
           >
             Cancel

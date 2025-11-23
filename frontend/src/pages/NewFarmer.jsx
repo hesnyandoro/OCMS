@@ -25,8 +25,8 @@ const NewFarmer = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Register New Farmer</h1>
+    <div className="min-h-screen bg-[#F1F8F4] p-6">
+      <h1 className="text-3xl font-bold text-[#1B4332] mb-4">Register New Farmer</h1>
       <div className="bg-white p-6 rounded shadow">
         <FarmerForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </div>

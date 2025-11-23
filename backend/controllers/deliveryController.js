@@ -26,6 +26,34 @@ exports.getDeliveries = async (req, res) => {
   }
 };
 
+exports.getDelivery = async (req, res) => {
+  try {
+    const delivery = await Delivery.findById(req.params.id)
+      .populate('farmer', 'name cellNumber weighStation')
+      .populate('createdBy', 'username name');
+    
+    if (!delivery) {
+      return res.status(404).json({ msg: 'Delivery not found' });
+    }
+
+    // Field agents can only view deliveries in their assigned region
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user && user.assignedRegion && delivery.region !== user.assignedRegion) {
+        return res.status(403).json({ msg: 'Access denied' });
+      }
+    }
+
+    res.json(delivery);
+  } catch (err) {
+    console.error('Get delivery error:', err);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Delivery not found' });
+    }
+    res.status(500).send('Server error');
+  }
+};
+
 exports.createDelivery = async (req, res) => {
   try {
     // Add createdBy field

@@ -4,7 +4,8 @@ import api from '../services/api';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { Plus, Download, FileText, DollarSign, CheckCircle, Clock, XCircle, User } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { canCreate } from '../utils/permissions';
@@ -56,43 +57,63 @@ const Payments = () => {
 
   const exportCSV = () => {
     const rows = filtered.map(p => ({
-      Date: new Date(p.date).toLocaleDateString(),
-      Farmer: p.farmer?.name || (p.farmer ?? ''),
-      Amount: p.amountPaid,
-      Currency: p.currency,
-      Status: p.status,
-      Delivery: p.delivery?._id || ''
+      Date: p.date ? new Date(p.date).toLocaleDateString() : '',
+      Farmer: p.farmer?.name || 'N/A',
+      'Farmer Phone': p.farmer?.cellNumber || '',
+      'Weigh Station': p.farmer?.weighStation || '',
+      'Amount Paid': p.amountPaid || 0,
+      Currency: p.currency || 'Ksh',
+      Status: p.status || '',
+      'Delivery Date': p.delivery?.date ? new Date(p.delivery.date).toLocaleDateString() : '',
+      'Kgs Delivered': p.delivery?.kgsDelivered || '',
+      'Recorded By': p.recordedBy?.name || p.recordedBy?.username || ''
     }));
+    
     const csv = Papa.unparse(rows);
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'payments.csv';
-    a.click();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `payments_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
     URL.revokeObjectURL(url);
   };
 
   const exportPDF = () => {
     const doc = new jsPDF();
-    doc.setFontSize(12);
-    doc.text('Payments Report', 10, 10);
-    let y = 20;
-    const header = ['Date', 'Farmer', 'Amount', 'Currency', 'Status'];
-    doc.text(header.join(' | '), 10, y); y += 8;
-    filtered.forEach(p => {
-      const line = [
-        new Date(p.date).toLocaleDateString(),
-        p.farmer?.name || '',
-        p.amountPaid,
-        p.currency,
-        p.status
-      ].join(' | ');
-      if (y > 280) { doc.addPage(); y = 20; }
-      doc.text(line, 10, y);
-      y += 8;
+    
+    // Title
+    doc.setFontSize(16);
+    doc.setTextColor(27, 67, 50); // Estate Green
+    doc.text('Coffee Payments Report', 14, 20);
+    
+    // Metadata
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
+    doc.text(`Total Payments: ${filtered.length}`, 14, 34);
+    doc.text(`Total Amount: Ksh ${totalAmount.toLocaleString()}`, 14, 40);
+    doc.text(`Completed: ${completedCount} | Pending: ${pendingCount} | Failed: ${failedCount}`, 14, 46);
+    
+    // Table
+    const headers = [['Date', 'Farmer', 'Amount', 'Status', 'Recorded By']];
+    const body = filtered.map(p => [
+      p.date ? new Date(p.date).toLocaleDateString() : '',
+      p.farmer?.name || 'N/A',
+      `${p.currency || 'Ksh'} ${Number(p.amountPaid || 0).toLocaleString()}`,
+      p.status || '',
+      p.recordedBy?.name || p.recordedBy?.username || 'N/A'
+    ]);
+    
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 52,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [27, 67, 50] } // Estate Green
     });
-    doc.save('payments.pdf');
+    
+    doc.save(`payments_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const totalAmount = filtered.reduce((s, p) => s + (Number(p.amountPaid) || 0), 0);
@@ -119,7 +140,7 @@ const Payments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6] p-6">
+    <div className="min-h-screen bg-[#F1F8F4] p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -194,7 +215,7 @@ const Payments = () => {
               onChange={date => setStartDate(date)}
               isClearable
               placeholderText="Select start date"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             />
           </div>
           
@@ -205,7 +226,7 @@ const Payments = () => {
               onChange={date => setEndDate(date)}
               isClearable
               placeholderText="Select end date"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             />
           </div>
           
@@ -214,7 +235,7 @@ const Payments = () => {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             >
               <option>All</option>
               <option>Pending</option>

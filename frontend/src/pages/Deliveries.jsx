@@ -2,10 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, Calendar, TrendingUp, Package, User } from 'lucide-react';
+import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText } from 'lucide-react';
+import Papa from 'papaparse';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
-import { canCreate } from '../utils/permissions';
+import { canCreate, canUpdate, canDelete } from '../utils/permissions';
 
 const Deliveries = () => {
   const navigate = useNavigate();
@@ -15,6 +18,8 @@ const Deliveries = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [typeFilter, setTypeFilter] = useState('All');
+  const [regionFilter, setRegionFilter] = useState('All');
+  const [driverFilter, setDriverFilter] = useState('All');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,16 +50,101 @@ const Deliveries = () => {
     if (typeFilter !== 'All') {
       filtered = filtered.filter(d => d.type === typeFilter);
     }
+    if (regionFilter !== 'All') {
+      filtered = filtered.filter(d => d.region === regionFilter);
+    }
+    if (driverFilter !== 'All') {
+      filtered = filtered.filter(d => d.driver === driverFilter);
+    }
     
     setFilteredDeliveries(filtered);
-  }, [startDate, endDate, typeFilter, deliveries]);
+  }, [startDate, endDate, typeFilter, regionFilter, driverFilter, deliveries]);
 
   const totalKgs = filteredDeliveries.reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
   const cherryKgs = filteredDeliveries.filter(d => d.type === 'Cherry').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
   const parchmentKgs = filteredDeliveries.filter(d => d.type === 'Parchment').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
 
+  const handleEdit = (deliveryId) => {
+    navigate(`/dashboard/deliveries/edit/${deliveryId}`);
+  };
+
+  const handleDelete = async (deliveryId) => {
+    if (!window.confirm('Are you sure you want to delete this delivery? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      await api.delete(`/deliveries/${deliveryId}`);
+      setDeliveries(deliveries.filter(d => d._id !== deliveryId));
+    } catch (err) {
+      console.error('Error deleting delivery:', err);
+      alert(err.response?.data?.msg || 'Failed to delete delivery');
+    }
+  };
+
+  const exportToCSV = () => {
+    const rows = filteredDeliveries.map(d => ({
+      Date: d.date ? new Date(d.date).toLocaleDateString() : '',
+      Farmer: d.farmer?.name || 'N/A',
+      'Farmer Phone': d.farmer?.cellNumber || '',
+      Type: d.type || '',
+      'Weight (kg)': d.kgsDelivered || 0,
+      Region: d.region || '',
+      Driver: d.driver || '',
+      Season: d.season || '',
+      'Vehicle Reg': d.vehicleReg || '',
+      'Weigh Station': d.weighStation || ''
+    }));
+    
+    const csv = Papa.unparse(rows);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `deliveries_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    
+    // Title
+    doc.setFontSize(16);
+    doc.setTextColor(27, 67, 50); // Estate Green
+    doc.text('Coffee Deliveries Report', 14, 20);
+    
+    // Metadata
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
+    doc.text(`Total Deliveries: ${filteredDeliveries.length}`, 14, 34);
+    doc.text(`Total Weight: ${totalKgs.toFixed(2)} kg`, 14, 40);
+    
+    // Table
+    const headers = [['Date', 'Farmer', 'Type', 'Weight (kg)', 'Region', 'Driver']];
+    const body = filteredDeliveries.map(d => [
+      d.date ? new Date(d.date).toLocaleDateString() : '',
+      d.farmer?.name || 'N/A',
+      d.type || '',
+      String(d.kgsDelivered || 0),
+      d.region || '',
+      d.driver || ''
+    ]);
+    
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 46,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [27, 67, 50] } // Estate Green
+    });
+    
+    doc.save(`deliveries_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   return (
-    <div className="min-h-screen bg-[#F3F4F6] p-6">
+    <div className="min-h-screen bg-[#F1F8F4] p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -65,7 +155,7 @@ const Deliveries = () => {
           {canCreate(authState?.role, 'deliveries') && (
             <button
               onClick={() => navigate('/dashboard/deliveries/new')}
-              className="flex items-center gap-2 bg-[#D93025] text-white px-6 py-3 rounded-lg hover:bg-[#B52518] transition-all shadow-md hover:shadow-lg"
+              className="flex items-center gap-2 bg-[#1B4332] text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] transition-all shadow-md hover:shadow-lg"
             >
               <Plus size={20} />
               <span>Record Delivery</span>
@@ -109,7 +199,7 @@ const Deliveries = () => {
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
             <ReactDatePicker
@@ -117,7 +207,7 @@ const Deliveries = () => {
               onChange={date => setStartDate(date)}
               isClearable
               placeholderText="Select start date"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             />
           </div>
           
@@ -128,7 +218,7 @@ const Deliveries = () => {
               onChange={date => setEndDate(date)}
               isClearable
               placeholderText="Select end date"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             />
           </div>
           
@@ -137,19 +227,65 @@ const Deliveries = () => {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
             >
               <option value="All">All Types</option>
               <option value="Cherry">Cherry</option>
               <option value="Parchment">Parchment</option>
             </select>
           </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+            <select
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+            >
+              <option value="All">All Regions</option>
+              {[...new Set(deliveries.map(d => d.region).filter(Boolean))].sort().map(region => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Driver</label>
+            <select
+              value={driverFilter}
+              onChange={(e) => setDriverFilter(e.target.value)}
+              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+            >
+              <option value="All">All Drivers</option>
+              {[...new Set(deliveries.map(d => d.driver).filter(Boolean))].sort().map(driver => (
+                <option key={driver} value={driver}>{driver}</option>
+              ))}
+            </select>
+          </div>
         </div>
         
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <p className="text-sm text-gray-600">
             Total Weight: <span className="font-bold text-[#1B4332]">{totalKgs.toFixed(2)} kg</span>
           </p>
+          <div className="flex gap-2">
+            <button
+              onClick={exportToCSV}
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] text-[#1B4332] rounded-lg hover:bg-[#1B4332] hover:text-white transition-all"
+              title="Export to CSV"
+            >
+              <FileText size={16} />
+              <span>CSV</span>
+            </button>
+            <button
+              onClick={exportToPDF}
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] text-[#D93025] rounded-lg hover:bg-[#D93025] hover:text-white transition-all"
+              title="Export to PDF"
+            >
+              <Download size={16} />
+              <span>PDF</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -175,6 +311,9 @@ const Deliveries = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold">Weight (kg)</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Region</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Driver</th>
+                  {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
+                    <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -209,6 +348,30 @@ const Deliveries = () => {
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {delivery.driver}
                     </td>
+                    {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          {canUpdate(authState?.role, 'deliveries') && (
+                            <button
+                              onClick={() => handleEdit(delivery._id)}
+                              className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg transition-all"
+                              title="Edit delivery"
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                          )}
+                          {canDelete(authState?.role, 'deliveries') && (
+                            <button
+                              onClick={() => handleDelete(delivery._id)}
+                              className="p-2 text-[#D93025] hover:bg-[#D93025] hover:text-white rounded-lg transition-all"
+                              title="Delete delivery"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
