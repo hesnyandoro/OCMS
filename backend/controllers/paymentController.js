@@ -1,19 +1,56 @@
 const Payment = require('../models/Payment');
+const Farmer = require('../models/Farmer');
+const User = require('../models/User');
 
 exports.getPayments = async (req, res) => {
   try {
-    const payments = await Payment.find().populate('farmer delivery');
+    let query = {};
+
+    // Field agents can only view payment status for their assigned region
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      // Only filter by region if field agent has one assigned
+      if (user && user.assignedRegion) {
+        // Find farmers in the agent's region
+        const farmers = await Farmer.find({ weighStation: user.assignedRegion }).select('_id');
+        const farmerIds = farmers.map(f => f._id);
+        
+        // Only show payments for farmers in their region
+        query.farmer = { $in: farmerIds };
+      }
+      // If no region assigned, they can see all payments
+    }
+
+    const payments = await Payment.find(query)
+      .populate('farmer', 'name cellNumber weighStation')
+      .populate('delivery', 'date kgsDelivered type')
+      .populate('recordedBy', 'username name')
+      .sort({ date: -1 });
+    
     res.json(payments);
   } catch (err) {
+    console.error('Get payments error:', err);
     res.status(500).send('Server error');
   }
 };
 
 exports.createPayment = async (req, res) => {
   try {
-    const payment = new Payment(req.body);
+    // Admin creates payments, so recordedBy is set
+    const paymentData = {
+      ...req.body,
+      recordedBy: req.user.id
+    };
+
+    const payment = new Payment(paymentData);
     await payment.save();
-    res.status(201).json(payment);
+    
+    const populatedPayment = await Payment.findById(payment._id)
+      .populate('farmer', 'name cellNumber')
+      .populate('delivery', 'date kgsDelivered type')
+      .populate('recordedBy', 'username name');
+    
+    res.status(201).json(populatedPayment);
   } catch (err) {
     console.error('PAYMENT CREATION FAILED:', err);
     if (err.name === 'ValidationError') {

@@ -29,6 +29,7 @@ const AuthTogglePage = () => {
     email: '',
     username: '',
     role: 'fieldagent',
+    assignedRegion: '',
     password: '',
     confirmPassword: ''
   });
@@ -99,7 +100,8 @@ const AuthTogglePage = () => {
         email: registerData.email,
         password: registerData.password,
         role: registerData.role,
-        name: fullName // Send full name to backend
+        name: fullName, // Send full name to backend
+        assignedRegion: registerData.role === 'fieldagent' ? registerData.assignedRegion : undefined
       });
 
       // Store token from registration
@@ -382,6 +384,27 @@ const AuthTogglePage = () => {
                     </select>
                   </div>
                 </div>
+
+                {/* Assigned Region - Only for Field Agents */}
+                {registerData.role === 'fieldagent' && (
+                  <div>
+                    <label htmlFor="register-assignedRegion" className="block text-sm font-medium text-gray-700 mb-2">
+                      Assigned Region <span className="text-gray-400 text-xs">(Optional)</span>
+                    </label>
+                    <input
+                      id="register-assignedRegion"
+                      name="assignedRegion"
+                      type="text"
+                      value={registerData.assignedRegion}
+                      onChange={handleRegisterChange}
+                      placeholder="e.g., Kiambu, Nyeri, Murang'a"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition-all"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Leave blank if region will be assigned later
+                    </p>
+                  </div>
+                )}
 
                 {/* Password */}
                 <div>

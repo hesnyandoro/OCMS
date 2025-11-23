@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
+import { AuthContext } from '../context/AuthContext';
 
 const NewDelivery = () => {
   const navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
+  const userHasRegion = authState?.assignedRegion;
+  
   const schema = yup.object({
     farmer: yup.string().required('Farmer is required'),
     type: yup.string().required('Type is required').oneOf(['Cherry', 'Parchment']),
@@ -18,7 +22,10 @@ const NewDelivery = () => {
   });
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      region: userHasRegion || ''
+    }
   });
   const [farmers, setFarmers] = useState([]);
   const [selectedWeigh, setSelectedWeigh] = useState('');
@@ -40,7 +47,7 @@ const NewDelivery = () => {
       // payload: farmer (id), type, kgsDelivered, region, driver, date
       await api.post('/deliveries', payload);
       toast.success('Delivery recorded');
-      navigate('/deliveries');
+      navigate('/dashboard/deliveries');
     } catch (err) {
       console.error('Record delivery failed', err);
       toast.error(err?.response?.data?.msg || 'Failed to record delivery');
@@ -55,7 +62,13 @@ const NewDelivery = () => {
     try {
       const res = await api.get(`/farmers/${id}`);
       const f = res.data;
-      if (f?.weighStation) setSelectedWeigh(f.weighStation);
+      if (f?.weighStation) {
+        setSelectedWeigh(f.weighStation);
+        // Auto-fill region field with farmer's weighStation if user has no assigned region
+        if (!userHasRegion) {
+          setValue('region', f.weighStation);
+        }
+      }
     } catch (err) {
       console.error('Load farmer failed', err);
     }
@@ -94,9 +107,18 @@ const NewDelivery = () => {
             </div>
 
             <div>
-              <label className="text-sm">Region</label>
-              <input className="input input-bordered w-full" {...register('region')} />
+              <label className="text-sm">
+                Region
+                {userHasRegion && <span className="text-gray-500 text-xs ml-2">(Auto-filled)</span>}
+              </label>
+              <input 
+                className="input input-bordered w-full" 
+                {...register('region')} 
+                readOnly={!!userHasRegion}
+                style={userHasRegion ? { backgroundColor: '#F3F4F6' } : {}}
+              />
               {errors.region && <p className="text-[#D93025] text-sm mt-1">{errors.region.message}</p>}
+              {!userHasRegion && <p className="text-xs text-gray-500 mt-1">Enter the region for this delivery</p>}
             </div>
           </div>
 
@@ -121,7 +143,7 @@ const NewDelivery = () => {
 
           <div className="flex gap-2">
             <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Save Delivery</button>
-            <button type="button" onClick={() => navigate('/deliveries')} className="btn btn-ghost">Cancel</button>
+            <button type="button" onClick={() => navigate('/dashboard/deliveries')} className="btn btn-secondary">Cancel</button>
           </div>
         </form>
       </div>

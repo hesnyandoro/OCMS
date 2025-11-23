@@ -7,7 +7,7 @@ exports.register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const { username, email, password, role, region, name } = req.body;
+  const { username, email, password, role, assignedRegion, name } = req.body;
 
   try {
     // ensure username and email are unique
@@ -23,12 +23,12 @@ exports.register = async (req, res) => {
       email, 
       password: await bcrypt.hash(password, 10), 
       role: userRole, 
-      region,
+      assignedRegion,
       name 
     });
     await user.save();
 
-    const payload = { user: { id: user.id, role: user.role } };
+    const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
       const userData = { 
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
         email: user.email, 
         name: user.name,
         role: user.role, 
-        region: user.region 
+        assignedRegion: user.assignedRegion 
       };
       res.json({ token, user: userData });
     });
@@ -61,7 +61,7 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
-    const payload = { user: { id: user.id, role: user.role } };
+    const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
       const userData = { 
@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
         email: user.email, 
         name: user.name,
         role: user.role, 
-        region: user.region 
+        assignedRegion: user.assignedRegion 
       };
       res.json({ token, user: userData });
     });

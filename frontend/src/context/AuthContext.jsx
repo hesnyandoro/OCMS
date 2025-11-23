@@ -1,6 +1,15 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 export const AuthContext = createContext();
+
+// Custom hook to use the AuthContext
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
 
 export const AuthProvider = ({ children }) => {
     // ⭐️ CHANGE 1: Combine states into authState and initialize with localStorage check ⭐️
@@ -9,6 +18,8 @@ export const AuthProvider = ({ children }) => {
         token: localStorage.getItem('token') || null,
         isAuthenticated: !!localStorage.getItem('token'),
         loading: true, // Crucial for preventing PrivateRoute flash
+        role: null, // 'admin' or 'fieldagent'
+        assignedRegion: null // For field agents
     });
 
     // ⭐️ CHANGE 2: Implement loadUser to verify token on application load ⭐️
@@ -22,11 +33,14 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 const response = await api.get('/auth/me');
+                console.log('User data from /auth/me:', response.data);
                 setAuthState({
                     token,
                     user: response.data,
                     isAuthenticated: true,
                     loading: false,
+                    role: response.data.role,
+                    assignedRegion: response.data.assignedRegion
                 });
             } catch (error) {
                 // Distinguish between network errors and auth errors
@@ -34,17 +48,19 @@ export const AuthProvider = ({ children }) => {
                 if (isNetworkError) {
                     console.error('Auth server unreachable:', error.message);
                     // Keep token; mark unauthenticated until server returns user
-                    setAuthState({ token, user: null, isAuthenticated: false, loading: false });
+                    setAuthState({ token, user: null, isAuthenticated: false, loading: false, role: null, assignedRegion: null });
                     return;
                 }
                 const status = error.response?.status;
                 if (status === 401 || status === 403) {
-                    console.error('Token expired or invalid');
+                    console.error('Token expired or invalid - clearing token');
                     localStorage.removeItem('token');
-                    setAuthState({ token: null, user: null, isAuthenticated: false, loading: false });
+                    setAuthState({ token: null, user: null, isAuthenticated: false, loading: false, role: null, assignedRegion: null });
                 } else {
-                    console.error('Failed to verify session:', error.message);
-                    setAuthState({ token, user: null, isAuthenticated: false, loading: false });
+                    console.error('Failed to verify session:', error.message, error.response?.data);
+                    // Clear token on any auth error to force re-login
+                    localStorage.removeItem('token');
+                    setAuthState({ token: null, user: null, isAuthenticated: false, loading: false, role: null, assignedRegion: null });
                 }
             }
         };
@@ -78,6 +94,8 @@ export const AuthProvider = ({ children }) => {
                 user: user || null,
                 isAuthenticated: !!data.token,
                 loading: false,
+                role: user?.role || null,
+                assignedRegion: user?.assignedRegion || null
             });
             return user;
         } catch (error) {
@@ -108,6 +126,8 @@ export const AuthProvider = ({ children }) => {
             user: null,
             isAuthenticated: false,
             loading: false,
+            role: null,
+            assignedRegion: null
         });
     };
 

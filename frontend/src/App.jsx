@@ -32,15 +32,15 @@ const App = () => {
               <PrivateRoute>
                 <Layout>
                   <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/farmers/new" element={<NewFarmer />} />
-                    <Route path="/farmers" element={<Farmers />} />
-                    <Route path="/deliveries" element={<Deliveries />} />
-                    <Route path="/deliveries/new" element={<NewDelivery />} />
-                    <Route path="/payments" element={<Payments />} />
-                    <Route path="/payments/new" element={<NewPayment />} />
-                    <Route path="/reports" element={<Reports />} />
-                    <Route path="*"element={
+                    <Route path="" element={<Dashboard />} />
+                    <Route path="farmers/new" element={<NewFarmer />} />
+                    <Route path="farmers" element={<Farmers />} />
+                    <Route path="deliveries" element={<Deliveries />} />
+                    <Route path="deliveries/new" element={<NewDelivery />} />
+                    <Route path="payments" element={<Payments />} />
+                    <Route path="payments/new" element={<NewPayment />} />
+                    <Route path="reports" element={<Reports />} />
+                    <Route path="*" element={
                         <div className="p-10 text-center text-xl font-semibold">
                           404 - Page Not Found
                         </div>

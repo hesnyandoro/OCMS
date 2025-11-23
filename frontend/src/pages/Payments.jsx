@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
 import jsPDF from 'jspdf';
+import { Plus, Download, FileText, DollarSign, CheckCircle, Clock, XCircle, User } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
+import { canCreate } from '../utils/permissions';
 
 
 const Payments = () => {
+  const navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
   const [payments, setPayments] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [startDate, setStartDate] = useState(null);
@@ -90,63 +96,225 @@ const Payments = () => {
   };
 
   const totalAmount = filtered.reduce((s, p) => s + (Number(p.amountPaid) || 0), 0);
+  const completedCount = filtered.filter(p => p.status === 'Completed').length;
+  const pendingCount = filtered.filter(p => p.status === 'Pending').length;
+  const failedCount = filtered.filter(p => p.status === 'Failed').length;
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'Completed': return 'bg-green-100 text-green-800';
+      case 'Pending': return 'bg-yellow-100 text-yellow-800';
+      case 'Failed': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch(status) {
+      case 'Completed': return <CheckCircle size={16} />;
+      case 'Pending': return <Clock size={16} />;
+      case 'Failed': return <XCircle size={16} />;
+      default: return null;
+    }
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="mb-4">Payments</h1>
-
-      <div className="d-flex align-items-center mb-3 gap-2">
-        <label className="me-2">Start:</label>
-        <ReactDatePicker selected={startDate} onChange={date => setStartDate(date)} isClearable />
-        <label className="ms-3 me-2">End:</label>
-        <ReactDatePicker selected={endDate} onChange={date => setEndDate(date)} isClearable />
-        <label className="ms-3 me-2">Status:</label>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="form-select w-auto">
-          <option>All</option>
-          <option>Pending</option>
-          <option>Completed</option>
-          <option>Failed</option>
-        </select>
-
-        <div className="ms-auto d-flex gap-2">
-          <button className="btn btn-secondary" onClick={exportCSV}>Export CSV</button>
-          <button className="btn btn-secondary" onClick={exportPDF}>Export PDF</button>
+    <div className="min-h-screen bg-[#F3F4F6] p-6">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[#1B4332]">Payments</h1>
+            <p className="text-gray-600 mt-1">Manage payment records and transactions</p>
+          </div>
+          <div className="flex gap-2">
+            {canCreate(authState?.role, 'payments') && (
+              <button
+                onClick={() => navigate('/dashboard/payments/new')}
+                className="flex items-center gap-2 bg-[#1B4332] text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] transition-all shadow-md hover:shadow-lg"
+              >
+                <Plus size={20} />
+                <span>Record Payment</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="mb-2">Showing {filtered.length} payments — Total: {totalAmount}</div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#1B4332]">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-medium">Total Amount</p>
+              <p className="text-2xl font-bold text-[#1B4332] mt-2">Ksh {totalAmount.toLocaleString()}</p>
+            </div>
+            <DollarSign size={40} className="text-[#1B4332] opacity-20" />
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-medium">Completed</p>
+              <p className="text-2xl font-bold text-green-600 mt-2">{completedCount}</p>
+            </div>
+            <CheckCircle size={40} className="text-green-500 opacity-20" />
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-medium">Pending</p>
+              <p className="text-2xl font-bold text-yellow-600 mt-2">{pendingCount}</p>
+            </div>
+            <Clock size={40} className="text-yellow-500 opacity-20" />
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-600 text-sm font-medium">Failed</p>
+              <p className="text-2xl font-bold text-red-600 mt-2">{failedCount}</p>
+            </div>
+            <XCircle size={40} className="text-red-500 opacity-20" />
+          </div>
+        </div>
+      </div>
 
+      {/* Filters & Export */}
+      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+            <ReactDatePicker
+              selected={startDate}
+              onChange={date => setStartDate(date)}
+              isClearable
+              placeholderText="Select start date"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+            <ReactDatePicker
+              selected={endDate}
+              onChange={date => setEndDate(date)}
+              isClearable
+              placeholderText="Select end date"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <select
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+            >
+              <option>All</option>
+              <option>Pending</option>
+              <option>Completed</option>
+              <option>Failed</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Export</label>
+            <div className="flex gap-2">
+              <button
+                onClick={exportCSV}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] text-[#1B4332] rounded-lg hover:bg-[#1B4332] hover:text-white transition-all"
+              >
+                <FileText size={16} />
+                <span>CSV</span>
+              </button>
+              <button
+                onClick={exportPDF}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] text-[#D93025] rounded-lg hover:bg-[#D93025] hover:text-white transition-all"
+              >
+                <Download size={16} />
+                <span>PDF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <p className="text-sm text-gray-600">
+            Showing <span className="font-bold text-[#1B4332]">{filtered.length}</span> of {payments.length} payments
+          </p>
+        </div>
+      </div>
+
+      {/* Payments Table */}
       {loading ? (
-        <div>Loading...</div>
+        <div className="flex justify-center items-center py-12">
+          <div className="text-gray-500">Loading payments...</div>
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="bg-white rounded-lg shadow-md p-12 text-center">
+          <p className="text-gray-500 text-lg">No payments found</p>
+          <p className="text-gray-400 mt-2">Try adjusting your filters</p>
+        </div>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Farmer</th>
-              <th>Amount</th>
-              <th>Currency</th>
-              <th>Status</th>
-              <th>Recorded By</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(p => (
-              <tr key={p._id}>
-                <td>{new Date(p.date).toLocaleDateString()}</td>
-                <td>{p.farmer?.name || ''}</td>
-                <td>{p.amountPaid}</td>
-                <td>{p.currency}</td>
-                <td>{p.status}</td>
-                <td>{p.recordedBy || ''}</td>
-                <td>
-                  <button className="btn btn-sm btn-danger" onClick={() => deletePayment(p._id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-[#1B4332] text-white">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Farmer</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Recorded By</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {filtered.map((payment, index) => (
+                  <tr key={payment._id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {new Date(payment.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <User size={16} className="text-gray-400" />
+                        <span className="text-sm font-medium text-gray-900">
+                          {payment.farmer?.name || 'N/A'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332]">
+                      {payment.currency} {Number(payment.amountPaid).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(payment.status)}`}>
+                        {getStatusIcon(payment.status)}
+                        {payment.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {payment.recordedBy?.name || payment.recordedBy?.username || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => deletePayment(payment._id)}
+                        className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
     </div>
   );

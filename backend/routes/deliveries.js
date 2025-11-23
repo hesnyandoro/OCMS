@@ -1,11 +1,17 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const { authorize } = require('../middleware/auth');
 const { getDeliveries, createDelivery, deleteDelivery, updateDelivery } = require('../controllers/deliveryController');
 const router = express.Router();
 
-router.get('/', auth, getDeliveries);
-router.post('/', auth, createDelivery);
-router.delete('/:id', auth, deleteDelivery);
-router.put('/:id', auth, updateDelivery);
+// Both roles can read deliveries (region-filtered for field agents)
+router.get('/', auth, authorize('admin', 'fieldagent'), getDeliveries);
+
+// Both roles can create deliveries
+router.post('/', auth, authorize('admin', 'fieldagent'), createDelivery);
+
+// Only admin can update/delete deliveries
+router.put('/:id', auth, authorize('admin'), updateDelivery);
+router.delete('/:id', auth, authorize('admin'), deleteDelivery);
 
 module.exports = router;

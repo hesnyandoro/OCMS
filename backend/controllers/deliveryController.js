@@ -1,8 +1,24 @@
 const Delivery = require('../models/Delivery');
+const User = require('../models/User');
 
 exports.getDeliveries = async (req, res) => {
   try {
-    const deliveries = (await Delivery.find().sort({ date: -1 }).populate('farmer', 'name cellNumber'))
+    let query = {};
+
+    // Field agents can only see deliveries in their assigned region
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      // If field agent has assigned region, filter by it
+      if (user && user.assignedRegion) {
+        query.region = user.assignedRegion;
+      }
+      // If no region assigned, they can see all deliveries
+    }
+
+    const deliveries = await Delivery.find(query)
+      .sort({ date: -1 })
+      .populate('farmer', 'name cellNumber')
+      .populate('createdBy', 'username name');
     res.json(deliveries);
   } catch (err) {
     console.error("DELIVERY FETCH FAILED", err);
@@ -12,11 +28,35 @@ exports.getDeliveries = async (req, res) => {
 
 exports.createDelivery = async (req, res) => {
   try {
-    const delivery = new Delivery(req.body);
+    // Add createdBy field
+    const deliveryData = {
+      ...req.body,
+      createdBy: req.user.id
+    };
+
+    // Field agents with assigned region can only create deliveries in that region
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user && user.assignedRegion) {
+        // Ensure the delivery region matches assigned region
+        if (deliveryData.region !== user.assignedRegion) {
+          return res.status(403).json({ 
+            msg: `You can only record deliveries in your assigned region: ${user.assignedRegion}` 
+          });
+        }
+      }
+      // If no region assigned, they can create deliveries in any region
+    }
+
+    const delivery = new Delivery(deliveryData);
     await delivery.save();
-    res.status(201).json(delivery);
+    
+    const populatedDelivery = await Delivery.findById(delivery._id)
+      .populate('farmer', 'name cellNumber')
+      .populate('createdBy', 'username name');
+    res.status(201).json(populatedDelivery);
   } catch (err) {
-    console.error(err);
+    console.error('Create delivery error:', err);
     if (err.name === 'ValidationError') {
       return res.status(400).json({ errors: Object.values(err.errors).map(e => e.message) });
     }

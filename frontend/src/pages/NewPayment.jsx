@@ -41,7 +41,7 @@ const NewPayment = () => {
       if (authState?.user?._id) payload.recordedBy = authState.user._id;
       await api.post('/payments', payload);
       toast.success('Payment recorded');
-      navigate('/payments');
+      navigate('/dashboard/payments');
     } catch (err) {
       console.error('Payment creation failed', err);
       toast.error(err?.response?.data?.msg || 'Failed to create payment');
@@ -107,9 +107,9 @@ const NewPayment = () => {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Save Payment</button>
-            <button type="button" onClick={() => navigate('/payments')} className="btn btn-ghost">Cancel</button>
+          <div className="d-flex gap-2">
+            <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Record Payment</button>
+            <button type="button" onClick={() => navigate('/dashboard/payments')} className="btn btn-secondary">Cancel</button>
           </div>
         </form>
       </div>

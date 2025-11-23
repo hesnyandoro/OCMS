@@ -12,7 +12,7 @@ const NewFarmer = () => {
       // API expects fields: name, cellNumber, nationalId, season, farmLocation, weighStation
       const res = await api.post('/farmers', data);
       toast.success('Farmer created');
-      navigate('/farmers');
+      navigate('/dashboard/farmers');
     } catch (err) {
       console.error('Create farmer failed', err);
       const msg = err?.response?.data?.msg || 'Failed to create farmer';
@@ -20,11 +20,15 @@ const NewFarmer = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/dashboard/farmers');
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Register New Farmer</h1>
       <div className="bg-white p-6 rounded shadow">
-        <FarmerForm onSubmit={handleSubmit} />
+        <FarmerForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </div>
     </div>
   );

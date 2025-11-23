@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: { type: String }, // Full name (firstName + secondName + lastName)
   role: { type: String, enum: ['admin', 'fieldagent'], required: true },
-  region: { type: String } // For field agents
+  assignedRegion: { type: String } // Locks field agents to specific regions
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

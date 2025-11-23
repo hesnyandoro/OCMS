@@ -1,24 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { AuthContext } from '../context/AuthContext';
 
-const schema = yup.object().shape({
-  name: yup.string().required('Name is required').min(3, 'Name must be at least 3 characters long'),
-  cellNumber: yup.string().required('Cell number is required').matches(/^\d{10,13}$/, 'Cell number must be 10 or 13 digits'),
-  nationalId: yup.string().required('National ID is required').matches(/^\d{8,12}$/, 'National ID must be 8 or 12 digits'),
-  season: yup.string().required('Season is required').oneOf(['Long', 'Short']),
-  farmLocation: yup.object().shape({
-    lat: yup.number().required('Latitude is required').typeError('Latitude must be a number'),
-    lng: yup.number().required('Longitude is required').typeError('Longitude must be a number'),
-    address: yup.string().required('Address is required')
-  }),
-  weighStation: yup.string().required('Weigh station is required')
-});
+const FarmerForm = ({ onSubmit, onCancel }) => {
+  const { authState } = useContext(AuthContext);
+  const userHasRegion = authState?.assignedRegion;
+  
+  // Dynamic schema based on whether user has assigned region
+  const schema = yup.object().shape({
+    name: yup.string().required('Name is required').min(3, 'Name must be at least 3 characters long'),
+    cellNumber: yup.string().required('Cell number is required').matches(/^\d{10,13}$/, 'Cell number must be 10 or 13 digits'),
+    nationalId: yup.string().required('National ID is required').matches(/^\d{8,12}$/, 'National ID must be 8 or 12 digits'),
+    season: yup.string().required('Season is required').oneOf(['Long', 'Short']),
+    farmLocation: yup.object().shape({
+      lat: yup.number().required('Latitude is required').typeError('Latitude must be a number'),
+      lng: yup.number().required('Longitude is required').typeError('Longitude must be a number'),
+      address: yup.string().required('Address is required')
+    }),
+    weighStation: yup.string().required('Weigh station/region is required')
+  });
 
-const FarmerForm = ({ onSubmit }) => {
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      weighStation: userHasRegion || ''
+    }
   });
 
   return (
@@ -67,11 +75,32 @@ const FarmerForm = ({ onSubmit }) => {
         </div>
       </div>
       <div className="mb-3">
-        <label className="form-label">Weigh Station</label>
-        <input className="form-control" type="text" {...register('weighStation')} />
+        <label className="form-label">
+          Weigh Station / Region
+          {userHasRegion && <span className="text-muted ms-2">(Auto-filled from your assigned region)</span>}
+        </label>
+        <input 
+          className="form-control" 
+          type="text" 
+          {...register('weighStation')} 
+          readOnly={!!userHasRegion}
+          style={userHasRegion ? { backgroundColor: '#F3F4F6' } : {}}
+        />
         {errors.weighStation && <p className="text-danger">{errors.weighStation.message}</p>}
+        {!userHasRegion && <small className="text-muted">Enter the region/weigh station for this farmer</small>}
       </div>
-      <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Submit</button>
+      <div className="d-flex gap-2">
+        <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Submit</button>
+        {onCancel && (
+          <button 
+            type="button" 
+            className="btn btn-secondary" 
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

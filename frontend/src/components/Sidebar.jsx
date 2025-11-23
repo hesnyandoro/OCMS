@@ -1,137 +1,161 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-// Using Lucide React icons for stability and functionality
-import { LayoutDashboard, Users, Truck, DollarSign, FileText, Plus, Scale, Wallet } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Users, Truck, DollarSign, FileText, Plus, Package, Wallet, UserPlus, Coffee } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-// Define navigation items using Lucide icons
-const navItems = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { name: "Farmers", icon: Users, path: "/dashboard/farmers" },
-    { name: "Deliveries", icon: Truck, path: "/dashboard/deliveries" },
-    { name: "Payments", icon: DollarSign, path: "/dashboard/payments" },
-    { name: "Reports", icon: FileText, path: "/dashboard/reports" },
+// Define navigation items with role restrictions
+const allNavItems = [
+    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard", roles: ['admin', 'fieldagent'] },
+    { name: "Farmers", icon: Users, path: "/dashboard/farmers", roles: ['admin', 'fieldagent'] },
+    { name: "Deliveries", icon: Truck, path: "/dashboard/deliveries", roles: ['admin', 'fieldagent'] },
+    { name: "Payments", icon: DollarSign, path: "/dashboard/payments", roles: ['admin', 'fieldagent'] },
+    { name: "Reports", icon: FileText, path: "/dashboard/reports", roles: ['admin'] },
+    { name: "Users", icon: UserPlus, path: "/dashboard/users", roles: ['admin'] },
 ];
 
-// --- Quick Actions Definition ---
-// The 'color' property is used to generate the correct outline button styles.
-const quickActions = [
-    { name: "New Farmer", icon: Plus, path: "/dashboard/farmers/new", color: "estate" },
-    { name: "Record Delivery", icon: Scale, path: "/dashboard/deliveries/new", color: "cherry" },
-    { name: "Record Payment", icon: Wallet, path: "/dashboard/payments/new", color: "estate" },
+// Quick Actions with role restrictions
+const allQuickActions = [
+    { name: "New Farmer", icon: Plus, path: "/dashboard/farmers/new", roles: ['admin', 'fieldagent'] },
+    { name: "Record Delivery", icon: Package, path: "/dashboard/deliveries/new", roles: ['admin', 'fieldagent'] },
+    { name: "Record Payment", icon: Wallet, path: "/dashboard/payments/new", roles: ['admin'] },
 ];
 
-/**
- * Custom component to generate the outline button style (like DaisyUI's btn-outline).
- */
-const OutlineButton = ({ color, to, children, className = '' }) => {
-    const base = 'w-full text-sm font-medium rounded-lg transition-colors duration-200 border py-2 px-3 text-center shadow-sm whitespace-nowrap';
-    const palette = {
-        estate: 'border-[#1B4332] text-[#1B4332] hover:bg-[#1B4332] hover:text-white',
-        cherry: 'border-[#D93025] text-[#D93025] hover:bg-[#D93025] hover:text-white',
-        charcoal: 'border-[#1F2937] text-[#1F2937] hover:bg-[#1F2937] hover:text-white',
-    };
-    return (
-        <Link to={to} className={`${base} ${palette[color] || palette.charcoal} ${className}`}>
-            {children}
-        </Link>
-    );
-};
+
 
 const Sidebar = ({ isCollapsed }) => {
-    // Determine the width of the sidebar and transition class
-    const sidebarWidth = isCollapsed ? 'w-20' : 'w-64'; 
-    const transitionClass = 'transition-all duration-300 ease-in-out';
-    const CollapsedLogo = LayoutDashboard;
+    const { authState } = useAuth();
+    const location = useLocation();
+    const userRole = authState?.role;
+
+    // Filter navigation items and quick actions based on user role
+    const navItems = userRole ? allNavItems.filter(item => item.roles?.includes(userRole)) : [];
+    const quickActions = userRole ? allQuickActions.filter(action => action.roles?.includes(userRole)) : [];
+
+    const sidebarWidth = isCollapsed ? 'w-20' : 'w-64';
+
+    // Show loading state
+    if (authState?.loading) {
+        return (
+            <div className={`h-full fixed left-0 top-0 bg-[#1B4332] shadow-xl ${sidebarWidth} transition-all duration-300 z-30 flex flex-col items-center justify-center`}>
+                <div className="text-white text-sm">Loading...</div>
+            </div>
+        );
+    }
 
     return (
-        <div className={`h-full fixed left-0 top-0 shadow-2xl ${sidebarWidth} ${transitionClass} z-30 flex flex-col`} style={{ backgroundColor: '#1B4332' }}>
+        <div className={`h-full fixed left-0 top-0 bg-[#1B4332] shadow-xl ${sidebarWidth} transition-all duration-300 z-30 flex flex-col`}>
             
             {/* Header / Logo Area */}
-            <div className={`h-16 flex items-center justify-center p-4 border-b border-[#2D6A4F] shrink-0`}>
-                <h1 className={`text-xl font-bold whitespace-nowrap overflow-hidden ${isCollapsed ? 'hidden' : 'block'}`} style={{ color: '#F9FAFB' }}>
-                    OCMS
-                </h1>
-                <CollapsedLogo className={`text-2xl ${isCollapsed ? 'block' : 'hidden'}`} style={{ color: '#F9FAFB' }} />
+            <div className="h-16 flex items-center justify-center px-4 border-b border-[#2D6A4F]">
+                {!isCollapsed ? (
+                    <div className="flex items-center gap-2">
+                        <Coffee size={28} className="text-[#F59E0B]" />
+                        <h1 className="text-xl font-bold text-white">
+                            OCMS
+                        </h1>
+                    </div>
+                ) : (
+                    <Coffee size={28} className="text-[#F59E0B]" />
+                )}
             </div>
 
             {/* Navigation & Quick Actions Container - Scrollable area */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto py-4">
                 
-                {/* 1. Primary Navigation Links */}
-                <nav className="p-2 space-y-1 mt-4">
+                {/* Primary Navigation Links */}
+                <nav className="px-3 space-y-1">
                     {navItems.map((item) => {
                         const IconComponent = item.icon;
-                        const isActive = item.path === window.location.pathname;
+                        const isActive = location.pathname === item.path;
                         return (
                             <Link
                                 key={item.name}
                                 to={item.path}
                                 title={item.name}
-                                className={`flex items-center p-3 rounded-lg ${isActive ? 'font-semibold' : ''} ${transitionClass}`}
-                                style={{
-                                    color: isActive ? '#F9FAFB' : 'rgba(249,250,251,0.8)',
-                                    backgroundColor: isActive ? '#2D6A4F' : 'transparent'
-                                }}
+                                className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 group relative ${
+                                    isActive 
+                                        ? 'bg-[#2D6A4F] text-white shadow-md' 
+                                        : 'text-gray-300 hover:bg-[#2D6A4F] hover:text-white'
+                                }`}
                             >
-                                <IconComponent className="text-xl shrink-0" style={{ color: isActive ? '#F9FAFB' : 'rgba(249,250,251,0.9)'}} />
-                                <span className={`ml-3 whitespace-nowrap overflow-hidden ${isCollapsed ? 'hidden' : 'block'}`}>
-                                    {item.name}
-                                </span>
+                                {isActive && !isCollapsed && (
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#F59E0B] rounded-r-full" />
+                                )}
+                                <IconComponent 
+                                    size={20} 
+                                    className={`shrink-0 ${isActive ? 'text-[#F59E0B]' : 'group-hover:text-[#F59E0B]'} transition-colors`}
+                                />
+                                {!isCollapsed && (
+                                    <span className={`ml-3 font-medium text-sm ${isActive ? 'font-semibold' : ''}`}>
+                                        {item.name}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* --- Quick Actions Section --- */}
-                {/* Add a divider for separation */}
-                {!isCollapsed && (
-                    <div className="mx-4 my-4" style={{ borderTop: '1px solid #2D6A4F' }}></div>
-                )}
+                {/* Quick Actions Section */}
+                {quickActions.length > 0 && (
+                    <>
+                        {!isCollapsed && (
+                            <div className="mx-6 my-6 border-t border-[#2D6A4F]" />
+                        )}
 
-                <div className={`mt-2 p-2 pt-0 ${isCollapsed ? 'py-4' : 'pt-0 pb-8'}`}>
-                    
-                    {isCollapsed ? (
-                        // Collapsed view: Simple icons for quick actions
-                        <div className="space-y-2 flex flex-col items-center">
-                            {quickActions.map((action) => {
-                                const ActionIcon = action.icon;
-                                return (
-                                    <Link
-                                        key={action.name}
-                                        to={action.path}
-                                        title={action.name}
-                                        className={`p-3 rounded-lg transition-colors duration-200 flex items-center justify-center w-full`}
-                                        style={{ color: '#F9FAFB', backgroundColor: '#2D6A4F' }}
-                                    >
-                                        <ActionIcon className={`text-lg shrink-0`} />
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        // Expanded view: Buttons retain their outline styling, structured as a vertical list.
-                        <div className="px-2"> 
+                        <div className="px-3">
+                            {!isCollapsed && (
+                                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-4">
+                                    Quick Actions
+                                </h3>
+                            )}
                             
-                            <h3 className="text-xs font-bold uppercase mb-3 ml-1" style={{ color: 'rgba(249,250,251,0.7)'}}>
-                                Quick Actions
-                            </h3>
-                            
-                            {/* FIX: Ensure buttons are explicitly stacked vertically and have spacing */}
-                            <div className="flex flex-col space-y-2">
-                                <OutlineButton to={quickActions[0].path} color={quickActions[0].color}>
-                                    {quickActions[0].name}
-                                </OutlineButton>
-                                <OutlineButton to={quickActions[1].path} color={quickActions[1].color}>
-                                    {quickActions[1].name}
-                                </OutlineButton>
-                                <OutlineButton to={quickActions[2].path} color={quickActions[2].color}>
-                                    {quickActions[2].name}
-                                </OutlineButton>
+                            <div className="space-y-2">
+                                {quickActions.map((action) => {
+                                    const ActionIcon = action.icon;
+                                    return (
+                                        <Link
+                                            key={action.name}
+                                            to={action.path}
+                                            title={action.name}
+                                            className={`flex items-center px-4 py-2.5 rounded-lg transition-all duration-200 ${
+                                                isCollapsed 
+                                                    ? 'justify-center bg-[#F59E0B] hover:bg-[#D97706] text-white' 
+                                                    : 'bg-[#F59E0B] hover:bg-[#D97706] text-white shadow-md hover:shadow-lg'
+                                            }`}
+                                        >
+                                            <ActionIcon size={18} className="shrink-0" />
+                                            {!isCollapsed && (
+                                                <span className="ml-3 font-medium text-sm">
+                                                    {action.name}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         </div>
-                    )}
-                </div>
+                    </>
+                )}
             </div>
+
+            {/* User Info Footer */}
+            {!isCollapsed && authState?.user && (
+                <div className="border-t border-[#2D6A4F] p-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#F59E0B] flex items-center justify-center text-white font-semibold">
+                            {authState.user.username?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm font-medium truncate">
+                                {authState.user.username}
+                            </p>
+                            <p className="text-gray-400 text-xs truncate capitalize">
+                                {authState.user.role || 'User'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
