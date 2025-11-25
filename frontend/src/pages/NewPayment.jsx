@@ -49,9 +49,9 @@ const NewPayment = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F8F4] p-6">
-      <h1 className="text-3xl font-bold text-[#1B4332] mb-4">Record Payment</h1>
-      <div className="bg-white p-6 rounded shadow">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100 mb-4">Record Payment</h1>
+      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="form-label">Farmer</label>
@@ -108,8 +108,8 @@ const NewPayment = () => {
           </div>
 
           <div className="d-flex gap-2">
-            <button className="btn" style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }} type="submit">Save Payment</button>
-            <button type="button" onClick={() => navigate('/dashboard/payments')} className="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-500 transition-all font-medium">Cancel</button>
+            <button className="btn bg-[#1B4332] dark:bg-dark-green-primary hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover text-white border-0" type="submit">Save Payment</button>
+            <button type="button" onClick={() => navigate('/dashboard/payments')} className="px-4 py-2 border border-gray-400 dark:border-gray-700 text-gray-700 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-500 transition-all font-medium">Cancel</button>
           </div>
         </form>
       </div>

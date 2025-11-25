@@ -144,18 +144,18 @@ const Deliveries = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F8F4] p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
-      <div className="mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#1B4332]">Deliveries</h1>
-            <p className="text-gray-600 mt-1">Track and manage coffee deliveries</p>
+            <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Deliveries</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Track and manage coffee deliveries</p>
           </div>
           {canCreate(authState?.role, 'deliveries') && (
             <button
               onClick={() => navigate('/dashboard/deliveries/new')}
-              className="flex items-center gap-2 bg-[#1B4332] text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] transition-all shadow-md hover:shadow-lg"
+              className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
             >
               <Plus size={20} />
               <span>Record Delivery</span>
@@ -166,68 +166,68 @@ const Deliveries = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#1B4332]">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#1B4332] dark:border-dark-green-primary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Total Deliveries</p>
-              <p className="text-3xl font-bold text-[#1B4332] mt-2">{filteredDeliveries.length}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Deliveries</p>
+              <p className="text-3xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">{filteredDeliveries.length}</p>
             </div>
-            <Package size={40} className="text-[#1B4332] opacity-20" />
+            <Package size={40} className="text-[#1B4332] dark:text-dark-green-primary opacity-20" />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#D93025]">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#D93025] dark:border-red-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Cherry</p>
-              <p className="text-3xl font-bold text-[#D93025] mt-2">{cherryKgs.toFixed(2)} kg</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Cherry</p>
+              <p className="text-3xl font-bold text-[#D93025] dark:text-red-400 mt-2">{cherryKgs.toFixed(2)} kg</p>
             </div>
-            <TrendingUp size={40} className="text-[#D93025] opacity-20" />
+            <TrendingUp size={40} className="text-[#D93025] dark:text-red-400 opacity-20" />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#F59E0B]">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#F59E0B] dark:border-dark-gold-primary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Parchment</p>
-              <p className="text-3xl font-bold text-[#F59E0B] mt-2">{parchmentKgs.toFixed(2)} kg</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Parchment</p>
+              <p className="text-3xl font-bold text-[#F59E0B] dark:text-yellow-400 mt-2">{parchmentKgs.toFixed(2)} kg</p>
             </div>
-            <TrendingUp size={40} className="text-[#F59E0B] opacity-20" />
+            <TrendingUp size={40} className="text-[#F59E0B] dark:text-yellow-400 opacity-20" />
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Start Date</label>
             <ReactDatePicker
               selected={startDate}
               onChange={date => setStartDate(date)}
               isClearable
               placeholderText="Select start date"
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">End Date</label>
             <ReactDatePicker
               selected={endDate}
               onChange={date => setEndDate(date)}
               isClearable
               placeholderText="Select end date"
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Type</label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
               <option value="All">All Types</option>
               <option value="Cherry">Cherry</option>
@@ -236,11 +236,11 @@ const Deliveries = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Region</label>
             <select
               value={regionFilter}
               onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
               <option value="All">All Regions</option>
               {[...new Set(deliveries.map(d => d.region).filter(Boolean))].sort().map(region => (
@@ -250,11 +250,11 @@ const Deliveries = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Driver</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Driver</label>
             <select
               value={driverFilter}
               onChange={(e) => setDriverFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
               <option value="All">All Drivers</option>
               {[...new Set(deliveries.map(d => d.driver).filter(Boolean))].sort().map(driver => (
@@ -264,14 +264,14 @@ const Deliveries = () => {
           </div>
         </div>
         
-        <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <p className="text-sm text-gray-600">
-            Total Weight: <span className="font-bold text-[#1B4332]">{totalKgs.toFixed(2)} kg</span>
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Total Weight: <span className="font-bold text-[#1B4332] dark:text-gray-100">{totalKgs.toFixed(2)} kg</span>
           </p>
           <div className="flex gap-2">
             <button
               onClick={exportToCSV}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] text-[#1B4332] rounded-lg hover:bg-[#1B4332] hover:text-white transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary rounded-lg hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white transition-all"
               title="Export to CSV"
             >
               <FileText size={16} />
@@ -279,7 +279,7 @@ const Deliveries = () => {
             </button>
             <button
               onClick={exportToPDF}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] text-[#D93025] rounded-lg hover:bg-[#D93025] hover:text-white transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] dark:border-red-500 text-[#D93025] dark:text-red-400 rounded-lg hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white transition-all"
               title="Export to PDF"
             >
               <Download size={16} />
@@ -292,18 +292,18 @@ const Deliveries = () => {
       {/* Deliveries List */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-500">Loading deliveries...</div>
+          <div className="text-gray-500 dark:text-dark-text-tertiary">Loading deliveries...</div>
         </div>
       ) : filteredDeliveries.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-500 text-lg">No deliveries found</p>
-          <p className="text-gray-400 mt-2">Try adjusting your filters</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No deliveries found</p>
+          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#1B4332] text-white">
+              <thead className="bg-[#1B4332] dark:bg-dark-green-secondary text-white">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Farmer</th>
@@ -316,16 +316,16 @@ const Deliveries = () => {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredDeliveries.map((delivery, index) => (
-                  <tr key={delivery._id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                  <tr key={delivery._id} className={index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}>
+                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                       {new Date(delivery.date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <User size={16} className="text-gray-400" />
-                        <span className="text-sm font-medium text-gray-900">
+                        <User size={16} className="text-gray-400 dark:text-dark-text-muted" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {delivery.farmer?.name || 'N/A'}
                         </span>
                       </div>
@@ -339,13 +339,13 @@ const Deliveries = () => {
                         {delivery.type}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332]">
+                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332] dark:text-dark-green-primary">
                       {delivery.kgsDelivered} kg
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {delivery.region}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {delivery.driver}
                     </td>
                     {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
@@ -354,7 +354,7 @@ const Deliveries = () => {
                           {canUpdate(authState?.role, 'deliveries') && (
                             <button
                               onClick={() => handleEdit(delivery._id)}
-                              className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg transition-all"
+                              className="p-2 text-[#1B4332] dark:text-dark-green-primary hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white rounded-lg transition-all"
                               title="Edit delivery"
                             >
                               <Edit2 size={16} />
@@ -363,7 +363,7 @@ const Deliveries = () => {
                           {canDelete(authState?.role, 'deliveries') && (
                             <button
                               onClick={() => handleDelete(delivery._id)}
-                              className="p-2 text-[#D93025] hover:bg-[#D93025] hover:text-white rounded-lg transition-all"
+                              className="p-2 text-[#D93025] dark:text-red-400 hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white rounded-lg transition-all"
                               title="Delete delivery"
                             >
                               <Trash2 size={16} />

@@ -14,11 +14,14 @@ import {
 } from 'chart.js';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 const Dashboard = () => {
     const { authState } = useAuth();
+    const { theme } = useTheme();
     const user = authState?.user;
+    const isDark = theme === 'dark';
     
     // --- State Hooks ---
     const [filterDate, setFilterDate] = useState('');
@@ -73,7 +76,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchDashboardData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, []);
 
     // --- KPI Data Configuration ---
@@ -83,7 +86,7 @@ const Dashboard = () => {
             value: dashboardData.totalFarmers.toLocaleString(), 
             icon: <Users size={24} />,
             color: "#1B4332", 
-            bgColor: "bg-[#1B4332]", 
+            bgColor: "bg-[#1B4332] dark:bg-dark-green-primary", 
             change: "Registered in system",
             link: "/dashboard/farmers"
         },
@@ -92,7 +95,7 @@ const Dashboard = () => {
             value: dashboardData.kgsDelivered.toLocaleString(), 
             icon: <Package size={24} />,
             color: "#D93025", 
-            bgColor: "bg-[#D93025]", 
+            bgColor: "bg-[#D93025] dark:bg-red-600", 
             change: "This month",
             link: "/dashboard/deliveries"
         },
@@ -101,7 +104,7 @@ const Dashboard = () => {
             value: `Ksh ${dashboardData.totalPayments.toLocaleString()}`, 
             icon: <DollarSign size={24} />,
             color: "#F59E0B", 
-            bgColor: "bg-[#F59E0B]", 
+            bgColor: "bg-[#F59E0B] dark:bg-dark-gold-primary", 
             change: "Current month",
             link: "/dashboard/payments"
         },
@@ -110,7 +113,7 @@ const Dashboard = () => {
             value: dashboardData.pendingReports.toString(), 
             icon: <List size={24} />,
             color: "#6B7280", 
-            bgColor: "bg-gray-600", 
+            bgColor: "bg-gray-600 dark:bg-gray-500", 
             change: "Action required",
             link: "/dashboard/reports"
         },
@@ -118,31 +121,31 @@ const Dashboard = () => {
 
     // --- Filter Card Component ---
     const FilterCard = () => (
-        <div className="bg-white shadow-lg border border-gray-200 rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-none border border-gray-200 dark:border-gray-700 rounded-xl p-6 transition-all duration-200">
             <div className="flex items-center gap-2 mb-4">
-                <Filter className="text-[#1B4332]" size={20} />
-                <h3 className="text-lg text-gray-800 font-semibold">Filter Dashboard Data</h3>
+                <Filter className="text-[#1B4332] dark:text-emerald-400" size={20} />
+                <h3 className="text-lg text-gray-900 dark:text-gray-100 font-semibold">Filter Dashboard Data</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
                 {/* Date Input */}
                 <div>
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">Date</label>
+                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Date</label>
                     <input 
                         type="date" 
                         value={filterDate} 
                         onChange={(e) => setFilterDate(e.target.value)} 
-                        className="w-full text-sm rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition" 
+                        className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-emerald-500 focus:border-transparent transition" 
                     />
                 </div>
 
                 {/* Region Select */}
                 <div>
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">Region</label>
+                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Region</label>
                     <select 
                         value={filterRegion} 
                         onChange={(e) => setFilterRegion(e.target.value)} 
-                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-emerald-500 focus:border-transparent transition"
                     >
                         <option value="">All Regions</option>
                         <option>North</option>
@@ -153,11 +156,11 @@ const Dashboard = () => {
                 
                 {/* Driver Select */}
                 <div>
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">Delivery Driver</label>
+                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Delivery Driver</label>
                     <select 
                         value={filterDriver} 
                         onChange={(e) => setFilterDriver(e.target.value)} 
-                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-emerald-500 focus:border-transparent transition"
                     >
                         <option value="">All Drivers</option>
                         <option>Driver A</option>
@@ -168,11 +171,11 @@ const Dashboard = () => {
                 
                 {/* Delivery Type Select */}
                 <div>
-                    <label className="text-xs font-medium text-gray-600 mb-1 block">Delivery Type</label>
+                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Delivery Type</label>
                     <select 
                         value={filterDelivery} 
                         onChange={(e) => setFilterDelivery(e.target.value)} 
-                        className="w-full text-sm bg-white text-gray-700 rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition"
+                        className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-emerald-500 focus:border-transparent transition"
                     >
                         <option value="">All Types</option>
                         <option value="Cherry">Cherry</option>
@@ -190,7 +193,7 @@ const Dashboard = () => {
                             if (filterDelivery) params.type = filterDelivery;
                             fetchDashboardData(params);
                         }} 
-                        className="w-full bg-[#1B4332] hover:bg-[#2D5F4D] text-white rounded-lg px-4 py-2.5 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                        className="w-full bg-[#1B4332] dark:bg-emerald-600 hover:bg-[#2D5F4D] dark:hover:bg-emerald-700 text-white rounded-lg px-4 py-2.5 text-sm font-semibold shadow-md dark:shadow-none transition-all duration-200"
                     >
                         Apply Filters
                     </button>
@@ -201,14 +204,14 @@ const Dashboard = () => {
 
     // Main Render Function
     return (
-        <div className="p-4 md:p-8 bg-[#F3F4F6] min-h-screen">
+        <div className="p-4 md:p-8 min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-[#1B4332] mb-2">Dashboard Overview</h1>
-                <div className="flex items-center gap-2 text-gray-600">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard Overview</h1>
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <Calendar size={16} />
                     <p className="text-sm">
-                        Welcome back, <span className="font-semibold text-[#1B4332]">{user?.username || 'User'}</span>
+                        Welcome back, <span className="font-semibold text-[#1B4332] dark:text-emerald-400">{user?.username || 'User'}</span>
                         {user?.assignedRegion && (
                             <>
                                 <span className="mx-2">•</span>
@@ -222,8 +225,8 @@ const Dashboard = () => {
             
             {loading && (
                 <div className="text-center p-16">
-                    <Loader2 className="animate-spin text-[#1B4332] text-4xl mx-auto" />
-                    <p className="mt-4 text-gray-600">Loading Dashboard Data...</p>
+                    <Loader2 className="animate-spin text-[#1B4332] dark:text-emerald-400 text-4xl mx-auto" />
+                    <p className="mt-4 text-gray-600 dark:text-gray-400">Loading Dashboard Data...</p>
                 </div>
             )}
             
@@ -242,14 +245,18 @@ const Dashboard = () => {
                                 <Link 
                                     key={index} 
                                     to={kpi.link}
-                                    className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 group cursor-pointer" 
-                                    style={{borderLeftColor: kpi.color}}
+                                    className={`bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-none border dark:border-gray-700 hover:shadow-xl dark:hover:border-gray-600 transition-all duration-300 p-6 border-l-4 group cursor-pointer ${
+                                        index === 0 ? 'border-l-[#1B4332] dark:border-l-emerald-500' :
+                                        index === 1 ? 'border-l-[#D93025] dark:border-l-red-500' :
+                                        index === 2 ? 'border-l-[#F59E0B] dark:border-l-amber-500' :
+                                        'border-l-gray-600 dark:border-l-gray-500'
+                                    }`}
                                 >
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <p className="text-gray-600 text-sm font-medium mb-2">{kpi.title}</p>
-                                            <h3 className="text-3xl font-bold text-gray-900 mb-1">{kpi.value}</h3>
-                                            <p className="text-xs text-gray-500">{kpi.change}</p>
+                                            <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-2">{kpi.title}</p>
+                                            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{kpi.value}</h3>
+                                            <p className="text-xs text-gray-500 dark:text-gray-500">{kpi.change}</p>
                                         </div>
                                         <div 
                                             className={`${kpi.bgColor} p-3 rounded-lg text-white group-hover:scale-110 transition-transform duration-300`}
@@ -265,20 +272,19 @@ const Dashboard = () => {
                         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                             
                             {/* Delivery Chart (2/3 Width) */}
-                            <div className="xl:col-span-2 bg-white shadow-lg rounded-xl p-6">
+                            <div className="xl:col-span-2 bg-white dark:bg-gray-800 shadow-lg dark:shadow-none border dark:border-gray-700 rounded-xl p-6 transition-all duration-200">
                                 <div className="flex items-center gap-2 mb-6">
-                                    <BarChart3 size={20} className="text-[#1B4332]" />
-                                    <h3 className="text-lg font-semibold text-gray-800">Monthly Delivery Trend</h3>
-                                </div>
-                                <div className="h-72 bg-white rounded-lg">
+                                    <BarChart3 size={20} className="text-[#1B4332] dark:text-emerald-400" />
+                                <div className="h-72 rounded-lg">
                                     <Bar
+                                        key={`bar-chart-${theme}`}
                                         data={{
                                             labels: dashboardData.monthlyKgs.labels,
                                             datasets: [
                                                 {
                                                     label: 'Kgs Delivered',
                                                     data: dashboardData.monthlyKgs.values,
-                                                    backgroundColor: '#1B4332',
+                                                    backgroundColor: isDark ? '#10b981' : '#1B4332',
                                                     borderRadius: 8,
                                                     borderSkipped: false,
                                                 }
@@ -290,20 +296,26 @@ const Dashboard = () => {
                                             plugins: { 
                                                 legend: { display: false },
                                                 tooltip: {
-                                                    backgroundColor: '#1B4332',
+                                                    backgroundColor: isDark ? '#1F2937' : '#1B4332',
                                                     padding: 12,
                                                     titleFont: { size: 14 },
                                                     bodyFont: { size: 13 },
+                                                    borderColor: isDark ? '#374151' : 'transparent',
+                                                    borderWidth: 1
                                                 }
                                             },
                                             scales: { 
                                                 y: { 
                                                     beginAtZero: true,
                                                     grid: {
-                                                        color: '#F3F4F6',
+                                                        color: isDark ? '#374151' : '#F3F4F6',
+                                                        drawBorder: false
                                                     },
                                                     ticks: {
-                                                        color: '#6B7280'
+                                                        color: isDark ? '#9CA3AF' : '#6B7280'
+                                                    },
+                                                    border: {
+                                                        display: false
                                                     }
                                                 },
                                                 x: {
@@ -311,7 +323,10 @@ const Dashboard = () => {
                                                         display: false
                                                     },
                                                     ticks: {
-                                                        color: '#6B7280'
+                                                        color: isDark ? '#9CA3AF' : '#6B7280'
+                                                    },
+                                                    border: {
+                                                        display: false
                                                     }
                                                 }
                                             }
@@ -321,10 +336,10 @@ const Dashboard = () => {
                             </div>
 
                             {/* Payments Snapshot Chart (1/3 Width) */}
-                            <div className="xl:col-span-1 bg-white shadow-lg rounded-xl p-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-6">Payment Status</h3>
+                            <div className="xl:col-span-1 bg-white dark:bg-gray-800 shadow-lg dark:shadow-none border dark:border-gray-700 rounded-xl p-6 transition-all duration-200">
                                 <div className="h-72 flex items-center justify-center">
                                     <Doughnut
+                                        key={`doughnut-chart-${theme}`}
                                         data={{
                                             labels: ['Completed', 'Pending', 'Failed'],
                                             datasets: [
@@ -334,8 +349,9 @@ const Dashboard = () => {
                                                         dashboardData.paymentsStatus.Pending || 0,
                                                         dashboardData.paymentsStatus.Failed || 0
                                                     ],
-                                                    backgroundColor: ['#10B981', '#F59E0B', '#D93025'],
-                                                    borderWidth: 0,
+                                                    backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                                                    borderWidth: isDark ? 2 : 0,
+                                                    borderColor: isDark ? '#1F2937' : 'transparent',
                                                     hoverOffset: 4
                                                 }
                                             ]
@@ -351,31 +367,36 @@ const Dashboard = () => {
                                                         font: {
                                                             size: 12
                                                         },
-                                                        color: '#374151'
+                                                        color: isDark ? '#D1D5DB' : '#374151'
                                                     }
                                                 },
                                                 tooltip: {
-                                                    backgroundColor: '#1F2937',
+                                                    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+                                                    titleColor: isDark ? '#F9FAFB' : '#111827',
+                                                    bodyColor: isDark ? '#D1D5DB' : '#374151',
+                                                    borderColor: isDark ? '#374151' : '#E5E7EB',
+                                                    borderWidth: 1,
                                                     padding: 12,
                                                 }
                                             }
                                         }}
                                     />
                                 </div>
+                                </div>
                             </div>
                         </div>
 
                         {/* RECENT ACTIVITY TABLE */}
-                        <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-                            <div className="p-6 border-b border-gray-200">
+                        <div className="bg-white dark:bg-gray-800 shadow-lg dark:shadow-none border dark:border-gray-700 rounded-xl overflow-hidden transition-all duration-200">
+                            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center gap-2">
-                                    <List size={20} className="text-[#1B4332]" />
-                                    <h3 className="text-lg font-semibold text-gray-800">Recent Activity</h3>
+                                    <List size={20} className="text-[#1B4332] dark:text-emerald-400" />
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Activity</h3>
                                 </div>
                             </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full">
-                                    <thead className="bg-[#1B4332] text-white">
+                                    <thead className="bg-[#1B4332] dark:bg-gray-700 text-white">
                                         <tr>
                                             <th className="py-3 px-6 text-left text-xs font-semibold uppercase tracking-wider">Date</th>
                                             <th className="py-3 px-6 text-left text-xs font-semibold uppercase tracking-wider">Farmer</th>
@@ -387,25 +408,25 @@ const Dashboard = () => {
                                     <tbody>
                                         {dashboardData.recentActivities.length > 0 ? (
                                             dashboardData.recentActivities.map((activity, idx) => (
-                                                <tr key={idx} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-[#F3F4F6] transition-colors duration-150`}> 
-                                                    <td className="py-4 px-6 text-gray-600 text-sm">
+                                                <tr key={idx} className={`${idx % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-750'} hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150 border-b border-gray-100 dark:border-gray-700`}> 
+                                                    <td className="py-4 px-6 text-gray-600 dark:text-gray-400 text-sm">
                                                         <div className="flex items-center gap-1">
-                                                            <Calendar size={14} className="text-gray-400" />
+                                                            <Calendar size={14} className="text-gray-400 dark:text-gray-500" />
                                                             {new Date(activity.date).toLocaleDateString()}
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-6 font-semibold text-gray-800 text-sm">{activity.farmer}</td>
-                                                    <td className="py-4 px-6 text-gray-700 text-sm">{activity.metric}</td>
+                                                    <td className="py-4 px-6 font-semibold text-gray-900 dark:text-gray-100 text-sm">{activity.farmer}</td>
+                                                    <td className="py-4 px-6 text-gray-700 dark:text-gray-300 text-sm">{activity.metric}</td>
                                                     <td className="py-4 px-6">
-                                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
                                                             {activity.type}
                                                         </span>
                                                     </td>
                                                     <td className="py-4 px-6">
                                                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                                                             activity.status.includes('Paid') || activity.status.includes('Completed') 
-                                                                ? 'bg-green-100 text-green-700' 
-                                                                : 'bg-yellow-100 text-yellow-700'
+                                                                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' 
+                                                                : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                                                         }`}>
                                                             {activity.status}
                                                         </span>
@@ -416,23 +437,23 @@ const Dashboard = () => {
                                             <tr>
                                                 <td colSpan="5" className="text-center py-16">
                                                     <div className="flex flex-col items-center justify-center">
-                                                        <div className="bg-gray-100 rounded-full p-6 mb-4">
-                                                            <List size={48} className="text-gray-400" />
+                                                        <div className="bg-gray-100 dark:bg-gray-700 rounded-full p-6 mb-4">
+                                                            <List size={48} className="text-gray-400 dark:text-gray-500" />
                                                         </div>
-                                                        <h4 className="text-lg font-semibold text-gray-700 mb-2">No Recent Activity</h4>
-                                                        <p className="text-sm text-gray-500 mb-6 max-w-md">
+                                                        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">No Recent Activity</h4>
+                                                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-md">
                                                             Start recording deliveries or payments to see your activity feed populate with recent transactions.
                                                         </p>
                                                         <div className="flex gap-3">
                                                             <Link 
                                                                 to="/dashboard/deliveries/new" 
-                                                                className="bg-[#1B4332] hover:bg-[#2D5F4D] text-white px-6 py-2.5 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                                                                className="bg-[#1B4332] dark:bg-emerald-600 hover:bg-[#2D5F4D] dark:hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold shadow-md dark:shadow-none transition-all duration-200"
                                                             >
                                                                 Record Delivery
                                                             </Link>
                                                             <Link 
                                                                 to="/dashboard/payments/new" 
-                                                                className="bg-white hover:bg-gray-50 text-[#1B4332] border-2 border-[#1B4332] px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+                                                                className="bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-[#1B4332] dark:text-emerald-400 border-2 border-[#1B4332] dark:border-emerald-500 px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
                                                             >
                                                                 Record Payment
                                                             </Link>

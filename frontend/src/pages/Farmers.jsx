@@ -72,18 +72,18 @@ const Farmers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F8F4] p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
-      <div className="mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#1B4332]">Farmers</h1>
-            <p className="text-gray-600 mt-1">Manage and view registered farmers</p>
+            <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Farmers</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Manage and view registered farmers</p>
           </div>
           {canCreate(authState?.role, 'farmers') && (
             <button
               onClick={() => navigate('/dashboard/farmers/new')}
-              className="flex items-center gap-2 bg-[#1B4332] text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] transition-all shadow-md hover:shadow-lg"
+              className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
             >
               <Plus size={20} />
               <span>Add New Farmer</span>
@@ -93,17 +93,17 @@ const Farmers = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-dark-text-tertiary" size={20} />
             <input
               type="text"
               placeholder="Search by name, phone, or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
           
@@ -112,7 +112,7 @@ const Farmers = () => {
             <select
               value={regionFilter}
               onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
               <option value="All">All Regions</option>
               {regions.map(region => (
@@ -124,8 +124,8 @@ const Farmers = () => {
         
         {/* Results count and View Toggle */}
         <div className="mt-4 flex justify-between items-center">
-          <div className="text-sm text-gray-600">
-            Showing <span className="font-semibold text-[#1B4332]">{filteredFarmers.length}</span> of {farmers.length} farmers
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span className="font-semibold text-[#1B4332] dark:text-dark-green-primary">{filteredFarmers.length}</span> of {farmers.length} farmers
           </div>
           
           {/* View Mode Toggle */}
@@ -134,8 +134,8 @@ const Farmers = () => {
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg transition-all ${
                 viewMode === 'grid'
-                  ? 'bg-[#1B4332] text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#1B4332] dark:bg-dark-green-primary text-white shadow-md'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
               title="Grid View"
             >
@@ -145,8 +145,8 @@ const Farmers = () => {
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-lg transition-all ${
                 viewMode === 'list'
-                  ? 'bg-[#1B4332] text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-[#1B4332] dark:bg-dark-green-primary text-white shadow-md'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
               title="List View"
             >
@@ -159,12 +159,12 @@ const Farmers = () => {
       {/* Farmers Display */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-500">Loading farmers...</div>
+          <div className="text-gray-500 dark:text-gray-400">Loading farmers...</div>
         </div>
       ) : filteredFarmers.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-500 text-lg">No farmers found</p>
-          <p className="text-gray-400 mt-2">Try adjusting your search or filters</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No farmers found</p>
+          <p className="text-gray-400 dark:text-dark-text-tertiary mt-2">Try adjusting your search or filters</p>
         </div>
       ) : viewMode === 'grid' ? (
         // Grid View
@@ -172,18 +172,18 @@ const Farmers = () => {
           {filteredFarmers.map(farmer => (
             <div
               key={farmer._id}
-              className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-[#1B4332] relative"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-[#1B4332] dark:border-dark-green-primary relative"
             >
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-semibold text-[#1B4332]">{farmer.name}</h3>
+                <h3 className="text-xl font-semibold text-[#1B4332] dark:text-gray-100">{farmer.name}</h3>
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-[#F59E0B] text-white text-xs rounded-full font-medium">
+                  <span className="px-3 py-1 bg-[#F59E0B] dark:bg-dark-gold-primary text-white text-xs rounded-full font-medium">
                     {farmer.season}
                   </span>
                   {canDelete(authState?.role, 'farmers') && (
                     <button
                       onClick={() => handleDeleteFarmer(farmer._id, farmer.name)}
-                      className="text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-lg transition-all duration-200"
+                      className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-all duration-200"
                       title="Delete farmer"
                     >
                       <Trash2 size={16} />
@@ -193,29 +193,29 @@ const Farmers = () => {
               </div>
               
               <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Phone size={16} className="text-[#D93025]" />
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <Phone size={16} className="text-[#D93025] dark:text-red-400" />
                   <span className="text-sm">{farmer.cellNumber}</span>
                 </div>
                 
-                <div className="flex items-center gap-2 text-gray-600">
-                  <IdCard size={16} className="text-[#D93025]" />
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <IdCard size={16} className="text-[#D93025] dark:text-red-400" />
                   <span className="text-sm">{farmer.nationalId}</span>
                 </div>
                 
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin size={16} className="text-[#D93025]" />
+                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                  <MapPin size={16} className="text-[#D93025] dark:text-red-400" />
                   <span className="text-sm">{farmer.weighStation}</span>
                 </div>
                 
                 {farmer.farmLocation?.address && (
-                  <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-100">
+                  <div className="text-xs text-gray-500 dark:text-dark-text-tertiary mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
                     {farmer.farmLocation.address}
                   </div>
                 )}
                 
                 {farmer.createdBy && (
-                  <div className="text-xs text-gray-400 mt-2">
+                  <div className="text-xs text-gray-400 dark:text-dark-text-muted mt-2">
                     Added by: {farmer.createdBy.name || farmer.createdBy.username}
                   </div>
                 )}
@@ -225,9 +225,9 @@ const Farmers = () => {
         </div>
       ) : (
         // List View
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <table className="w-full">
-            <thead className="bg-[#1B4332] text-white">
+            <thead className="bg-[#1B4332] dark:bg-dark-green-secondary text-white">
               <tr>
                 <th className="py-3 px-6 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
                 <th className="py-3 px-6 text-left text-xs font-semibold uppercase tracking-wider">Phone</th>
@@ -245,47 +245,47 @@ const Farmers = () => {
                 <tr 
                   key={farmer._id} 
                   className={`${
-                    index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                  } hover:bg-[#F3F4F6] transition-colors`}
+                    index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'
+                  } hover:bg-[#F3F4F6] dark:hover:bg-gray-700 transition-colors`}
                 >
                   <td className="py-4 px-6">
                     <div className="flex items-center gap-2">
-                      <div className="font-semibold text-[#1B4332]">{farmer.name}</div>
+                      <div className="font-semibold text-[#1B4332] dark:text-gray-100">{farmer.name}</div>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Phone size={16} className="text-[#D93025]" />
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <Phone size={16} className="text-[#D93025] dark:text-red-400" />
                       <span className="text-sm">{farmer.cellNumber}</span>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <IdCard size={16} className="text-[#D93025]" />
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <IdCard size={16} className="text-[#D93025] dark:text-red-400" />
                       <span className="text-sm">{farmer.nationalId}</span>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <MapPin size={16} className="text-[#F59E0B]" />
+                    <div className="flex items-center gap-2 text-gray-700 dark:text-gray-100">
+                      <MapPin size={16} className="text-[#F59E0B] dark:text-dark-gold-primary" />
                       <span className="text-sm">{farmer.weighStation}</span>
                     </div>
                   </td>
                   <td className="py-4 px-6">
-                    <span className="px-3 py-1 bg-[#F59E0B] text-white text-xs rounded-full font-medium">
+                    <span className="px-3 py-1 bg-[#F59E0B] dark:bg-dark-gold-primary text-white text-xs rounded-full font-medium">
                       {farmer.season}
                     </span>
                   </td>
-                  <td className="py-4 px-6 text-sm text-gray-600">
+                  <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">
                     {farmer.farmLocation?.address || (
-                      <span className="text-gray-400 italic">No address</span>
+                      <span className="text-gray-400 dark:text-dark-text-muted italic">No address</span>
                     )}
                   </td>
                   {canDelete(authState?.role, 'farmers') && (
                     <td className="py-4 px-6">
                       <button
                         onClick={() => handleDeleteFarmer(farmer._id, farmer.name)}
-                        className="text-red-600 hover:text-red-800 hover:bg-red-50 p-2 rounded-lg transition-all duration-200"
+                        className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-all duration-200"
                         title="Delete farmer"
                       >
                         <Trash2 size={18} />

@@ -11,10 +11,10 @@ const PrivateRoute = ({ children }) => {
     if (authState.loading) {
         // Render a loading spinner or message while checking the token in localStorage
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="text-center p-6 bg-white rounded-lg shadow-xl">
-                    <FaSpinner className="animate-spin text-primary text-4xl mx-auto mb-3" />
-                    <p className="text-lg font-semibold text-gray-700">Verifying Session...</p>
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+                    <FaSpinner className="animate-spin text-[#1B4332] dark:text-dark-green-primary text-4xl mx-auto mb-3" />
+                    <p className="text-lg font-semibold text-gray-700 dark:text-gray-100">Verifying Session...</p>
                 </div>
             </div>
         );

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import ReactDatePicker from 'react-datepicker';
@@ -140,19 +140,19 @@ const Payments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F8F4] p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
-      <div className="mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#1B4332]">Payments</h1>
-            <p className="text-gray-600 mt-1">Manage payment records and transactions</p>
+            <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Payments</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Track and manage farmer payments</p>
           </div>
           <div className="flex gap-2">
             {canCreate(authState?.role, 'payments') && (
               <button
                 onClick={() => navigate('/dashboard/payments/new')}
-                className="flex items-center gap-2 bg-[#1B4332] text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] transition-all shadow-md hover:shadow-lg"
+                className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
               >
                 <Plus size={20} />
                 <span>Record Payment</span>
@@ -164,78 +164,78 @@ const Payments = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#1B4332]">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#1B4332] dark:border-dark-green-primary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Total Amount</p>
-              <p className="text-2xl font-bold text-[#1B4332] mt-2">Ksh {totalAmount.toLocaleString()}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Amount</p>
+              <p className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">Ksh {totalAmount.toLocaleString()}</p>
             </div>
-            <DollarSign size={40} className="text-[#1B4332] opacity-20" />
+            <DollarSign size={40} className="text-[#1B4332] dark:text-dark-green-primary opacity-20" />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-green-500 dark:border-green-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Completed</p>
-              <p className="text-2xl font-bold text-green-600 mt-2">{completedCount}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Completed</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">{completedCount}</p>
             </div>
-            <CheckCircle size={40} className="text-green-500 opacity-20" />
+            <CheckCircle size={40} className="text-green-500 dark:text-green-400 opacity-20" />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-yellow-500 dark:border-yellow-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600 mt-2">{pendingCount}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Pending</p>
+              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">{pendingCount}</p>
             </div>
-            <Clock size={40} className="text-yellow-500 opacity-20" />
+            <Clock size={40} className="text-yellow-500 dark:text-yellow-400 opacity-20" />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-red-500 dark:border-red-600">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Failed</p>
-              <p className="text-2xl font-bold text-red-600 mt-2">{failedCount}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Failed</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400 mt-2">{failedCount}</p>
             </div>
-            <XCircle size={40} className="text-red-500 opacity-20" />
+            <XCircle size={40} className="text-red-500 dark:text-red-400 opacity-20" />
           </div>
         </div>
       </div>
 
       {/* Filters & Export */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Start Date</label>
             <ReactDatePicker
               selected={startDate}
               onChange={date => setStartDate(date)}
               isClearable
               placeholderText="Select start date"
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">End Date</label>
             <ReactDatePicker
               selected={endDate}
               onChange={date => setEndDate(date)}
               isClearable
               placeholderText="Select end date"
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Status</label>
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
               <option>All</option>
               <option>Pending</option>
@@ -245,18 +245,18 @@ const Payments = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Export</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Export</label>
             <div className="flex gap-2">
               <button
                 onClick={exportCSV}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] text-[#1B4332] rounded-lg hover:bg-[#1B4332] hover:text-white transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary rounded-lg hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white transition-all"
               >
                 <FileText size={16} />
                 <span>CSV</span>
               </button>
               <button
                 onClick={exportPDF}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] text-[#D93025] rounded-lg hover:bg-[#D93025] hover:text-white transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] dark:border-red-500 text-[#D93025] dark:text-red-400 rounded-lg hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white transition-all"
               >
                 <Download size={16} />
                 <span>PDF</span>
@@ -265,9 +265,9 @@ const Payments = () => {
           </div>
         </div>
         
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <p className="text-sm text-gray-600">
-            Showing <span className="font-bold text-[#1B4332]">{filtered.length}</span> of {payments.length} payments
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span className="font-bold text-[#1B4332] dark:text-gray-100">{filtered.length}</span> of {payments.length} payments
           </p>
         </div>
       </div>
@@ -275,18 +275,18 @@ const Payments = () => {
       {/* Payments Table */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="text-gray-500">Loading payments...</div>
+          <div className="text-gray-500 dark:text-dark-text-tertiary">Loading payments...</div>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-500 text-lg">No payments found</p>
-          <p className="text-gray-400 mt-2">Try adjusting your filters</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No payments found</p>
+          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#1B4332] text-white">
+              <thead className="bg-[#1B4332] dark:bg-dark-green-secondary text-white">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Farmer</th>
@@ -296,21 +296,21 @@ const Payments = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filtered.map((payment, index) => (
-                  <tr key={payment._id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                  <tr key={payment._id} className={index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}>
+                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                       {new Date(payment.date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <User size={16} className="text-gray-400" />
-                        <span className="text-sm font-medium text-gray-900">
+                        <User size={16} className="text-gray-400 dark:text-dark-text-muted" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {payment.farmer?.name || 'N/A'}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332]">
+                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332] dark:text-dark-green-primary">
                       {payment.currency} {Number(payment.amountPaid).toLocaleString()}
                     </td>
                     <td className="px-6 py-4">
@@ -319,13 +319,13 @@ const Payments = () => {
                         {payment.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {payment.recordedBy?.name || payment.recordedBy?.username || 'N/A'}
                     </td>
                     <td className="px-6 py-4">
                       <button
                         onClick={() => deletePayment(payment._id)}
-                        className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
+                        className="px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors text-sm font-medium"
                       >
                         Delete
                       </button>

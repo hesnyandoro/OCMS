@@ -126,19 +126,19 @@ const AuthTogglePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6] flex items-center justify-center p-4 font-sans">
+    <div className="min-h-screen flex items-center justify-center p-4 font-sans">
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
           
           {/* Toggle Header */}
-          <div className="flex border-b border-gray-200">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button
               onClick={() => setView('login')}
               className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-300 ${
                 view === 'login'
-                  ? 'text-[#1B4332] border-b-4 border-[#1B4332] bg-[#F3F4F6]'
-                  : 'text-gray-500 hover:text-[#1B4332] hover:bg-gray-50'
+                  ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               Login
@@ -147,8 +147,8 @@ const AuthTogglePage = () => {
               onClick={() => setView('register')}
               className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-300 ${
                 view === 'register'
-                  ? 'text-[#1B4332] border-b-4 border-[#1B4332] bg-[#F3F4F6]'
-                  : 'text-gray-500 hover:text-[#1B4332] hover:bg-gray-50'
+                  ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             >
               Register
@@ -160,8 +160,8 @@ const AuthTogglePage = () => {
             
             {/* Logo/Title */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-[#1B4332] mb-2">OCMS</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">OCMS</h1>
+              <p className="text-gray-600 dark:text-gray-400">
                 {view === 'login' ? 'Welcome back!' : 'Create your account'}
               </p>
             </div>
@@ -172,7 +172,7 @@ const AuthTogglePage = () => {
                 
                 {/* Username */}
                 <div>
-                  <label htmlFor="login-username" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="login-username" className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                     Username
                   </label>
                   <div className="relative">
@@ -185,7 +185,7 @@ const AuthTogglePage = () => {
                       onChange={handleLoginChange}
                       placeholder="Enter your username"
                       autoComplete="username"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent transition-all"
+                      className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                       required
                     />
                   </div>
@@ -239,6 +239,17 @@ const AuthTogglePage = () => {
                   </div>
                 </div>
 
+                {/* Forgot Password Link */}
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/forgot-password')}
+                    className="text-sm text-[#1B4332] hover:text-[#2D6A4F] hover:underline font-medium"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
                 {/* Submit Button */}
                 <button
                   type="submit"
@@ -249,12 +260,12 @@ const AuthTogglePage = () => {
 
                 {/* Toggle to Register */}
                 <div className="text-center mt-6">
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 dark:text-gray-400">
                     Don't have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setView('register')}
-                      className="text-[#D93025] font-semibold hover:underline"
+                      className="text-[#D93025] dark:text-red-400 font-semibold hover:underline"
                     >
                       Sign up
                     </button>
@@ -493,7 +504,7 @@ const AuthTogglePage = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-            className="text-gray-600 hover:text-[#1B4332] transition-colors"
+            className="text-gray-600 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors"
           >
             ← Back to Home
           </button>
