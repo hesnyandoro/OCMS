@@ -25,4 +25,4 @@ dist-ssr
 *.sw?
 
 #ignore environment files
-backend/.env
+.env

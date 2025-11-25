@@ -7,30 +7,30 @@ const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6] font-sans">
+    <div className="min-h-screen bg-gray-100 dark:bg-dark-bg-primary font-sans">
       {/* Navbar */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
+      <nav className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-[#1B4332]">OCMS</h1>
+              <h1 className="text-2xl font-bold text-[#1B4332] dark:text-dark-green-primary">OCMS</h1>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="text-gray-700 hover:text-[#1B4332] transition-colors">
+              <a href="#home" className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors">
                 Home
               </a>
-              <a href="#features" className="text-gray-700 hover:text-[#1B4332] transition-colors">
+              <a href="#features" className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors">
                 Features
               </a>
-              <a href="#about" className="text-gray-700 hover:text-[#1B4332] transition-colors">
+              <a href="#about" className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors">
                 About
               </a>
               <button
                 onClick={() => navigate('/login')}
-                className="bg-[#1B4332] text-white px-6 py-2 rounded-md hover:bg-[#2D6A4F] transition-colors"
+                className="bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-2 rounded-md hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-colors"
               >
                 Login
               </button>
@@ -40,7 +40,7 @@ const LandingPage = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-700 hover:text-[#1B4332]"
+                className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -53,21 +53,21 @@ const LandingPage = () => {
               <div className="flex flex-col space-y-3">
                 <a
                   href="#home"
-                  className="text-gray-700 hover:text-[#1B4332] transition-colors"
+                  className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Home
                 </a>
                 <a
                   href="#features"
-                  className="text-gray-700 hover:text-[#1B4332] transition-colors"
+                  className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Features
                 </a>
                 <a
                   href="#about"
-                  className="text-gray-700 hover:text-[#1B4332] transition-colors"
+                  className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   About
@@ -77,7 +77,7 @@ const LandingPage = () => {
                     setMobileMenuOpen(false);
                     navigate('/login');
                   }}
-                  className="bg-[#1B4332] text-white px-6 py-2 rounded-md hover:bg-[#2D6A4F] transition-colors text-center"
+                  className="bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-2 rounded-md hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-colors text-center"
                 >
                   Login
                 </button>
@@ -88,27 +88,27 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="bg-[#F3F4F6] py-16 md:py-24">
+      <section id="home" className="bg-gray-100 dark:bg-dark-bg-primary py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="order-2 md:order-1">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-gray-100 leading-tight mb-6">
                 Digitizing the Coffee Supply Chain
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-8">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8">
                 Empower farmers, streamline deliveries, and automate payments with a single integrated platform
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => navigate('/login')}
-                  className="bg-[#1B4332] text-white px-8 py-3 rounded-md hover:bg-[#2D6A4F] transition-colors font-medium text-lg"
+                  className="bg-[#1B4332] dark:bg-dark-green-primary text-white px-8 py-3 rounded-md hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-colors font-medium text-lg"
                 >
                   Field Agent Login
                 </button>
                 <button
                   onClick={() => navigate('/login')}
-                  className="border-2 border-[#1B4332] text-[#1B4332] px-8 py-3 rounded-md hover:bg-[#1B4332] hover:text-white transition-colors font-medium text-lg"
+                  className="border-2 border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary px-8 py-3 rounded-md hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white transition-colors font-medium text-lg"
                 >
                   Admin Portal
                 </button>
@@ -117,7 +117,7 @@ const LandingPage = () => {
 
             {/* Right Image */}
             <div className="order-1 md:order-2">
-              <div className="bg-white rounded-lg shadow-xl p-4 h-[400px] flex items-center justify-center">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 h-[400px] flex items-center justify-center">
                 <img
                   src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=600&fit=crop"
                   alt="Coffee farm dashboard"
@@ -133,47 +133,47 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="bg-white py-16 md:py-24">
+      <section id="features" className="bg-white dark:bg-gray-800 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Powerful Features for Complete Control
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Everything you need to manage your coffee supply chain efficiently
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1 - Farmer Management */}
-            <div className="bg-[#F3F4F6] rounded-lg p-8 hover:shadow-lg transition-shadow">
-              <div className="bg-[#1B4332] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 hover:shadow-lg transition-shadow">
+              <div className="bg-[#1B4332] dark:bg-dark-green-primary w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                 <Tractor className="text-white" size={32} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Farmer Management</h3>
-              <p className="text-gray-600">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Farmer Management</h3>
+              <p className="text-gray-600 dark:text-gray-400">
                 Track farmer profiles, farm locations, and acreage with comprehensive digital records
               </p>
             </div>
 
             {/* Card 2 - Delivery Tracking */}
-            <div className="bg-[#F3F4F6] rounded-lg p-8 hover:shadow-lg transition-shadow">
-              <div className="bg-[#1B4332] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 hover:shadow-lg transition-shadow">
+              <div className="bg-[#1B4332] dark:bg-dark-green-primary w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                 <Truck className="text-white" size={32} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Delivery Tracking</h3>
-              <p className="text-gray-600">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Delivery Tracking</h3>
+              <p className="text-gray-600 dark:text-gray-400">
                 Real-time recording of cherry and parchment deliveries with full traceability
               </p>
             </div>
 
             {/* Card 3 - Payment Tracking */}
-            <div className="bg-[#F3F4F6] rounded-lg p-8 hover:shadow-lg transition-shadow">
-              <div className="bg-[#1B4332] w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 hover:shadow-lg transition-shadow">
+              <div className="bg-[#1B4332] dark:bg-dark-green-primary w-16 h-16 rounded-lg flex items-center justify-center mb-6">
                 <Wallet className="text-white" size={32} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Payment Tracking</h3>
-              <p className="text-gray-600">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Payment Tracking</h3>
+              <p className="text-gray-600 dark:text-gray-400">
                 Seamless payment processing and financial reconciliation for transparent operations
               </p>
             </div>
@@ -182,22 +182,22 @@ const LandingPage = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="bg-[#F3F4F6] py-16 md:py-24">
+      <section id="about" className="bg-gray-100 dark:bg-dark-bg-primary py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               About OCMS
             </h2>
-            <p className="text-lg text-gray-600 mb-6">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
               The Optimal Coffee Management System (OCMS) is designed to revolutionize the coffee supply chain
               by providing a comprehensive digital platform for farmers, field agents, and administrators.
             </p>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
               Our mission is to bring transparency, efficiency, and fairness to every stakeholder in the
               coffee production process, from the farm to the final delivery point.
             </p>
             <div className="mt-10">
-              <span className="inline-block bg-[#D93025] text-white px-6 py-2 rounded-full font-medium">
+              <span className="inline-block bg-[#D93025] dark:bg-red-600 text-white px-6 py-2 rounded-full font-medium">
                 Transforming Coffee Supply Chains
               </span>
             </div>
@@ -206,7 +206,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#1B4332] text-white py-12">
+      <footer className="bg-[#1B4332] dark:bg-dark-green-secondary text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             {/* Column 1 */}

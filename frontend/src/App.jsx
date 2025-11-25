@@ -18,6 +18,9 @@ import NewDelivery from './pages/NewDelivery.jsx';
 import EditDelivery from './pages/EditDelivery.jsx';
 import NewPayment from './pages/NewPayment.jsx';
 import Users from './pages/Users.jsx';
+import UserSettings from './pages/UserSettings.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 
 
 const App = () => {
@@ -28,6 +31,8 @@ const App = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<AuthTogglePage />} />
           <Route path="/auth" element={<AuthTogglePage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard/*"
             element={
@@ -44,6 +49,7 @@ const App = () => {
                     <Route path="payments/new" element={<NewPayment />} />
                     <Route path="reports" element={<Reports />} />
                     <Route path="users" element={<Users />} />
+                    <Route path="settings" element={<UserSettings />} />
                     <Route path="*" element={
                         <div className="p-10 text-center text-xl font-semibold">
                           404 - Page Not Found

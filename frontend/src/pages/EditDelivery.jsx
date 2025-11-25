@@ -109,42 +109,42 @@ const EditDelivery = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F1F8F4] flex items-center justify-center">
-        <div className="text-gray-500">Loading delivery data...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-gray-500 dark:text-gray-400">Loading delivery data...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F1F8F4] p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       {/* Header */}
       <div className="mb-6">
         <button
           onClick={() => navigate('/dashboard/deliveries')}
-          className="flex items-center gap-2 text-[#1B4332] hover:text-[#0F2419] mb-4 transition-colors"
+          className="flex items-center gap-2 text-[#1B4332] dark:text-dark-green-primary hover:text-[#0F2419] dark:hover:text-dark-green-hover mb-4 transition-colors"
         >
           <ArrowLeft size={20} />
           <span className="font-medium">Back to Deliveries</span>
         </button>
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-[#1B4332] rounded-lg">
+          <div className="p-3 bg-[#1B4332] dark:bg-dark-green-primary rounded-lg">
             <Package className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-[#1B4332]">Edit Delivery</h1>
-            <p className="text-gray-600 mt-1">Update delivery information</p>
+            <h1 className="text-3xl font-bold text-[#1B4332] dark:text-dark-green-primary">Edit Delivery</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Update delivery information</p>
           </div>
         </div>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow-md p-8">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Farmer Selection */}
           <div>
-            <label className="form-label">Farmer</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Farmer</label>
             <select 
-              className="form-control"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
               {...register('farmer')} 
               onChange={onFarmerChange}
             >
@@ -156,44 +156,44 @@ const EditDelivery = () => {
               ))}
             </select>
             {errors.farmer && (
-              <p className="text-danger">{errors.farmer.message}</p>
+              <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.farmer.message}</p>
             )}
           </div>
 
           {/* Type, Kgs, Season */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="form-label">Type</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Type</label>
               <select 
-                className="form-control"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
                 {...register('type')}
               >
                 <option value="Cherry">Cherry</option>
                 <option value="Parchment">Parchment</option>
               </select>
               {errors.type && (
-                <p className="text-danger">{errors.type.message}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.type.message}</p>
               )}
             </div>
 
             <div>
-              <label className="form-label">Kgs Delivered</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Kgs Delivered</label>
               <input 
                 type="number" 
                 step="0.01" 
-                className="form-control"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
                 {...register('kgsDelivered')} 
                 placeholder="Enter weight"
               />
               {errors.kgsDelivered && (
-                <p className="text-danger">{errors.kgsDelivered.message}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.kgsDelivered.message}</p>
               )}
             </div>
 
             <div>
-              <label className="form-label">Season</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Season</label>
               <select 
-                className="form-control"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
                 {...register('season')}
               >
                 <option value="">Select season</option>
@@ -206,77 +206,75 @@ const EditDelivery = () => {
           {/* Region, Driver, Date */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="form-label">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                 Region
                 {userHasRegion && (
-                  <span className="text-muted ms-2">(Auto-filled from your assigned region)</span>
+                  <span className="text-gray-500 dark:text-dark-text-tertiary ms-2">(Auto-filled from your assigned region)</span>
                 )}
               </label>
               <input 
-                className="form-control"
+                className={`w-full px-4 py-3 ${userHasRegion ? 'bg-gray-100 dark:bg-gray-700' : 'bg-white dark:bg-gray-700'} text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition`}
                 {...register('region')} 
                 readOnly={!!userHasRegion}
                 placeholder="Enter region"
-                style={userHasRegion ? { backgroundColor: '#F3F4F6' } : {}}
               />
               {errors.region && (
-                <p className="text-danger">{errors.region.message}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.region.message}</p>
               )}
-              {!userHasRegion && <small className="text-muted">Enter the region for this delivery</small>}
+              {!userHasRegion && <small className="text-gray-500 dark:text-dark-text-tertiary">Enter the region for this delivery</small>}
             </div>
 
             <div>
-              <label className="form-label">Driver</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Driver</label>
               <input 
-                className="form-control"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
                 {...register('driver')} 
                 placeholder="Driver name"
               />
               {errors.driver && (
-                <p className="text-danger">{errors.driver.message}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.driver.message}</p>
               )}
             </div>
 
             <div>
-              <label className="form-label">Date</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Date</label>
               <input 
                 type="date" 
-                className="form-control"
+                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
                 {...register('date')} 
               />
               {errors.date && (
-                <p className="text-danger">{errors.date.message}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.date.message}</p>
               )}
             </div>
           </div>
 
           {/* Weigh Station */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <MapPin size={16} className="text-[#1B4332]" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
+              <MapPin size={16} className="text-[#1B4332] dark:text-dark-green-primary" />
               Weigh Station (from farmer)
             </label>
             <input 
               readOnly 
               value={selectedWeigh} 
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-[#F3F4F6] text-gray-600"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
               placeholder="Auto-filled from farmer"
             />
           </div>
 
           {/* Buttons */}
-          <div className="d-flex gap-2">
+          <div className="flex gap-3">
             <button 
               type="submit"
-              className="btn" 
-              style={{ backgroundColor: '#1B4332', color: '#FFFFFF', borderColor: '#1B4332' }}
+              className="px-6 py-3 bg-[#1B4332] dark:bg-dark-green-primary hover:bg-[#2D5F4D] dark:hover:bg-dark-green-hover text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200"
             >
               Update Delivery
             </button>
             <button 
               type="button" 
               onClick={() => navigate('/dashboard/deliveries')} 
-              className="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-500 transition-all font-medium"
+              className="px-6 py-3 border border-gray-400 dark:border-gray-700 text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-500 dark:hover:border-dark-border-secondary transition-all font-semibold"
             >
               Cancel
             </button>
@@ -285,8 +283,8 @@ const EditDelivery = () => {
       </div>
 
       {/* Info Card */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
+      <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <p className="text-sm text-blue-800 dark:text-blue-300">
           <strong>Note:</strong> Updating this delivery will modify the existing record. Make sure all information is accurate before saving.
         </p>
       </div>

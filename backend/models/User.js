@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   name: { type: String }, // Full name (firstName + secondName + lastName)
   role: { type: String, enum: ['admin', 'fieldagent'], required: true },
-  assignedRegion: { type: String } // Locks field agents to specific regions
+  assignedRegion: { type: String }, // Locks field agents to specific regions
+  avatar: { type: String } // Profile picture URL/path
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
