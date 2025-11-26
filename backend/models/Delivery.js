@@ -32,6 +32,12 @@ const deliverySchema = new mongoose.Schema({
     required: true 
   },
 
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid'],
+    default: 'Pending'
+  },
+
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

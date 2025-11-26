@@ -1,9 +1,12 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const { authorize } = require('../middleware/auth');
-const { getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer } = require('../controllers/farmerController');
+const { getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer, searchFarmers } = require('../controllers/farmerController');
 
 const router = express.Router();
+
+// Search farmers (for searchable dropdown)
+router.get('/search', auth, authorize('admin', 'fieldagent'), searchFarmers);
 
 // Both roles can read farmers (region-filtered for field agents)
 router.get('/', auth, authorize('admin', 'fieldagent'), getFarmers);

@@ -44,14 +44,42 @@ const Payments = () => {
     setFiltered(list);
   }, [payments, startDate, endDate, statusFilter]);
 
-  const deletePayment = async (id) => {
-    if (!confirm('Delete this payment?')) return;
+  const [showVoidModal, setShowVoidModal] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [voidReason, setVoidReason] = useState('');
+  const [isVoiding, setIsVoiding] = useState(false);
+
+  const handleVoidPayment = async () => {
+    if (!voidReason.trim()) {
+      alert('Please provide a reason for voiding this payment');
+      return;
+    }
+
+    setIsVoiding(true);
     try {
-      await api.delete(`/payments/${id}`);
-      setPayments(prev => prev.filter(p => p._id !== id));
+      await api.put(`/payments/${selectedPayment._id}`, {
+        status: 'Failed',
+        voidReason: voidReason,
+        voidedAt: new Date().toISOString(),
+        voidedBy: authState?.user?._id
+      });
+      
+      // Update local state
+      setPayments(prev => prev.map(p => 
+        p._id === selectedPayment._id 
+          ? { ...p, status: 'Failed', voidReason, voidedAt: new Date().toISOString() }
+          : p
+      ));
+      
+      alert('Payment has been voided successfully');
+      setShowVoidModal(false);
+      setVoidReason('');
+      setSelectedPayment(null);
     } catch (err) {
-      console.error('Delete failed', err);
-      alert('Failed to delete payment');
+      console.error('Void payment failed', err);
+      alert(err?.response?.data?.msg || 'Failed to void payment');
+    } finally {
+      setIsVoiding(false);
     }
   };
 
@@ -314,26 +342,137 @@ const Payments = () => {
                       {payment.currency} {Number(payment.amountPaid).toLocaleString()}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(payment.status)}`}>
-                        {getStatusIcon(payment.status)}
-                        {payment.status}
-                      </span>
+                      <div className="relative group">
+                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(payment.status)}`}>
+                          {getStatusIcon(payment.status)}
+                          {payment.status}
+                          {payment.voidReason && (
+                            <span className="ml-1 text-xs">ⓘ</span>
+                          )}
+                        </span>
+                        
+                        {payment.voidReason && (
+                          <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block z-10 w-64 p-3 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg">
+                            <p className="font-semibold mb-1">Void Reason:</p>
+                            <p className="mb-2">{payment.voidReason}</p>
+                            {payment.voidedAt && (
+                              <p className="text-gray-300 dark:text-gray-400">
+                                Voided on: {new Date(payment.voidedAt).toLocaleString()}
+                              </p>
+                            )}
+                            <div className="absolute left-4 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900 dark:border-t-gray-700"></div>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {payment.recordedBy?.name || payment.recordedBy?.username || 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        onClick={() => deletePayment(payment._id)}
-                        className="px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors text-sm font-medium"
-                      >
-                        Delete
-                      </button>
+                      {payment.status === 'Completed' && canCreate(authState?.role, 'payments') && (
+                        <button
+                          onClick={() => {
+                            setSelectedPayment(payment);
+                            setShowVoidModal(true);
+                          }}
+                          className="px-3 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors text-sm font-medium"
+                        >
+                          Void
+                        </button>
+                      )}
+                      {payment.status === 'Failed' && payment.voidReason && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400 italic">
+                          Voided
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Void Payment Modal */}
+      {showVoidModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Void Payment
+            </h3>
+            
+            <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <p className="text-sm text-yellow-800 dark:text-yellow-300 font-medium">
+                ⚠️ Warning: This action will mark the payment as Failed
+              </p>
+            </div>
+
+            {selectedPayment && (
+              <div className="mb-4 space-y-2">
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Farmer: </span>
+                  <span className="text-gray-900 dark:text-gray-100">{selectedPayment.farmer?.name}</span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Amount: </span>
+                  <span className="text-gray-900 dark:text-gray-100">
+                    {selectedPayment.currency} {Number(selectedPayment.amountPaid).toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Date: </span>
+                  <span className="text-gray-900 dark:text-gray-100">
+                    {new Date(selectedPayment.date).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Reason for Voiding *
+              </label>
+              <textarea
+                value={voidReason}
+                onChange={(e) => setVoidReason(e.target.value)}
+                placeholder="Enter reason (e.g., Duplicate payment, Incorrect amount, Payment error...)"
+                rows="4"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none"
+                required
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                This reason will be recorded in the payment history
+              </p>
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                <strong>Note:</strong> The payment record will be preserved for audit purposes. 
+                The delivery status will remain unchanged. To correct this payment, you may need to create a new payment record.
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowVoidModal(false);
+                  setVoidReason('');
+                  setSelectedPayment(null);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+                disabled={isVoiding}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleVoidPayment}
+                disabled={isVoiding || !voidReason.trim()}
+                className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isVoiding ? 'Voiding...' : 'Void Payment'}
+              </button>
+            </div>
           </div>
         </div>
       )}

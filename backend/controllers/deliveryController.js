@@ -128,3 +128,74 @@ exports.deleteDelivery = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+// Get unpaid deliveries for a specific farmer
+exports.getUnpaidDeliveriesByFarmer = async (req, res) => {
+  try {
+    const { farmerId } = req.params;
+    
+    const deliveries = await Delivery.find({
+      farmer: farmerId,
+      paymentStatus: 'Pending'
+    })
+      .select('_id date type kgsDelivered region')
+      .sort({ date: -1 })
+      .populate('farmer', 'name cellNumber');
+    
+    res.json(deliveries);
+  } catch (err) {
+    console.error('Get unpaid deliveries error:', err);
+    res.status(500).send('Server error');
+  }
+};
+
+// Get available delivery types for a specific farmer (unpaid only)
+exports.getDeliveryTypesByFarmer = async (req, res) => {
+  try {
+    const { farmerId } = req.params;
+    
+    const deliveries = await Delivery.find({
+      farmer: farmerId,
+      paymentStatus: 'Pending'
+    }).distinct('type');
+    
+    res.json(deliveries);
+  } catch (err) {
+    console.error('Get delivery types error:', err);
+    res.status(500).send('Server error');
+  }
+};
+
+// Get total kgs for a specific farmer and delivery type (unpaid only)
+exports.getTotalKgsByType = async (req, res) => {
+  try {
+    const { farmerId, type } = req.params;
+    const mongoose = require('mongoose');
+    
+    const result = await Delivery.aggregate([
+      {
+        $match: {
+          farmer: new mongoose.Types.ObjectId(farmerId),
+          type: type,
+          paymentStatus: 'Pending'
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalKgs: { $sum: '$kgsDelivered' },
+          deliveryIds: { $push: '$_id' }
+        }
+      }
+    ]);
+    
+    if (result.length === 0) {
+      return res.json({ totalKgs: 0, deliveryIds: [] });
+    }
+    
+    res.json(result[0]);
+  } catch (err) {
+    console.error('Get total kgs by type error:', err);
+    res.status(500).send('Server error');
+  }
+};

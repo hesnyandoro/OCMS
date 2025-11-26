@@ -119,4 +119,36 @@ exports.deleteFarmer = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
+};
+
+// Search farmers by name (for searchable dropdown)
+exports.searchFarmers = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim().length < 2) {
+      return res.json([]);
+    }
+
+    let query = {
+      name: { $regex: q, $options: 'i' }
+    };
+
+    // Field agents can only search farmers in their assigned region
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user && user.assignedRegion) {
+        query.weighStation = user.assignedRegion;
+      }
+    }
+
+    const farmers = await Farmer.find(query)
+      .select('_id name cellNumber weighStation')
+      .limit(20)
+      .sort({ name: 1 });
+    
+    res.json(farmers);
+  } catch (err) {
+    console.error('Search farmers error:', err);
+    res.status(500).send('Server error');
+  }
 }; 
