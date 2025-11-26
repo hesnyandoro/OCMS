@@ -24,7 +24,7 @@ const NewPayment = () => {
   const [pricePerKg, setPricePerKg] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
-  const [currency, setCurrency] = useState('Ksh');
+  const [currency, setCurrency] = useState('KES');
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -310,7 +310,7 @@ const NewPayment = () => {
           {/* Price Per Kg */}
           {totalKgs > 0 && (
             <div>
-              <label className="form-label">Price Per Kg (Ksh) *</label>
+              <label className="form-label">Price Per Kg (KES) *</label>
               <input
                 type="number"
                 step="0.01"
@@ -327,7 +327,7 @@ const NewPayment = () => {
           {/* Total Amount - Read Only, Auto-calculated */}
           {totalAmount > 0 && (
             <div>
-              <label className="form-label">Total Amount to Pay (Ksh)</label>
+              <label className="form-label">Total Amount to Pay (KES)</label>
               <input
                 type="number"
                 value={totalAmount.toFixed(2)}
@@ -335,7 +335,7 @@ const NewPayment = () => {
                 className="form-control bg-gray-100 dark:bg-gray-700 cursor-not-allowed font-bold text-lg"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Calculated: {totalKgs} kg × Ksh {pricePerKg} = Ksh {totalAmount.toFixed(2)}
+                Calculated: {totalKgs} kg × KES {pricePerKg} = KES {totalAmount.toFixed(2)}
               </p>
             </div>
           )}

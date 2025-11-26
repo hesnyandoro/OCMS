@@ -95,7 +95,7 @@ router.get('/summary', async (req, res) => {
         const mappedPayments = recentPayments.map(p => ({
             date: p.date,
             farmer: p.farmer?.name || '',
-            metric: `KES ${p.amountPaid}`,
+            metric: `KES ${Number(p.amountPaid).toFixed(2)}`,
             type: 'Payment',
             status: p.status || ''
         }));

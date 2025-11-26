@@ -223,7 +223,7 @@ const Reports = () => {
             yAxisID: 'y'
           },
           {
-            label: 'Payout (Ksh)',
+            label: 'Payout (KES)',
             data: [],
             borderColor: '#D93025',
             backgroundColor: 'rgba(217, 48, 37, 0.1)',
@@ -286,7 +286,7 @@ const Reports = () => {
           fill: false
         },
         {
-          label: 'Payout (Ksh)',
+          label: 'Payout (KES)',
           data: payoutData,
           borderColor: '#D93025',
           backgroundColor: 'rgba(217, 48, 37, 0.1)',
@@ -308,11 +308,11 @@ const Reports = () => {
     csvData.push([]);
     csvData.push(['KEY PERFORMANCE INDICATORS']);
     csvData.push(['Metric', 'Value']);
-    csvData.push(['Total Outstanding', `Ksh ${kpis.outstanding.toLocaleString()}`]);
-    csvData.push(['Outstanding Cherry', `Ksh ${kpis.outstandingCherry.toLocaleString()}`]);
-    csvData.push(['Outstanding Parchment', `Ksh ${kpis.outstandingParchment.toLocaleString()}`]);
-    csvData.push(['Average Cost Per Kg', `Ksh ${kpis.avgCostPerKg.toFixed(2)}`]);
-    csvData.push(['Total Paid Out', `Ksh ${kpis.totalPaid.toLocaleString()}`]);
+    csvData.push(['Total Outstanding', `KES ${kpis.outstanding.toLocaleString()}`]);
+    csvData.push(['Outstanding Cherry', `KES ${kpis.outstandingCherry.toLocaleString()}`]);
+    csvData.push(['Outstanding Parchment', `KES ${kpis.outstandingParchment.toLocaleString()}`]);
+    csvData.push(['Average Cost Per Kg', `KES ${kpis.avgCostPerKg.toFixed(2)}`]);
+    csvData.push(['Total Paid Out', `KES ${kpis.totalPaid.toLocaleString()}`]);
     csvData.push(['Total Deliveries', kpis.totalDeliveries.toLocaleString()]);
     csvData.push(['Total Kgs', `${kpis.totalKgs.toLocaleString()} kgs`]);
     csvData.push(['Daily Average', `${kpis.dailyAvg.toLocaleString()} kgs`]);
@@ -334,7 +334,7 @@ const Reports = () => {
       csvData.push(['Payment Velocity', `${paymentAnalytics.paymentVelocity} per day`]);
       csvData.push(['Total Payments', paymentAnalytics.totalPayments]);
       csvData.push(['Voided Payments', paymentAnalytics.voidedPayments.total]);
-      csvData.push(['Voided Amount', `Ksh ${paymentAnalytics.voidedPayments.totalAmount.toLocaleString()}`]);
+      csvData.push(['Voided Amount', `KES ${paymentAnalytics.voidedPayments.totalAmount.toLocaleString()}`]);
       csvData.push([]);
       csvData.push(['Payment Aging']);
       csvData.push(['0-30 days', paymentAnalytics.agingBuckets['0-30']]);
@@ -355,7 +355,7 @@ const Reports = () => {
         comparativeAnalytics.monthOverMonth.deliveries.growth
       ]);
       csvData.push([
-        'Payments (Ksh)',
+        'Payments (KES)',
         comparativeAnalytics.monthOverMonth.payments.current.totalAmount.toLocaleString(),
         comparativeAnalytics.monthOverMonth.payments.previous.totalAmount.toLocaleString(),
         comparativeAnalytics.monthOverMonth.payments.growth
@@ -370,7 +370,7 @@ const Reports = () => {
         comparativeAnalytics.yearOverYear.deliveries.growth
       ]);
       csvData.push([
-        'Payments (Ksh)',
+        'Payments (KES)',
         comparativeAnalytics.yearOverYear.payments.current.totalAmount.toLocaleString(),
         comparativeAnalytics.yearOverYear.payments.previous.totalAmount.toLocaleString(),
         comparativeAnalytics.yearOverYear.payments.growth
@@ -387,7 +387,7 @@ const Reports = () => {
       csvData.push(['VIP Farmers', farmerPerformance.summary.vip]);
       csvData.push(['Total Tracked', farmerPerformance.summary.total]);
       csvData.push([]);
-      csvData.push(['Rank', 'Farmer Name', 'Total Paid (Ksh)', 'Total Kgs', 'Deliveries', 'Reliability Score', 'Days Since Last', 'Status']);
+      csvData.push(['Rank', 'Farmer Name', 'Total Paid (KES)', 'Total Kgs', 'Deliveries', 'Reliability Score', 'Days Since Last', 'Status']);
       farmerPerformance.farmerPerformance.slice(0, 10).forEach((farmer, index) => {
         const status = farmer.totalPaid > 100000 ? 'VIP' : farmer.daysSinceLastDelivery <= 30 ? 'Active' : 'Inactive';
         csvData.push([
@@ -415,7 +415,7 @@ const Reports = () => {
           type.totalKgs.toLocaleString(),
           type.deliveries,
           type.avgKgsPerDelivery.toFixed(2),
-          pricing ? `Ksh ${pricing.avgPricePerKg.toFixed(2)}` : 'N/A'
+          pricing ? `KES ${pricing.avgPricePerKg.toFixed(2)}` : 'N/A'
         ]);
       });
       csvData.push([]);
@@ -426,7 +426,7 @@ const Reports = () => {
       csvData.push(['OPERATIONAL EFFICIENCY METRICS']);
       csvData.push(['Metric', 'Value']);
       csvData.push(['Avg Payment Cycle Time', `${operationalMetrics.avgPaymentCycleTime} days`]);
-      csvData.push(['Avg Transaction Size', `Ksh ${parseFloat(operationalMetrics.avgTransactionSize).toLocaleString()}`]);
+      csvData.push(['Avg Transaction Size', `KES ${parseFloat(operationalMetrics.avgTransactionSize).toLocaleString()}`]);
       csvData.push([]);
       csvData.push(['Last 30 Days Activity']);
       csvData.push(['Deliveries', operationalMetrics.systemUsage.last30Days.deliveries]);
@@ -454,7 +454,7 @@ const Reports = () => {
 
     // 9. Detailed Payments
     csvData.push(['DETAILED PAYMENTS DATA']);
-    csvData.push(['Date', 'Farmer', 'Amount Paid (Ksh)', 'Delivery Type', 'Kgs', 'Price/Kg', 'Status', 'Void Reason']);
+    csvData.push(['Date', 'Farmer', 'Amount Paid (KES)', 'Delivery Type', 'Kgs', 'Price/Kg', 'Status', 'Void Reason']);
     payments.forEach(p => {
       csvData.push([
         p.date ? new Date(p.date).toLocaleDateString() : '',
@@ -504,11 +504,11 @@ const Reports = () => {
       startY: yPosition,
       head: [['Metric', 'Value']],
       body: [
-        ['Total Outstanding', `Ksh ${kpis.outstanding.toLocaleString()}`],
-        ['Outstanding Cherry', `Ksh ${kpis.outstandingCherry.toLocaleString()}`],
-        ['Outstanding Parchment', `Ksh ${kpis.outstandingParchment.toLocaleString()}`],
-        ['Avg Cost Per Kg', `Ksh ${kpis.avgCostPerKg.toFixed(2)}`],
-        ['Total Paid Out', `Ksh ${kpis.totalPaid.toLocaleString()}`],
+        ['Total Outstanding', `KES ${kpis.outstanding.toLocaleString()}`],
+        ['Outstanding Cherry', `KES ${kpis.outstandingCherry.toLocaleString()}`],
+        ['Outstanding Parchment', `KES ${kpis.outstandingParchment.toLocaleString()}`],
+        ['Avg Cost Per Kg', `KES ${kpis.avgCostPerKg.toFixed(2)}`],
+        ['Total Paid Out', `KES ${kpis.totalPaid.toLocaleString()}`],
         ['Total Deliveries', kpis.totalDeliveries.toLocaleString()],
         ['Total Kgs', `${kpis.totalKgs.toLocaleString()} kgs`],
         ['Total Farmers', kpis.totalFarmers]
@@ -558,7 +558,7 @@ const Reports = () => {
         return [
           index + 1,
           farmer.farmerName,
-          `Ksh ${farmer.totalPaid.toLocaleString()}`,
+          `KES ${farmer.totalPaid.toLocaleString()}`,
           farmer.totalKgs.toLocaleString(),
           farmer.totalDeliveries,
           status
@@ -594,7 +594,7 @@ const Reports = () => {
           type._id,
           type.totalKgs.toLocaleString(),
           type.deliveries,
-          pricing ? `Ksh ${pricing.avgPricePerKg.toFixed(2)}` : 'N/A'
+          pricing ? `KES ${pricing.avgPricePerKg.toFixed(2)}` : 'N/A'
         ];
       });
       
@@ -692,7 +692,7 @@ const Reports = () => {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <p className="text-gray-600 dark:text-gray-400 text-xs font-medium mb-1">Total Outstanding</p>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Ksh {kpis.outstanding.toLocaleString()}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">KES {kpis.outstanding.toLocaleString()}</h3>
                 </div>
                 <div className="bg-[#D93025] dark:bg-red-600 p-2 rounded-lg">
                   <DollarSign size={18} className="text-white" />
@@ -707,7 +707,7 @@ const Reports = () => {
                     <span className="text-xs text-gray-600 dark:text-gray-400">Cherry</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                    Ksh {kpis.outstandingCherry.toLocaleString()}
+                    KES {kpis.outstandingCherry.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -720,7 +720,7 @@ const Reports = () => {
                     <span className="text-xs text-gray-600 dark:text-gray-400">Parchment</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                    Ksh {kpis.outstandingParchment.toLocaleString()}
+                    KES {kpis.outstandingParchment.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -731,7 +731,7 @@ const Reports = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-gray-600 dark:text-gray-400 text-xs font-medium mb-1">Total Paid Out</p>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Ksh {kpis.totalPaid.toLocaleString()}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">KES {kpis.totalPaid.toLocaleString()}</h3>
                   <p className="text-[10px] text-green-600 dark:text-green-400 mt-1 flex items-center gap-1">
                     <TrendingDown size={10} />
                     Completed payments
@@ -911,7 +911,7 @@ const Reports = () => {
                           beginAtZero: true,
                           title: {
                             display: true,
-                            text: 'Payout (Ksh)',
+                            text: 'Payout (KES)',
                             color: '#D93025'
                           },
                           ticks: {
@@ -962,7 +962,7 @@ const Reports = () => {
                 <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-700 dark:to-gray-600 rounded-lg p-4">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Voided Payments</p>
                   <p className="text-3xl font-bold text-red-600 dark:text-red-400">{paymentAnalytics.voidedPayments.total}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Ksh {paymentAnalytics.voidedPayments.totalAmount.toLocaleString()}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">KES {paymentAnalytics.voidedPayments.totalAmount.toLocaleString()}</p>
                 </div>
               </div>
               
@@ -1042,7 +1042,7 @@ const Reports = () => {
                         )}
                       </div>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Ksh {comparativeAnalytics.monthOverMonth.payments.current.totalAmount.toLocaleString()} vs Ksh {comparativeAnalytics.monthOverMonth.payments.previous.totalAmount.toLocaleString()}
+                        KES {comparativeAnalytics.monthOverMonth.payments.current.totalAmount.toLocaleString()} vs KES {comparativeAnalytics.monthOverMonth.payments.previous.totalAmount.toLocaleString()}
                       </p>
                     </div>
                   </div>
@@ -1082,7 +1082,7 @@ const Reports = () => {
                         )}
                       </div>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Ksh {comparativeAnalytics.yearOverYear.payments.current.totalAmount.toLocaleString()} vs Ksh {comparativeAnalytics.yearOverYear.payments.previous.totalAmount.toLocaleString()}
+                        KES {comparativeAnalytics.yearOverYear.payments.current.totalAmount.toLocaleString()} vs KES {comparativeAnalytics.yearOverYear.payments.previous.totalAmount.toLocaleString()}
                       </p>
                     </div>
                   </div>
@@ -1147,7 +1147,7 @@ const Reports = () => {
                           </span>
                         </td>
                         <td className="py-3 px-4 font-semibold text-[#1B4332] dark:text-dark-green-primary">{farmer.farmerName}</td>
-                        <td className="py-3 px-4 font-bold text-gray-900 dark:text-gray-100">Ksh {farmer.totalPaid.toLocaleString()}</td>
+                        <td className="py-3 px-4 font-bold text-gray-900 dark:text-gray-100">KES {farmer.totalPaid.toLocaleString()}</td>
                         <td className="py-3 px-4 text-gray-700 dark:text-gray-400">{farmer.totalKgs.toLocaleString()}</td>
                         <td className="py-3 px-4 text-gray-700 dark:text-gray-400">{farmer.totalDeliveries}</td>
                         <td className="py-3 px-4">
@@ -1203,7 +1203,7 @@ const Reports = () => {
                         <div className="flex justify-between border-t dark:border-gray-700 pt-2">
                           <span className="text-gray-600 dark:text-gray-400">Avg Price/Kg:</span>
                           <span className="font-bold text-green-600 dark:text-green-400">
-                            Ksh {deliveryTypeAnalytics.pricingByType.find(p => p._id === type._id).avgPricePerKg.toFixed(2)}
+                            KES {deliveryTypeAnalytics.pricingByType.find(p => p._id === type._id).avgPricePerKg.toFixed(2)}
                           </span>
                         </div>
                       )}
@@ -1228,7 +1228,7 @@ const Reports = () => {
                   
                   <div className="bg-green-50 dark:bg-gray-700 rounded-lg p-4">
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Avg Transaction Size</p>
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">Ksh {parseFloat(operationalMetrics.avgTransactionSize).toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">KES {parseFloat(operationalMetrics.avgTransactionSize).toLocaleString()}</p>
                   </div>
                   
                   <div className="border-t dark:border-gray-700 pt-3">

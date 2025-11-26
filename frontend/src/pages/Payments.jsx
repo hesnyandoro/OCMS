@@ -90,7 +90,7 @@ const Payments = () => {
       'Farmer Phone': p.farmer?.cellNumber || '',
       'Weigh Station': p.farmer?.weighStation || '',
       'Amount Paid': p.amountPaid || 0,
-      Currency: p.currency || 'Ksh',
+      Currency: p.currency || 'KES',
       Status: p.status || '',
       'Delivery Date': p.delivery?.date ? new Date(p.delivery.date).toLocaleDateString() : '',
       'Kgs Delivered': p.delivery?.kgsDelivered || '',
@@ -120,7 +120,7 @@ const Payments = () => {
     doc.setTextColor(100);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
     doc.text(`Total Payments: ${filtered.length}`, 14, 34);
-    doc.text(`Total Amount: Ksh ${totalAmount.toLocaleString()}`, 14, 40);
+    doc.text(`Total Amount: KES ${totalAmount.toLocaleString()}`, 14, 40);
     doc.text(`Completed: ${completedCount} | Pending: ${pendingCount} | Failed: ${failedCount}`, 14, 46);
     
     // Table
@@ -128,7 +128,7 @@ const Payments = () => {
     const body = filtered.map(p => [
       p.date ? new Date(p.date).toLocaleDateString() : '',
       p.farmer?.name || 'N/A',
-      `${p.currency || 'Ksh'} ${Number(p.amountPaid || 0).toLocaleString()}`,
+      `${p.currency || 'KES'} ${Number(p.amountPaid || 0).toLocaleString()}`,
       p.status || '',
       p.recordedBy?.name || p.recordedBy?.username || 'N/A'
     ]);
@@ -196,7 +196,7 @@ const Payments = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Amount</p>
-              <p className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">Ksh {totalAmount.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">KES {totalAmount.toLocaleString()}</p>
             </div>
             <DollarSign size={40} className="text-[#1B4332] dark:text-dark-green-primary opacity-20" />
           </div>
