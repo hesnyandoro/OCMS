@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext.jsx';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const NewPayment = () => {
   const { authState } = useContext(AuthContext);
@@ -23,7 +25,7 @@ const NewPayment = () => {
   
   const [pricePerKg, setPricePerKg] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
-  const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
+  const [paymentDate, setPaymentDate] = useState(new Date());
   const [currency, setCurrency] = useState('KES');
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -171,7 +173,7 @@ const NewPayment = () => {
         kgsDelivered: totalKgs,
         pricePerKg: parseFloat(pricePerKg),
         amountPaid: totalAmount,
-        date: paymentDate,
+        date: paymentDate instanceof Date ? paymentDate.toISOString() : paymentDate,
         status: 'Completed',
         currency: currency
       };
@@ -344,11 +346,12 @@ const NewPayment = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="form-label">Payment Date *</label>
-              <input
-                type="date"
-                value={paymentDate}
-                onChange={(e) => setPaymentDate(e.target.value)}
-                className="form-control"
+              <ReactDatePicker
+                selected={paymentDate}
+                onChange={(date) => setPaymentDate(date)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select payment date"
+                className="form-control cursor-pointer"
                 required
               />
             </div>

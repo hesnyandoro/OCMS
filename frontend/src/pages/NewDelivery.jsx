@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const NewDelivery = () => {
   const navigate = useNavigate();
@@ -130,7 +132,19 @@ const NewDelivery = () => {
             </div>
             <div>
               <label className="form-label">Date</label>
-              <input type="date" className="form-control" {...register('date')} />
+              <Controller
+                name="date"
+                control={control}
+                render={({ field }) => (
+                  <ReactDatePicker
+                    selected={field.value}
+                    onChange={(date) => field.onChange(date)}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select delivery date"
+                    className="form-control cursor-pointer w-full"
+                  />
+                )}
+              />
               {errors.date && <p className="text-danger">{errors.date.message}</p>}
             </div>
           </div>

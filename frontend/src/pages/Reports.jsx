@@ -17,6 +17,8 @@ import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DollarSign, TrendingUp, TrendingDown, Users, Package, AlertCircle, Download, FileText, Calendar } from 'lucide-react';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
 
@@ -44,7 +46,7 @@ const Reports = () => {
   const [comparativeAnalytics, setComparativeAnalytics] = useState(null);
   const [deliveryTypeAnalytics, setDeliveryTypeAnalytics] = useState(null);
   const [operationalMetrics, setOperationalMetrics] = useState(null);
-  const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
+  const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
 
   useEffect(() => {
     fetchAllData();
@@ -130,8 +132,8 @@ const Reports = () => {
   async function fetchAdvancedAnalytics() {
     try {
       const params = new URLSearchParams();
-      if (dateRange.startDate) params.append('startDate', dateRange.startDate);
-      if (dateRange.endDate) params.append('endDate', dateRange.endDate);
+      if (dateRange.startDate) params.append('startDate', dateRange.startDate instanceof Date ? dateRange.startDate.toISOString().split('T')[0] : dateRange.startDate);
+      if (dateRange.endDate) params.append('endDate', dateRange.endDate instanceof Date ? dateRange.endDate.toISOString().split('T')[0] : dateRange.endDate);
       
       const queryString = params.toString();
       
@@ -653,24 +655,28 @@ const Reports = () => {
           <div className="flex gap-3 items-center">
             <div className="flex flex-col">
               <label className="text-xs text-gray-600 dark:text-gray-400 mb-1">Start Date</label>
-              <input
-                type="date"
-                value={dateRange.startDate}
-                onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-100 text-sm"
+              <ReactDatePicker
+                selected={dateRange.startDate}
+                onChange={(date) => setDateRange({ ...dateRange, startDate: date })}
+                isClearable
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select start date"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-100 text-sm cursor-pointer"
               />
             </div>
             <div className="flex flex-col">
               <label className="text-xs text-gray-600 dark:text-gray-400 mb-1">End Date</label>
-              <input
-                type="date"
-                value={dateRange.endDate}
-                onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-100 text-sm"
+              <ReactDatePicker
+                selected={dateRange.endDate}
+                onChange={(date) => setDateRange({ ...dateRange, endDate: date })}
+                isClearable
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select end date"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-100 text-sm cursor-pointer"
               />
             </div>
             <button
-              onClick={() => setDateRange({ startDate: '', endDate: '' })}
+              onClick={() => setDateRange({ startDate: null, endDate: null })}
               className="mt-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm font-medium transition-colors"
             >
               Clear

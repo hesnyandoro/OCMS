@@ -4,12 +4,12 @@ const Delivery = require('../models/Delivery');
 const Payment = require ('../models/Payment');
 
 const SUCCESS_STATUS = ['Completed', 'Paid'];
-const PENDING_STATUS = ['Pending', 'Processing', 'Failed'];
+const PENDING_STATUS = ['Pending', 'Failed'];
 
 // Route to fetch summarized dashboard data
 router.get('/summary', async (req, res) => {
     try {
-        const { region, driver, type } = req.query;
+        const { region, driver, type, date } = req.query;
 
         const totalFarmers = await Farmer.countDocuments({});
 
@@ -18,6 +18,14 @@ router.get('/summary', async (req, res) => {
         if (region) deliveryMatch.region = region;
         if (driver) deliveryMatch.driver = driver;
         if (type) deliveryMatch.type = type;
+        if (date) {
+            // Filter for specific date
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+            deliveryMatch.date = { $gte: startOfDay, $lte: endOfDay };
+        }
 
         const kgsDeliveredResult = await Delivery.aggregate([
             ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
@@ -68,7 +76,11 @@ router.get('/summary', async (req, res) => {
             { $group: { _id: "$status", count: { $sum: 1 } } }
         ]);
         const paymentsStatus = { Pending: 0, Completed: 0, Failed: 0 };
-        paymentStatusAgg.forEach(p => { paymentsStatus[p._id] = p.count || 0; });
+        paymentStatusAgg.forEach(p => { 
+            if (p._id && paymentsStatus.hasOwnProperty(p._id)) {
+                paymentsStatus[p._id] = p.count || 0; 
+            }
+        });
         
         // Build a recentActivities feed by combining recent deliveries and payments
         // Apply same delivery filters to recent deliveries
@@ -121,6 +133,28 @@ router.get('/summary', async (req, res) => {
     } catch (err) {
         console.error("Dashboard data fetching failed:", err);
         res.status(500).json({ msg: 'Server error while compiling dashboard data.' });
+    }
+});
+
+// Route to get unique drivers
+router.get('/drivers', async (req, res) => {
+    try {
+        const drivers = await Delivery.distinct('driver');
+        res.json(drivers.filter(d => d).sort());
+    } catch (err) {
+        console.error('Failed to fetch drivers:', err);
+        res.status(500).json({ msg: 'Server error while fetching drivers.' });
+    }
+});
+
+// Route to get unique regions
+router.get('/regions', async (req, res) => {
+    try {
+        const regions = await Delivery.distinct('region');
+        res.json(regions.filter(r => r).sort());
+    } catch (err) {
+        console.error('Failed to fetch regions:', err);
+        res.status(500).json({ msg: 'Server error while fetching regions.' });
     }
 });
 

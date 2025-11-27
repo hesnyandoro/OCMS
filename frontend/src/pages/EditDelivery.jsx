@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowLeft, Save, Calendar, User, Package, MapPin } from 'lucide-react';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const EditDelivery = () => {
   const navigate = useNavigate();
@@ -238,10 +240,18 @@ const EditDelivery = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Date</label>
-              <input 
-                type="date" 
-                className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
-                {...register('date')} 
+              <Controller
+                name="date"
+                control={control}
+                render={({ field }) => (
+                  <ReactDatePicker
+                    selected={field.value ? new Date(field.value) : null}
+                    onChange={(date) => field.onChange(date)}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select delivery date"
+                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition cursor-pointer"
+                  />
+                )}
               />
               {errors.date && (
                 <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.date.message}</p>

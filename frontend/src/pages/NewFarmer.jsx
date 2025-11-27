@@ -11,6 +11,8 @@ const NewFarmer = () => {
     try {
       // API expects fields: name, cellNumber, nationalId, season, farmLocation, weighStation
       const res = await api.post('/farmers', data);
+      const responseData = res.data;
+      console.log('Farmer created:', responseData);
       toast.success('Farmer created');
       navigate('/dashboard/farmers');
     } catch (err) {

@@ -6,6 +6,8 @@ import {
 } from 'lucide-react'; 
 import { Link } from 'react-router-dom';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -29,8 +31,8 @@ const Dashboard = () => {
     const user = authState?.user;
     const isDark = theme === 'dark';
     
-    // --- State Hooks ---
-    const [filterDate, setFilterDate] = useState('');
+    // State Hooks
+    const [filterDate, setFilterDate] = useState(null);
     const [filterRegion, setFilterRegion] = useState('');
     const [filterDriver, setFilterDriver] = useState('');
     const [filterDelivery, setFilterDelivery] = useState('');
@@ -46,6 +48,8 @@ const Dashboard = () => {
     });
     
     const [loading, setLoading] = useState(true);
+    const [drivers, setDrivers] = useState([]);
+    const [regions, setRegions] = useState([]);
 
     // Fetch Dashboard Data 
     const fetchDashboardData = async (params = {}) => {
@@ -80,12 +84,40 @@ const Dashboard = () => {
         }
     };
 
+    // Fetch drivers and regions for filters
+    const fetchFilterOptions = async () => {
+        try {
+            const [driversRes, regionsRes] = await Promise.all([
+                api.get('/dashboard/drivers'),
+                api.get('/dashboard/regions')
+            ]);
+            setDrivers(driversRes.data || []);
+            setRegions(regionsRes.data || []);
+        } catch (error) {
+            console.error('Failed to fetch filter options:', error);
+        }
+    };
+
     useEffect(() => {
         fetchDashboardData();
-        
+        fetchFilterOptions();
     }, []);
 
-    // --- Calculate Trends ---
+    // Apply filters automatically when any filter changes
+    useEffect(() => {
+        const params = {};
+        if (filterRegion) params.region = filterRegion;
+        if (filterDriver) params.driver = filterDriver;
+        if (filterDelivery) params.type = filterDelivery;
+        if (filterDate) params.date = filterDate.toISOString().split('T')[0];
+        
+        // Only fetch if at least one filter is applied
+        if (Object.keys(params).length > 0 || filterDate || filterRegion || filterDriver || filterDelivery) {
+            fetchDashboardData(params);
+        }
+    }, [filterDate, filterRegion, filterDriver, filterDelivery]);
+
+    // Calculate Trends 
     const calculateTrend = (data) => {
         if (!data || data.length < 2) return { trend: 0, isPositive: true };
         const current = data[data.length - 1] || 0;
@@ -99,7 +131,7 @@ const Dashboard = () => {
     const totalPayments = dashboardData.paymentsStatus.Completed + dashboardData.paymentsStatus.Pending + dashboardData.paymentsStatus.Failed;
     const paymentSuccessRate = totalPayments > 0 ? ((dashboardData.paymentsStatus.Completed / totalPayments) * 100).toFixed(0) : 0;
 
-    // --- KPI Data Configuration ---
+    // KPI Data Configuration
     const kpiData = [
         { 
             title: "Total Farmers", 
@@ -147,7 +179,7 @@ const Dashboard = () => {
         },
     ];
 
-    // --- Filter Card Component ---
+    // Filter Card Component
     const FilterCard = () => {
         const hasActiveFilters = filterRegion || filterDriver || filterDelivery;
         
@@ -170,7 +202,7 @@ const Dashboard = () => {
                                 setFilterRegion('');
                                 setFilterDriver('');
                                 setFilterDelivery('');
-                                setFilterDate('');
+                                setFilterDate(null);
                                 fetchDashboardData();
                             }}
                             className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold flex items-center gap-1 transition-colors"
@@ -181,24 +213,26 @@ const Dashboard = () => {
                     )}
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">{/* Auto-apply filters on change */}
                     {/* Date Input */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 block flex items-center gap-1">
+                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                             <Calendar size={12} />
                             Date
                         </label>
-                        <input 
-                            type="date" 
-                            value={filterDate} 
-                            onChange={(e) => setFilterDate(e.target.value)} 
-                            className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm" 
+                        <ReactDatePicker
+                            selected={filterDate}
+                            onChange={(date) => setFilterDate(date)}
+                            isClearable
+                            placeholderText="Select date"
+                            dateFormat="yyyy-MM-dd"
+                            className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm cursor-pointer"
                         />
                     </div>
 
                     {/* Region Select */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 block flex items-center gap-1">
+                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                             <MapPin size={12} />
                             Region
                         </label>
@@ -208,15 +242,15 @@ const Dashboard = () => {
                             className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm"
                         >
                             <option value="">All Regions</option>
-                            <option>North</option>
-                            <option>South</option>
-                            <option>East</option>
+                            {regions.map((region) => (
+                                <option key={region} value={region}>{region}</option>
+                            ))}
                         </select>
                     </div>
                     
                     {/* Driver Select */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 block flex items-center gap-1">
+                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                             <Users size={12} />
                             Driver
                         </label>
@@ -226,15 +260,15 @@ const Dashboard = () => {
                             className="w-full text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg border border-gray-300 dark:border-gray-600 p-2.5 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm"
                         >
                             <option value="">All Drivers</option>
-                            <option>Driver A</option>
-                            <option>Driver B</option>
-                            <option>Driver C</option>
+                            {drivers.map((driver) => (
+                                <option key={driver} value={driver}>{driver}</option>
+                            ))}
                         </select>
                     </div>
                     
                     {/* Delivery Type Select */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 block flex items-center gap-1">
+                        <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                             <Package size={12} />
                             Type
                         </label>
@@ -249,21 +283,12 @@ const Dashboard = () => {
                         </select>
                     </div>
                     
-                    {/* Apply Button */}
-                    <div>
-                        <button 
-                            onClick={() => {
-                                const params = {};
-                                if (filterRegion) params.region = filterRegion;
-                                if (filterDriver) params.driver = filterDriver;
-                                if (filterDelivery) params.type = filterDelivery;
-                                fetchDashboardData(params);
-                            }} 
-                            className="w-full bg-gradient-to-r from-[#1B4332] to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 hover:from-[#2D5F4D] hover:to-emerald-800 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white rounded-lg px-4 py-2.5 text-sm font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
-                        >
-                            <Zap size={16} />
-                            Apply Filters
-                        </button>
+                    {/* Active Filters Indicator */}
+                    <div className="flex items-end">
+                        <div className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 text-white rounded-lg px-4 py-2.5 text-sm font-semibold shadow-lg flex items-center justify-center gap-2">
+                            <Activity size={16} />
+                            {(filterDate || filterRegion || filterDriver || filterDelivery) ? 'Filters Active' : 'No Filters'}
+                        </div>
                     </div>
                 </div>
             </div>
