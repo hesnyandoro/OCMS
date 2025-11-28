@@ -4,6 +4,7 @@ import { Search, Plus, MapPin, Phone, IdCard, Calendar, Grid, List, Trash2 } fro
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { canCreate, canDelete } from '../utils/permissions';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 
 const Farmers = () => {
   const navigate = useNavigate();
@@ -15,21 +16,25 @@ const Farmers = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
 
+  const fetchFarmers = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get('/farmers');
+      setFarmers(data);
+      setFilteredFarmers(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchFarmers = async () => {
-      setLoading(true);
-      try {
-        const { data } = await api.get('/farmers');
-        setFarmers(data);
-        setFilteredFarmers(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchFarmers();
   }, []);
+
+  // Smart auto-refresh: 2 minutes, pauses on inactive tab
+  useSmartRefresh(fetchFarmers, 120000);
 
   useEffect(() => {
     let filtered = [...farmers];

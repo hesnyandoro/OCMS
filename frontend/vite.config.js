@@ -12,4 +12,24 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor chunks for better caching
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'chart-vendor': ['chart.js', 'react-chartjs-2'],
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'yup'],
+          'ui-vendor': ['lucide-react', 'react-icons', 'react-datepicker', 'react-select'],
+        },
+      },
+    },
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 1000,
+    // Enable source maps for debugging (disable in production)
+    sourcemap: false,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
+  },
 })

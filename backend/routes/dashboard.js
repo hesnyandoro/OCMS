@@ -70,46 +70,71 @@ router.get('/summary', async (req, res) => {
         ]);
         const totalPaid = pendingPaymentsResult.length > 0 ? pendingPaymentsResult[0].totalAmount : 0;
         
-        // Count pending/failed payments from Payment collection
-        const pendingPaymentsCount = await Payment.countDocuments({ status: { $in: PENDING_STATUS } });
-        
-        // Count pending deliveries from Delivery collection (paymentStatus: 'Pending')
-        const pendingDeliveriesCount = await Delivery.countDocuments({ 
-            paymentStatus: 'Pending',
-            ...(Object.keys(deliveryMatch).length ? deliveryMatch : {})
-        });
-        
-        // Total pending reports = pending payments + pending deliveries
-        const totalPendingReports = pendingPaymentsCount + pendingDeliveriesCount;
-
-        // Payment status distribution - combine Payment collection and Delivery paymentStatus
-        // Get payment records status
-        const paymentStatusAgg = await Payment.aggregate([
-            { $group: { _id: "$status", count: { $sum: 1 } } }
+        // Count deliveries without payment records (truly pending)
+        const pendingDeliveriesAgg = await Delivery.aggregate([
+            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
+            {
+                $lookup: {
+                    from: 'payments',
+                    localField: 'payment',
+                    foreignField: '_id',
+                    as: 'paymentInfo'
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { paymentInfo: { $size: 0 } }, // No payment record
+                        { 'paymentInfo.status': { $in: PENDING_STATUS } } // Payment exists but pending/failed
+                    ]
+                }
+            },
+            {
+                $count: 'total'
+            }
         ]);
         
-        // Get delivery payment status (Pending/Paid)
-        const deliveryPaymentStatusAgg = await Delivery.aggregate([
+        const totalPendingReports = pendingDeliveriesAgg.length > 0 ? pendingDeliveriesAgg[0].total : 0;
+
+        // Payment status distribution - SINGLE SOURCE OF TRUTH
+        // Use LEFT JOIN to get delivery status from Payment records
+        const deliveryStatusAgg = await Delivery.aggregate([
             ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
-            { $group: { _id: "$paymentStatus", count: { $sum: 1 } } }
+            {
+                $lookup: {
+                    from: 'payments',
+                    localField: 'payment',
+                    foreignField: '_id',
+                    as: 'paymentInfo'
+                }
+            },
+            {
+                $addFields: {
+                    effectiveStatus: {
+                        $cond: {
+                            if: { $gt: [{ $size: '$paymentInfo' }, 0] },
+                            then: { $arrayElemAt: ['$paymentInfo.status', 0] },
+                            else: 'Pending'
+                        }
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: '$effectiveStatus',
+                    count: { $sum: 1 }
+                }
+            }
         ]);
         
         // Initialize status object
         const paymentsStatus = { Pending: 0, Completed: 0, Failed: 0 };
         
-        // Add Payment collection status
-        paymentStatusAgg.forEach(p => { 
-            if (p._id && paymentsStatus.hasOwnProperty(p._id)) {
-                paymentsStatus[p._id] = p.count || 0; 
-            }
-        });
-        
-        // Add Delivery paymentStatus (map "Paid" to "Completed")
-        deliveryPaymentStatusAgg.forEach(d => {
-            if (d._id === 'Pending') {
-                paymentsStatus.Pending += d.count || 0;
-            } else if (d._id === 'Paid') {
-                paymentsStatus.Completed += d.count || 0;
+        // Populate from aggregation results
+        deliveryStatusAgg.forEach(item => {
+            const status = item._id;
+            if (status && paymentsStatus.hasOwnProperty(status)) {
+                paymentsStatus[status] = item.count || 0;
             }
         });
         

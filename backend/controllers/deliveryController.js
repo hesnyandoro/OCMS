@@ -133,14 +133,52 @@ exports.deleteDelivery = async (req, res) => {
 exports.getUnpaidDeliveriesByFarmer = async (req, res) => {
   try {
     const { farmerId } = req.params;
+    const mongoose = require('mongoose');
+    const Payment = require('../models/Payment');
     
-    const deliveries = await Delivery.find({
-      farmer: farmerId,
-      paymentStatus: 'Pending'
-    })
-      .select('_id date type kgsDelivered region')
-      .sort({ date: -1 })
-      .populate('farmer', 'name cellNumber');
+    // Get deliveries with no payment or failed/pending payment
+    const deliveries = await Delivery.aggregate([
+      {
+        $match: {
+          farmer: new mongoose.Types.ObjectId(farmerId)
+        }
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          localField: 'payment',
+          foreignField: '_id',
+          as: 'paymentInfo'
+        }
+      },
+      {
+        $match: {
+          $or: [
+            { paymentInfo: { $size: 0 } },
+            { 'paymentInfo.status': { $in: ['Pending', 'Failed'] } }
+          ]
+        }
+      },
+      {
+        $lookup: {
+          from: 'farmers',
+          localField: 'farmer',
+          foreignField: '_id',
+          as: 'farmerInfo'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          date: 1,
+          type: 1,
+          kgsDelivered: 1,
+          region: 1,
+          farmer: { $arrayElemAt: ['$farmerInfo', 0] }
+        }
+      },
+      { $sort: { date: -1 } }
+    ]);
     
     res.json(deliveries);
   } catch (err) {
@@ -153,13 +191,38 @@ exports.getUnpaidDeliveriesByFarmer = async (req, res) => {
 exports.getDeliveryTypesByFarmer = async (req, res) => {
   try {
     const { farmerId } = req.params;
+    const mongoose = require('mongoose');
     
-    const deliveries = await Delivery.find({
-      farmer: farmerId,
-      paymentStatus: 'Pending'
-    }).distinct('type');
+    const types = await Delivery.aggregate([
+      {
+        $match: {
+          farmer: new mongoose.Types.ObjectId(farmerId)
+        }
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          localField: 'payment',
+          foreignField: '_id',
+          as: 'paymentInfo'
+        }
+      },
+      {
+        $match: {
+          $or: [
+            { paymentInfo: { $size: 0 } },
+            { 'paymentInfo.status': { $in: ['Pending', 'Failed'] } }
+          ]
+        }
+      },
+      {
+        $group: {
+          _id: '$type'
+        }
+      }
+    ]);
     
-    res.json(deliveries);
+    res.json(types.map(t => t._id));
   } catch (err) {
     console.error('Get delivery types error:', err);
     res.status(500).send('Server error');
@@ -176,8 +239,23 @@ exports.getTotalKgsByType = async (req, res) => {
       {
         $match: {
           farmer: new mongoose.Types.ObjectId(farmerId),
-          type: type,
-          paymentStatus: 'Pending'
+          type: type
+        }
+      },
+      {
+        $lookup: {
+          from: 'payments',
+          localField: 'payment',
+          foreignField: '_id',
+          as: 'paymentInfo'
+        }
+      },
+      {
+        $match: {
+          $or: [
+            { paymentInfo: { $size: 0 } },
+            { 'paymentInfo.status': { $in: ['Pending', 'Failed'] } }
+          ]
         }
       },
       {

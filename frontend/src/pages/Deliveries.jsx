@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText } from 'lucide-react';
 import Papa from 'papaparse';
@@ -22,21 +23,25 @@ const Deliveries = () => {
   const [driverFilter, setDriverFilter] = useState('All');
   const [loading, setLoading] = useState(true);
 
+  const fetchDeliveries = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get('/deliveries');
+      setDeliveries(data);
+      setFilteredDeliveries(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchDeliveries = async () => {
-      setLoading(true);
-      try {
-        const { data } = await api.get('/deliveries');
-        setDeliveries(data);
-        setFilteredDeliveries(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchDeliveries();
   }, []);
+
+  // Smart auto-refresh: 2 minutes, pauses on inactive tab
+  useSmartRefresh(fetchDeliveries, 120000);
 
   useEffect(() => {
     let filtered = [...deliveries];

@@ -231,9 +231,41 @@ exports.getCashflowForecast = async (req, res) => {
     // Calculate daily average
     const dailyAverage = historicalPayments.reduce((sum, p) => sum + p.amountPaid, 0) / 90;
 
-    // Get pending deliveries (unpaid)
-    const pendingDeliveries = await Delivery.find({ paymentStatus: 'Pending' })
-      .populate('farmer', 'name');
+    // Get pending deliveries (unpaid) - deliveries without payment or with failed/pending payment
+    const pendingDeliveries = await Delivery.aggregate([
+      {
+        $lookup: {
+          from: 'payments',
+          localField: 'payment',
+          foreignField: '_id',
+          as: 'paymentInfo'
+        }
+      },
+      {
+        $match: {
+          $or: [
+            { paymentInfo: { $size: 0 } },
+            { 'paymentInfo.status': { $in: ['Pending', 'Failed'] } }
+          ]
+        }
+      },
+      {
+        $lookup: {
+          from: 'farmers',
+          localField: 'farmer',
+          foreignField: '_id',
+          as: 'farmerInfo'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          type: 1,
+          kgsDelivered: 1,
+          farmer: { $arrayElemAt: ['$farmerInfo', 0] }
+        }
+      }
+    ]);
 
     // Calculate expected obligations
     const expectedObligations = await Payment.aggregate([
@@ -675,18 +707,22 @@ exports.getOperationalMetrics = async (req, res) => {
     // Average payment cycle time
     const paymentsWithDeliveries = await Payment.find({
       status: 'Completed',
-      delivery: { $exists: true }
-    }).populate('delivery');
+      deliveries: { $exists: true, $ne: [] }
+    }).populate('deliveries');
 
     let totalCycleTime = 0;
     let cycleCount = 0;
 
     paymentsWithDeliveries.forEach(p => {
-      if (p.delivery && p.delivery.date) {
-        const cycleTime = (new Date(p.date) - new Date(p.delivery.date)) / (1000 * 60 * 60 * 24);
-        if (cycleTime >= 0) {
-          totalCycleTime += cycleTime;
-          cycleCount++;
+      if (p.deliveries && p.deliveries.length > 0) {
+        // Use the first delivery's date for cycle time calculation
+        const firstDeliveryDate = p.deliveries[0].date;
+        if (firstDeliveryDate) {
+          const cycleTime = (new Date(p.date) - new Date(firstDeliveryDate)) / (1000 * 60 * 60 * 24);
+          if (cycleTime >= 0) {
+            totalCycleTime += cycleTime;
+            cycleCount++;
+          }
         }
       }
     });

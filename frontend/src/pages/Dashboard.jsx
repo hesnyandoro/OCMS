@@ -23,6 +23,7 @@ import {
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
 const Dashboard = () => {
@@ -116,6 +117,16 @@ const Dashboard = () => {
             fetchDashboardData(params);
         }
     }, [filterDate, filterRegion, filterDriver, filterDelivery]);
+
+    // Smart auto-refresh: 2 minutes, pauses on inactive tab
+    useSmartRefresh(() => {
+        const params = {};
+        if (filterRegion) params.region = filterRegion;
+        if (filterDriver) params.driver = filterDriver;
+        if (filterDelivery) params.type = filterDelivery;
+        if (filterDate) params.date = filterDate.toISOString().split('T')[0];
+        fetchDashboardData(params);
+    }, 120000, [filterDate, filterRegion, filterDriver, filterDelivery]);
 
     // Calculate Trends 
     const calculateTrend = (data) => {

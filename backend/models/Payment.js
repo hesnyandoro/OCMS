@@ -7,11 +7,11 @@ const paymentSchema = new mongoose.Schema({
     required: true 
   },
   
-  delivery: { 
+  deliveries: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Delivery',
     required: true
-  },
+  }],
   
   deliveryType: {
     type: String,
@@ -71,6 +71,20 @@ const paymentSchema = new mongoose.Schema({
   voidedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  
+  retriedFrom: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Payment'
+  },
+  
+  retryReason: {
+    type: String
+  },
+  
+  isRetry: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 

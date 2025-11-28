@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
@@ -21,20 +22,24 @@ const Payments = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [loading, setLoading] = useState(false);
 
+  const fetchPayments = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get('/payments');
+      setPayments(data || []);
+    } catch (err) {
+      console.error('Failed loading payments', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchPayments = async () => {
-      setLoading(true);
-      try {
-        const { data } = await api.get('/payments');
-        setPayments(data || []);
-      } catch (err) {
-        console.error('Failed loading payments', err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchPayments();
   }, []);
+
+  // Smart auto-refresh: 2 minutes, pauses on inactive tab
+  useSmartRefresh(fetchPayments, 120000);
 
   useEffect(() => {
     let list = [...payments];
@@ -48,6 +53,12 @@ const Payments = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [voidReason, setVoidReason] = useState('');
   const [isVoiding, setIsVoiding] = useState(false);
+
+  const [showRetryModal, setShowRetryModal] = useState(false);
+  const [retryReason, setRetryReason] = useState('');
+  const [retryPricePerKg, setRetryPricePerKg] = useState('');
+  const [useOriginalPrice, setUseOriginalPrice] = useState(true);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const handleVoidPayment = async () => {
     if (!voidReason.trim()) {
@@ -83,6 +94,48 @@ const Payments = () => {
     }
   };
 
+  const handleRetryPayment = async () => {
+    if (!retryReason.trim()) {
+      alert('Please provide a reason for retrying this payment');
+      return;
+    }
+
+    if (!useOriginalPrice && (!retryPricePerKg || parseFloat(retryPricePerKg) <= 0)) {
+      alert('Please enter a valid price per kg');
+      return;
+    }
+
+    setIsRetrying(true);
+    try {
+      const retryData = {
+        retryReason: retryReason.trim()
+      };
+
+      // Only send pricePerKg if user chose to adjust it
+      if (!useOriginalPrice) {
+        retryData.pricePerKg = parseFloat(retryPricePerKg);
+      }
+
+      await api.post(`/payments/${selectedPayment._id}/retry`, retryData);
+      
+      // Reload payments to get updated data
+      const { data } = await api.get('/payments');
+      setPayments(data || []);
+      
+      alert(`Payment retried successfully! New payment record created.`);
+      setShowRetryModal(false);
+      setRetryReason('');
+      setRetryPricePerKg('');
+      setUseOriginalPrice(true);
+      setSelectedPayment(null);
+    } catch (err) {
+      console.error('Retry payment failed', err);
+      alert(err?.response?.data?.msg || 'Failed to retry payment');
+    } finally {
+      setIsRetrying(false);
+    }
+  };
+
   const exportCSV = () => {
     const rows = filtered.map(p => ({
       Date: p.date ? new Date(p.date).toLocaleDateString() : '',
@@ -92,8 +145,9 @@ const Payments = () => {
       'Amount Paid': p.amountPaid || 0,
       Currency: p.currency || 'KES',
       Status: p.status || '',
-      'Delivery Date': p.delivery?.date ? new Date(p.delivery.date).toLocaleDateString() : '',
-      'Kgs Delivered': p.delivery?.kgsDelivered || '',
+      'Number of Deliveries': p.deliveries?.length || 0,
+      'Total Kgs': p.kgsDelivered || 0,
+      'Delivery Type': p.deliveryType || '',
       'Recorded By': p.recordedBy?.name || p.recordedBy?.username || ''
     }));
     
@@ -318,6 +372,7 @@ const Payments = () => {
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Date</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Farmer</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Type / Deliveries</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Recorded By</th>
@@ -336,6 +391,16 @@ const Payments = () => {
                         <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           {payment.farmer?.name || 'N/A'}
                         </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
+                          {payment.deliveryType || 'N/A'}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {payment.deliveries?.length || 0} delivery(ies) • {payment.kgsDelivered || 0} kg
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm font-semibold text-[#1B4332] dark:text-dark-green-primary">
@@ -369,27 +434,190 @@ const Payments = () => {
                       {payment.recordedBy?.name || payment.recordedBy?.username || 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      {payment.status === 'Completed' && canCreate(authState?.role, 'payments') && (
-                        <button
-                          onClick={() => {
-                            setSelectedPayment(payment);
-                            setShowVoidModal(true);
-                          }}
-                          className="px-3 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors text-sm font-medium"
-                        >
-                          Void
-                        </button>
-                      )}
-                      {payment.status === 'Failed' && payment.voidReason && (
-                        <span className="text-xs text-gray-500 dark:text-gray-400 italic">
-                          Voided
-                        </span>
-                      )}
+                      <div className="flex gap-2">
+                        {payment.status === 'Completed' && canCreate(authState?.role, 'payments') && (
+                          <button
+                            onClick={() => {
+                              setSelectedPayment(payment);
+                              setShowVoidModal(true);
+                            }}
+                            className="px-3 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors text-sm font-medium"
+                          >
+                            Void
+                          </button>
+                        )}
+                        {payment.status === 'Failed' && canCreate(authState?.role, 'payments') && (
+                          <button
+                            onClick={() => {
+                              setSelectedPayment(payment);
+                              setRetryPricePerKg(payment.pricePerKg?.toString() || '');
+                              setShowRetryModal(true);
+                            }}
+                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors text-sm font-medium"
+                          >
+                            Retry
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Retry Payment Modal */}
+      {showRetryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full p-4 sm:p-6 my-8">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Retry Failed Payment
+            </h3>
+            
+            <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-300 font-medium">
+                ℹ️ This will create a new payment record and mark deliveries as paid
+              </p>
+            </div>
+
+            {selectedPayment && (
+              <div className="mb-4 space-y-2 bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Farmer: </span>
+                    <span className="text-gray-900 dark:text-gray-100">{selectedPayment.farmer?.name}</span>
+                  </div>
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Delivery Type: </span>
+                    <span className="text-gray-900 dark:text-gray-100">{selectedPayment.deliveryType}</span>
+                  </div>
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Deliveries: </span>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {selectedPayment.deliveries?.length || 0} delivery(ies) • {selectedPayment.kgsDelivered} kg
+                    </span>
+                  </div>
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Original Amount: </span>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {selectedPayment.currency} {Number(selectedPayment.amountPaid).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Original Price/kg: </span>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {selectedPayment.currency} {selectedPayment.pricePerKg}
+                    </span>
+                  </div>
+                  <div className="text-sm">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Failed Date: </span>
+                    <span className="text-gray-900 dark:text-gray-100">
+                      {new Date(selectedPayment.date).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+                {selectedPayment.voidReason && (
+                  <div className="text-sm pt-2 border-t border-gray-200 dark:border-gray-600">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Failure Reason: </span>
+                    <span className="text-red-600 dark:text-red-400">{selectedPayment.voidReason}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Reason for Retry *
+              </label>
+              <textarea
+                value={retryReason}
+                onChange={(e) => setRetryReason(e.target.value)}
+                placeholder="Enter reason (e.g., Issue resolved, Corrected amount, Payment system restored...)"
+                rows="3"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none"
+                required
+              />
+            </div>
+
+            <div className="mb-4 border border-gray-300 dark:border-gray-600 rounded-lg p-3 sm:p-4">
+              <label className="flex items-start sm:items-center gap-2 mb-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useOriginalPrice}
+                  onChange={(e) => setUseOriginalPrice(e.target.checked)}
+                  className="w-4 h-4 mt-0.5 sm:mt-0 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 flex-shrink-0"
+                />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Use original price per kg ({selectedPayment?.currency} {selectedPayment?.pricePerKg})
+                </span>
+              </label>
+
+              {!useOriginalPrice && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    New Price Per Kg *
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={retryPricePerKg}
+                    onChange={(e) => setRetryPricePerKg(e.target.value)}
+                    placeholder="Enter new price per kg"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm sm:text-base"
+                    required
+                  />
+                  {retryPricePerKg && selectedPayment && (
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      New total: {selectedPayment.currency} {(parseFloat(retryPricePerKg) * selectedPayment.kgsDelivered).toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3 mb-4">
+              <p className="text-xs text-yellow-800 dark:text-yellow-300">
+                <strong>Note:</strong> A new payment record will be created with today&apos;s date. 
+                The original failed payment will remain in the system for audit purposes. 
+                All linked deliveries will be marked as paid and locked to the new payment.
+              </p>
+            </div>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
+              <button
+                onClick={() => {
+                  setShowRetryModal(false);
+                  setRetryReason('');
+                  setRetryPricePerKg('');
+                  setUseOriginalPrice(true);
+                  setSelectedPayment(null);
+                }}
+                className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm sm:text-base"
+                disabled={isRetrying}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRetryPayment}
+                disabled={isRetrying || !retryReason.trim() || (!useOriginalPrice && !retryPricePerKg)}
+                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base flex items-center justify-center gap-2"
+              >
+                {isRetrying ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                    <span>Retrying...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle size={18} />
+                    <span>Confirm Retry</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

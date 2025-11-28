@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import api from '../services/api';
+import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -54,6 +55,12 @@ const Reports = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRange]);
 
+  // Smart auto-refresh: 2 minutes, pauses on inactive tab
+  useSmartRefresh(() => {
+    fetchAllData();
+    fetchAdvancedAnalytics();
+  }, 120000, [dateRange]);
+
   async function fetchAllData() {
     setLoading(true);
     try {
@@ -95,15 +102,23 @@ const Reports = () => {
     const avgCostPerKgCherry = cherryKgs > 0 ? (cherryTotalPaid / cherryKgs) : avgCostPerKg;
     const avgCostPerKgParchment = parchmentKgs > 0 ? (parchmentTotalPaid / parchmentKgs) : avgCostPerKg;
     
-    // Calculate outstanding by delivery type: unpaid deliveries + voided payments not yet repaid
-    // 1. Pending Cherry deliveries
-    const pendingCherry = deliveriesData.filter(d => d.paymentStatus === 'Pending' && d.type === 'Cherry');
+    // Calculate outstanding by delivery type: deliveries without completed payment
+    // 1. Pending Cherry deliveries (no payment or failed/pending payment)
+    const pendingCherry = deliveriesData.filter(d => {
+      if (!d.payment) return d.type === 'Cherry'; // No payment record
+      const payment = paymentsData.find(p => p._id === d.payment);
+      return d.type === 'Cherry' && (!payment || payment.status !== 'Completed');
+    });
     const outstandingCherry = pendingCherry.reduce((sum, d) => {
       return sum + (d.kgsDelivered || 0) * avgCostPerKgCherry;
     }, 0);
     
     // 2. Pending Parchment deliveries
-    const pendingParchment = deliveriesData.filter(d => d.paymentStatus === 'Pending' && d.type === 'Parchment');
+    const pendingParchment = deliveriesData.filter(d => {
+      if (!d.payment) return d.type === 'Parchment'; // No payment record
+      const payment = paymentsData.find(p => p._id === d.payment);
+      return d.type === 'Parchment' && (!payment || payment.status !== 'Completed');
+    });
     const outstandingParchment = pendingParchment.reduce((sum, d) => {
       return sum + (d.kgsDelivered || 0) * avgCostPerKgParchment;
     }, 0);

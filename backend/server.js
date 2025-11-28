@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const compression = require('compression');
 const dashboardRoutes = require('./routes/dashboard');
 
 dotenv.config();
@@ -15,7 +16,18 @@ app.use(cors({
   credentials: true
 }));
 
+// Enable gzip compression for all responses
+app.use(compression());
+
 app.use(express.json());
+
+// Cache control for static assets
+app.use((req, res, next) => {
+  if (req.url.startsWith('/uploads')) {
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+  }
+  next();
+});
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

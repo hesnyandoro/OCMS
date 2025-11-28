@@ -165,21 +165,18 @@ const NewPayment = () => {
     setIsSubmitting(true);
 
     try {
-      // Use the first delivery ID 
+      // Send batch payment data with deliveryIds array
       const paymentData = {
         farmer: selectedFarmer._id,
-        delivery: deliveryIds[0], // Primary delivery
+        deliveryIds: deliveryIds, // Array of delivery IDs for batch processing
         deliveryType: selectedType,
-        kgsDelivered: totalKgs,
         pricePerKg: parseFloat(pricePerKg),
-        amountPaid: totalAmount,
         date: paymentDate instanceof Date ? paymentDate.toISOString() : paymentDate,
-        status: 'Completed',
         currency: currency
       };
 
       await api.post('/payments', paymentData);
-      toast.success('Payment recorded successfully');
+      toast.success(`Payment recorded successfully for ${deliveryIds.length} delivery(ies)`);
       navigate('/dashboard/payments');
     } catch (err) {
       console.error('Payment creation failed:', err);

@@ -433,23 +433,18 @@ const Users = () => {
                                 <label className="form-label">
                                     Assigned Region <span className="text-danger">*</span>
                                 </label>
-                                <select
+                                <input
+                                    type="text"
                                     name="assignedRegion"
                                     value={formData.assignedRegion}
                                     onChange={handleInputChange}
                                     className={`form-control ${formErrors.assignedRegion ? 'border-danger' : ''}`}
-                                >
-                                    <option value="">Select region</option>
-                                    <option value="Kiambu">Kiambu</option>
-                                    <option value="Nyeri">Nyeri</option>
-                                    <option value="Murang'a">Murang'a</option>
-                                    <option value="Kirinyaga">Kirinyaga</option>
-                                    <option value="Embu">Embu</option>
-                                    <option value="Tharaka Nithi">Tharaka Nithi</option>
-                                </select>
+                                    placeholder="Enter assigned region (e.g., Kiambu, Nyeri)"
+                                />
                                 {formErrors.assignedRegion && (
                                     <p className="text-danger text-xs mt-1">{formErrors.assignedRegion}</p>
                                 )}
+                                <small className="text-muted">Enter the region this field agent will manage</small>
                             </div>
 
                             {/* Submit Error */}
