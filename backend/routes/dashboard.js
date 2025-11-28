@@ -69,16 +69,47 @@ router.get('/summary', async (req, res) => {
             { $group: { _id: null, totalAmount: { $sum: "$amountPaid" } } }
         ]);
         const totalPaid = pendingPaymentsResult.length > 0 ? pendingPaymentsResult[0].totalAmount : 0;
+        
+        // Count pending/failed payments from Payment collection
         const pendingPaymentsCount = await Payment.countDocuments({ status: { $in: PENDING_STATUS } });
+        
+        // Count pending deliveries from Delivery collection (paymentStatus: 'Pending')
+        const pendingDeliveriesCount = await Delivery.countDocuments({ 
+            paymentStatus: 'Pending',
+            ...(Object.keys(deliveryMatch).length ? deliveryMatch : {})
+        });
+        
+        // Total pending reports = pending payments + pending deliveries
+        const totalPendingReports = pendingPaymentsCount + pendingDeliveriesCount;
 
-        // Payment status distribution
+        // Payment status distribution - combine Payment collection and Delivery paymentStatus
+        // Get payment records status
         const paymentStatusAgg = await Payment.aggregate([
             { $group: { _id: "$status", count: { $sum: 1 } } }
         ]);
+        
+        // Get delivery payment status (Pending/Paid)
+        const deliveryPaymentStatusAgg = await Delivery.aggregate([
+            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
+            { $group: { _id: "$paymentStatus", count: { $sum: 1 } } }
+        ]);
+        
+        // Initialize status object
         const paymentsStatus = { Pending: 0, Completed: 0, Failed: 0 };
+        
+        // Add Payment collection status
         paymentStatusAgg.forEach(p => { 
             if (p._id && paymentsStatus.hasOwnProperty(p._id)) {
                 paymentsStatus[p._id] = p.count || 0; 
+            }
+        });
+        
+        // Add Delivery paymentStatus (map "Paid" to "Completed")
+        deliveryPaymentStatusAgg.forEach(d => {
+            if (d._id === 'Pending') {
+                paymentsStatus.Pending += d.count || 0;
+            } else if (d._id === 'Paid') {
+                paymentsStatus.Completed += d.count || 0;
             }
         });
         
@@ -122,7 +153,7 @@ router.get('/summary', async (req, res) => {
             totalFarmers: totalFarmers,
             kgsDelivered: totalKgs,
             totalPayments: totalPaid,
-            pendingReports: pendingPaymentsCount,
+            pendingReports: totalPendingReports,
             recentActivities: recentActivities,
             monthlyKgs: {
                 labels: monthLabels,

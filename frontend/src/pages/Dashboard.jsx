@@ -540,7 +540,7 @@ const Dashboard = () => {
                                         </div>
                                         <div>
                                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">Payment Status</h3>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Current distribution</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">Deliveries & payments</p>
                                         </div>
                                     </div>
                                 </div>

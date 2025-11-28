@@ -445,6 +445,7 @@ const Users = () => {
                                     <option value="Murang'a">Murang'a</option>
                                     <option value="Kirinyaga">Kirinyaga</option>
                                     <option value="Embu">Embu</option>
+                                    <option value="Tharaka Nithi">Tharaka Nithi</option>
                                 </select>
                                 {formErrors.assignedRegion && (
                                     <p className="text-danger text-xs mt-1">{formErrors.assignedRegion}</p>

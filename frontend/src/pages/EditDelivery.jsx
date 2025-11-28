@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -27,7 +27,7 @@ const EditDelivery = () => {
     weighStation: yup.string()
   });
 
-  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, reset, control, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       region: userHasRegion || ''
@@ -37,6 +37,10 @@ const EditDelivery = () => {
   const [farmers, setFarmers] = useState([]);
   const [selectedWeigh, setSelectedWeigh] = useState('');
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedFarmer, setSelectedFarmer] = useState(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -76,6 +80,20 @@ const EditDelivery = () => {
     loadData();
   }, [id, navigate, reset, userHasRegion]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const onSubmit = async (payload) => {
     try {
       await api.put(`/deliveries/${id}`, payload);
@@ -87,14 +105,15 @@ const EditDelivery = () => {
     }
   };
 
-  async function onFarmerChange(e) {
-    const farmerId = e.target.value;
-    setValue('farmer', farmerId);
+  const handleSelectFarmer = async (farmer) => {
+    setSelectedFarmer(farmer);
+    setSearchTerm(farmer.name);
+    setValue('farmer', farmer._id);
+    setShowDropdown(false);
     setSelectedWeigh('');
-    if (!farmerId) return;
     
     try {
-      const res = await api.get(`/farmers/${farmerId}`);
+      const res = await api.get(`/farmers/${farmer._id}`);
       const f = res.data;
       if (f?.weighStation) {
         setSelectedWeigh(f.weighStation);
@@ -107,7 +126,21 @@ const EditDelivery = () => {
     } catch (err) {
       console.error('Load farmer failed', err);
     }
-  }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setShowDropdown(true);
+    if (!e.target.value) {
+      setValue('farmer', '');
+      setSelectedFarmer(null);
+    }
+  };
+
+  const filteredFarmers = farmers.filter(f => 
+    f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    f.cellNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -143,20 +176,40 @@ const EditDelivery = () => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Farmer Selection */}
-          <div>
+          <div className="relative" ref={dropdownRef}>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Farmer</label>
-            <select 
+            <input
+              type="text"
               className="w-full px-4 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition"
-              {...register('farmer')} 
-              onChange={onFarmerChange}
-            >
-              <option value="">Select farmer</option>
-              {farmers.map(f => (
-                <option key={f._id} value={f._id}>
-                  {f.name} - {f.cellNumber} ({f.weighStation || 'N/A'})
-                </option>
-              ))}
-            </select>
+              placeholder="Search farmer by name or phone..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onFocus={() => setShowDropdown(true)}
+              autoComplete="off"
+            />
+            <input type="hidden" {...register('farmer')} />
+            
+            {showDropdown && searchTerm && filteredFarmers.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                {filteredFarmers.map(f => (
+                  <div
+                    key={f._id}
+                    onClick={() => handleSelectFarmer(f)}
+                    className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer border-b border-gray-200 dark:border-gray-600 last:border-b-0"
+                  >
+                    <div className="font-medium text-gray-900 dark:text-gray-100">{f.name}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">{f.cellNumber} • {f.weighStation || 'N/A'}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {showDropdown && searchTerm && filteredFarmers.length === 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-4">
+                <p className="text-gray-500 dark:text-gray-400 text-sm">No farmers found</p>
+              </div>
+            )}
+            
             {errors.farmer && (
               <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.farmer.message}</p>
             )}
