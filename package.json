@@ -1,0 +1,16 @@
+{
+  "name": "ocms",
+  "version": "1.0.0",
+  "description": "Organic Coffee Management System",
+  "engines": {
+    "node": "18.x",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install --production",
+    "postinstall": "npm run build"
+  },
+  "author": "hesnyandoro",
+  "license": "ISC"
+}

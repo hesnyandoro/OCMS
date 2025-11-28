@@ -9,9 +9,23 @@ const dashboardRoutes = require('./routes/dashboard');
 dotenv.config();
 
 const app = express();
-const frontendDevUrl = 'http://localhost:5173';
+
+// CORS configuration - allow development and production origins
+const allowedOrigins = [
+  'http://localhost:5173', // Vite dev server
+  process.env.FRONTEND_URL, // Production frontend URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: frontendDevUrl,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all in production (served from same origin)
+    }
+  },
   methods: ['GET','HEAD', 'PATCH', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -34,13 +48,24 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/dashboard', dashboardRoutes);
 
-// Routes
+// API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/farmers', require('./routes/farmers'));
 app.use('/api/deliveries', require('./routes/deliveries'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reports', require('./routes/reports'));
+
+// Serve React frontend in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from React build
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+  
+  // Catch-all route to serve index.html for React Router
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+}
 
 mongoose.set('strictQuery', true);
 const connectDB = async () => {
