@@ -49,17 +49,23 @@ const Reports = () => {
   const [operationalMetrics, setOperationalMetrics] = useState(null);
   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
 
+  // Memoize date values to prevent unnecessary re-renders
+  const dateRangeKey = useMemo(() => 
+    `${dateRange.startDate?.getTime() || ''}-${dateRange.endDate?.getTime() || ''}`,
+    [dateRange.startDate, dateRange.endDate]
+  );
+
   useEffect(() => {
     fetchAllData();
     fetchAdvancedAnalytics();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRange]);
+  }, [dateRangeKey]);
 
   // Smart auto-refresh: 2 minutes, pauses on inactive tab
   useSmartRefresh(() => {
     fetchAllData();
     fetchAdvancedAnalytics();
-  }, 120000, [dateRange]);
+  }, 120000, [dateRangeKey]);
 
   async function fetchAllData() {
     setLoading(true);

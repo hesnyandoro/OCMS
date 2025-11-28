@@ -33,8 +33,9 @@ const NewDelivery = () => {
   const [selectedWeigh, setSelectedWeigh] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedFarmer, setSelectedFarmer] = useState(null);
+  const [_selectedFarmer, setSelectedFarmer] = useState(null);
   const dropdownRef = useRef(null);
+  
   useEffect(() => {
     const load = async () => {
       try {
