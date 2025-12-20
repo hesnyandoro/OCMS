@@ -14,6 +14,8 @@ A comprehensive guide to creating and managing branches in Git. This guide cover
 - [Common Workflows](#common-workflows)
 - [Best Practices](#best-practices)
 - [Troubleshooting](#troubleshooting)
+- [Summary](#summary)
+- [Additional Resources](#additional-resources)
 
 ---
 
