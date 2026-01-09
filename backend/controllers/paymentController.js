@@ -253,7 +253,6 @@ exports.retryPayment = async (req, res) => {
     }
     
     // Check if any deliveries are already paid by another admin
-    const Payment = require('../models/Payment');
     const alreadyPaidDeliveries = [];
     
     for (const delivery of deliveries) {
