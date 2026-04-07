@@ -1,14 +1,13 @@
 const express = require('express');
-const auth = require('../middleware/auth');
-const { authorize } = require('../middleware/auth');
+const { verifyToken, authorize } = require('../middleware/auth');
 const { createFieldAgent, getUsers, updateUser, deleteUser } = require('../controllers/userController');
 
 const router = express.Router();
 
 // Only admin can manage users
-router.post('/field-agent', auth, authorize('admin'), createFieldAgent);
-router.get('/', auth, authorize('admin'), getUsers);
-router.put('/:id', auth, authorize('admin'), updateUser);
-router.delete('/:id', auth, authorize('admin'), deleteUser);
+router.post('/field-agent', verifyToken, authorize('admin'), createFieldAgent);
+router.get('/', verifyToken, authorize('admin'), getUsers);
+router.put('/:id', verifyToken, authorize('admin'), updateUser);
+router.delete('/:id', verifyToken, authorize('admin'), deleteUser);
 
 module.exports = router;

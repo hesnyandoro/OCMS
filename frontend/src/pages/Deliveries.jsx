@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText } from 'lucide-react';
+import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map } from 'lucide-react';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { canCreate, canUpdate, canDelete } from '../utils/permissions';
+import DeliveryMap from '../components/DeliveryMap';
 
 const Deliveries = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Deliveries = () => {
   const [regionFilter, setRegionFilter] = useState('All');
   const [driverFilter, setDriverFilter] = useState('All');
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
 
   const fetchDeliveries = async () => {
     setLoading(true);
@@ -273,28 +275,53 @@ const Deliveries = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Total Weight: <span className="font-bold text-[#1B4332] dark:text-gray-100">{totalKgs.toFixed(2)} kg</span>
           </p>
-          <div className="flex gap-2">
-            <button
-              onClick={exportToCSV}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary rounded-lg hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white transition-all"
-              title="Export to CSV"
-            >
-              <FileText size={16} />
-              <span>CSV</span>
-            </button>
-            <button
-              onClick={exportToPDF}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] dark:border-red-500 text-[#D93025] dark:text-red-400 rounded-lg hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white transition-all"
-              title="Export to PDF"
-            >
-              <Download size={16} />
-              <span>PDF</span>
-            </button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+              <button
+                onClick={() => setViewMode('table')}
+                className={`px-4 py-2 rounded font-medium transition-all ${
+                  viewMode === 'table'
+                    ? 'bg-white dark:bg-gray-600 text-[#1B4332] dark:text-dark-green-primary shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300'
+                }`}
+              >
+                Table
+              </button>
+              <button
+                onClick={() => setViewMode('map')}
+                className={`px-4 py-2 rounded font-medium flex items-center gap-2 transition-all ${
+                  viewMode === 'map'
+                    ? 'bg-white dark:bg-gray-600 text-[#1B4332] dark:text-dark-green-primary shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300'
+                }`}
+              >
+                <Map size={16} />
+                Map
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={exportToCSV}
+                className="flex items-center justify-center gap-2 px-4 py-2 border border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary rounded-lg hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white transition-all"
+                title="Export to CSV"
+              >
+                <FileText size={16} />
+                <span>CSV</span>
+              </button>
+              <button
+                onClick={exportToPDF}
+                className="flex items-center justify-center gap-2 px-4 py-2 border border-[#D93025] dark:border-red-500 text-[#D93025] dark:text-red-400 rounded-lg hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white transition-all"
+                title="Export to PDF"
+              >
+                <Download size={16} />
+                <span>PDF</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Deliveries List */}
+      {/* Deliveries List / Map */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-500 dark:text-dark-text-tertiary">Loading deliveries...</div>
@@ -303,6 +330,17 @@ const Deliveries = () => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400 text-lg">No deliveries found</p>
           <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
+        </div>
+      ) : viewMode === 'map' ? (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 overflow-hidden">
+          <DeliveryMap
+            centerLat={-1.2}
+            centerLng={34.75}
+            zoom={10}
+            farmers={[]}
+            deliveries={filteredDeliveries}
+            height="600px"
+          />
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">

@@ -55,6 +55,7 @@ app.use('/api/farmers', require('./routes/farmers'));
 app.use('/api/deliveries', require('./routes/deliveries'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reports', require('./routes/reports'));
+app.use('/api/geolocation', require('./routes/geolocation'));
 
 // Serve React frontend in production
 if (process.env.NODE_ENV === 'production') {

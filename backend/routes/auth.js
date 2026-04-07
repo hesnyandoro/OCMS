@@ -2,12 +2,12 @@ const express = require('express');
 const { body } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
-const { 
-  register, 
-  login, 
-  logout, 
-  logoutAll, 
-  getSessions, 
+const {
+  register,
+  login,
+  logout,
+  logoutAll,
+  getSessions,
   deleteSession,
   updateProfile,
   changePassword,
@@ -15,7 +15,7 @@ const {
   forgotPassword,
   resetPassword
 } = require('../controllers/authController');
-const auth = require('../middleware/auth');
+const { verifyToken } = require('../middleware/auth');
 const User = require('../models/User');
 
 const router = express.Router();
@@ -60,7 +60,7 @@ router.post('/login', [
 ], login);
 
 // Get current user
-router.get('/me', auth, async (req, res) => {
+router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) {
@@ -74,26 +74,26 @@ router.get('/me', auth, async (req, res) => {
 });
 
 // Profile management
-router.put('/profile', auth, [
+router.put('/profile', verifyToken, [
   body('username').optional().notEmpty(),
   body('email').optional().isEmail(),
   body('name').optional()
 ], updateProfile);
 
 // Password management
-router.put('/change-password', auth, [
+router.put('/change-password', verifyToken, [
   body('currentPassword').notEmpty(),
   body('newPassword').isLength({ min: 6 })
 ], changePassword);
 
 // Avatar upload
-router.post('/avatar', auth, upload.single('avatar'), uploadAvatar);
+router.post('/avatar', verifyToken, upload.single('avatar'), uploadAvatar);
 
 // Session management
-router.get('/sessions', auth, getSessions);
-router.delete('/sessions/:sessionId', auth, deleteSession);
-router.post('/logout', auth, logout);
-router.post('/logout-all', auth, logoutAll);
+router.get('/sessions', verifyToken, getSessions);
+router.delete('/sessions/:sessionId', verifyToken, deleteSession);
+router.post('/logout', verifyToken, logout);
+router.post('/logout-all', verifyToken, logoutAll);
 
 // Password reset
 router.post('/forgot-password', [
