@@ -27,34 +27,34 @@ export const GeolocationCapture = ({
   }, [lat, lng, accuracy, onLocationCapture]);
 
   return (
-    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-3 mb-3">
-        <MapPin size={20} className="text-blue-600" />
-        <h3 className="font-semibold text-gray-800">Current Location</h3>
+        <MapPin size={20} className="text-blue-600 dark:text-blue-300" />
+        <h3 className="font-semibold text-gray-800 dark:text-gray-100">Current Location</h3>
       </div>
 
       {error && (
-        <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+        <div className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded text-red-700 dark:text-red-200 text-sm">
           {error}
         </div>
       )}
 
       {(lat || initialLocation?.lat) && (
-        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-          <div className="font-semibold text-blue-900">Captured Location:</div>
-          <div className="text-blue-800 font-mono text-xs">
+        <div className="mb-3 p-3 bg-blue-50 dark:bg-slate-900/70 border border-blue-200 dark:border-blue-700 rounded text-sm">
+          <div className="font-semibold text-blue-900 dark:text-blue-200">Captured Location:</div>
+          <div className="text-blue-800 dark:text-blue-200 font-mono text-xs">
             Latitude: {lat || initialLocation?.lat}
           </div>
-          <div className="text-blue-800 font-mono text-xs">
+          <div className="text-blue-800 dark:text-blue-200 font-mono text-xs">
             Longitude: {lng || initialLocation?.lng}
           </div>
           {(accuracy || initialLocation?.accuracy) && (
-            <div className="text-blue-700 text-xs mt-1">
+            <div className="text-blue-700 dark:text-blue-300 text-xs mt-1">
               Accuracy: ±{(accuracy || initialLocation?.accuracy).toFixed(2)}m
             </div>
           )}
           {initialLocation?.address && (
-            <div className="text-blue-800 text-xs mt-1">
+            <div className="text-blue-800 dark:text-blue-200 text-xs mt-1">
               Address: {initialLocation.address}
             </div>
           )}
@@ -80,7 +80,7 @@ export const GeolocationCapture = ({
         )}
       </button>
 
-      <p className="text-xs text-gray-600 mt-2">
+      <p className="text-xs text-gray-600 dark:text-gray-300 mt-2">
         Click to capture your current GPS location. Make sure location services
         are enabled.
       </p>
