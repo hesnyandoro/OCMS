@@ -65,7 +65,7 @@ const LandingPage = () => {
                 Features
               </a>
               <a href="#how-it-works" className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors font-medium">
-                How It Works
+                Workflow
               </a>
               <a href="#about" className="text-gray-700 dark:text-gray-100 hover:text-[#1B4332] dark:hover:text-dark-green-primary transition-colors font-medium">
                 About
