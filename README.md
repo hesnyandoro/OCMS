@@ -541,6 +541,9 @@ Contributions are welcome! Please follow these steps:
    ```
 5. **Open a Pull Request**
 
+### Git Branching Guide
+For detailed information on creating and managing branches in Git, including `git branch`, `git checkout`, `git merge`, and `git rebase` commands with examples, please refer to our comprehensive [Git Branching Guide](docs/GIT_BRANCHING_GUIDE.md).
+
 ### Code Style Guidelines
 - Follow existing code formatting
 - Use meaningful variable and function names
