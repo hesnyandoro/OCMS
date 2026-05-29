@@ -27,6 +27,7 @@
     "nodemon": "^2.0.15"
   },
   "overrides": {
-    "path-to-regexp": "^0.1.13"
+    "path-to-regexp": "^0.1.13",
+    "fast-xml-parser": "^5.3.5"
   }
 }
