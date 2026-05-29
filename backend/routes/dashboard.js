@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const rateLimit = require('express-rate-limit');
 const Farmer = require('../models/Farmer'); 
 const Delivery = require('../models/Delivery'); 
 const Payment = require ('../models/Payment');
@@ -6,8 +7,15 @@ const Payment = require ('../models/Payment');
 const SUCCESS_STATUS = ['Completed', 'Paid'];
 const PENDING_STATUS = ['Pending', 'Failed'];
 
+const dashboardReadLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per window
+    standardHeaders: true,
+    legacyHeaders: false
+});
+
 // Route to fetch summarized dashboard data
-router.get('/summary', async (req, res) => {
+router.get('/summary', dashboardReadLimiter, async (req, res) => {
     try {
         const { region, driver, type, date } = req.query;
 
@@ -193,7 +201,7 @@ router.get('/summary', async (req, res) => {
 });
 
 // Route to get unique drivers
-router.get('/drivers', async (req, res) => {
+router.get('/drivers', dashboardReadLimiter, async (req, res) => {
     try {
         const drivers = await Delivery.distinct('driver');
         res.json(drivers.filter(d => d).sort());
@@ -204,7 +212,7 @@ router.get('/drivers', async (req, res) => {
 });
 
 // Route to get unique regions
-router.get('/regions', async (req, res) => {
+router.get('/regions', dashboardReadLimiter, async (req, res) => {
     try {
         const regions = await Delivery.distinct('region');
         res.json(regions.filter(r => r).sort());
