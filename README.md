@@ -2,15 +2,8 @@
 
 A comprehensive full-stack web application for managing organic coffee cooperatives, tracking deliveries, processing payments, and generating analytics reports. Built with the MERN stack (MongoDB, Express.js, React, Node.js).
 
-[![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=flat&logo=react)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-6.2+-47A248?style=flat&logo=mongodb)](https://www.mongodb.com/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.17-000000?style=flat&logo=express)](https://expressjs.com/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 
----
-
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -30,7 +23,7 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 
 ---
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
 -  **Farmer Management** - Register and manage farmer profiles with regional assignments
@@ -64,7 +57,7 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 | Technology | Version | Purpose |
@@ -103,7 +96,7 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```
 OCMS/
@@ -129,7 +122,7 @@ OCMS/
 
 ---
 
-## 📦 Prerequisites
+##  Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -140,7 +133,7 @@ Before you begin, ensure you have the following installed:
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -162,7 +155,7 @@ npm install
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Backend Configuration
 
@@ -211,7 +204,7 @@ concurrently "cd backend && npm run dev" "cd frontend && npm run dev"
 
 ---
 
-## 🔐 User Roles & Permissions
+##  User Roles & Permissions
 
 ### Admin
 **Full system access with all privileges:**
@@ -235,7 +228,7 @@ concurrently "cd backend && npm run dev" "cd frontend && npm run dev"
 
 ---
 
-## 📡 API Documentation
+##  API Documentation
 
 ### Authentication Endpoints
 ```
@@ -398,7 +391,7 @@ backend/
 
 ---
 
-## 🎯 Key Functionalities
+##  Key Functionalities
 
 ### 1. Dashboard with Real-Time Analytics
 - **KPI Cards**: Total farmers, kgs delivered, total paid out, pending actions
@@ -457,7 +450,7 @@ backend/
 
 
 
-## 📸 Screenshots
+##  Screenshots
 
 ### Dashboard
 ![Dashboard](docs/screenshots/dashboard.png)
@@ -487,20 +480,20 @@ backend/
 
 
 
-## 📝 License
+##  License
 
 This project is licensed under the **ISC License**.
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **hesnyandoro**
 - GitHub: [@hesnyandoro](https://github.com/hesnyandoro)
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Coffee farmers and cooperatives for inspiring this project
 - Open source community for amazing tools and libraries
@@ -508,7 +501,7 @@ This project is licensed under the **ISC License**.
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 ### Upcoming Features
 - [ ] Mobile application (React Native)
@@ -522,7 +515,7 @@ This project is licensed under the **ISC License**.
 
 ---
 
-## 🔒 Security
+##  Security
 
 ### Reporting Security Issues
 If you discover a security vulnerability, please email security@example.com instead of using the issue tracker.
@@ -538,7 +531,7 @@ If you discover a security vulnerability, please email security@example.com inst
 
 ---
 
-## 📊 Database Schema
+##  Database Schema
 
 ### User Schema
 ```javascript
@@ -592,7 +585,7 @@ If you discover a security vulnerability, please email security@example.com inst
 
 ---
 
-## 🌍 Environment Variables
+##  Environment Variables
 
 ### Required Backend Variables
 | Variable | Description | Example |
@@ -610,7 +603,7 @@ If you discover a security vulnerability, please email security@example.com inst
 
 ---
 
-## 💡 Tips for Development
+##  Tips for Development
 
 ### Quick Start Development
 ```bash
