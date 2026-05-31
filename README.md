@@ -33,34 +33,34 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 ## ✨ Features
 
 ### Core Functionality
-- 🧑‍🌾 **Farmer Management** - Register and manage farmer profiles with regional assignments
-- 📦 **Delivery Tracking** - Record coffee deliveries (Cherry/Parchment) with weight and driver details
-- 💰 **Payment Processing** - Track payment status (Pending, Completed, Failed) with comprehensive records
-- 📊 **Analytics Dashboard** - Real-time KPIs, trends, and visual charts
-- 🔍 **Advanced Filtering** - Filter data by date, region, driver, and delivery type
-- 📈 **Reports & Analytics** - Generate detailed reports with export capabilities (CSV, PDF)
+-  **Farmer Management** - Register and manage farmer profiles with regional assignments
+-  **Delivery Tracking** - Record coffee deliveries (Cherry/Parchment) with weight and driver details
+-  **Payment Processing** - Track payment status (Pending, Completed, Failed) with comprehensive records
+-  **Analytics Dashboard** - Real-time KPIs, trends, and visual charts
+-  **Advanced Filtering** - Filter data by date, region, driver, and delivery type
+-  **Reports & Analytics** - Generate detailed reports with export capabilities (CSV, PDF)
 
 ### User Management
-- 🔐 **Role-Based Access Control (RBAC)** - Admin and Field Agent roles
-- 👥 **Multi-User Support** - Session management with device tracking
-- 🔑 **Secure Authentication** - JWT-based auth with password reset functionality
-- 🌍 **Region-Based Filtering** - Field agents see only their assigned regions
+-  **Role-Based Access Control (RBAC)** - Admin and Field Agent roles
+-  **Multi-User Support** - Session management with device tracking
+-  **Secure Authentication** - JWT-based auth with password reset functionality
+-  **Region-Based Filtering** - Field agents see only their assigned regions
 
 ### UI/UX Features
-- 🌙 **Dark Mode** - System-wide dark theme support
-- 📱 **Responsive Design** - Mobile-first approach with Tailwind CSS
-- 🔔 **Real-Time Notifications** - Live updates for deliveries, payments, and farmer registrations
-- 📅 **Date Pickers** - Enhanced date selection across all forms
-- 🎨 **Modern Interface** - Clean, intuitive dashboard with gradient effects
-- ⚡ **Auto-Apply Filters** - Instant data refresh on filter changes
+-  **Dark Mode** - System-wide dark theme support
+-  **Responsive Design** - Mobile-first approach with Tailwind CSS
+-  **Real-Time Notifications** - Live updates for deliveries, payments, and farmer registrations
+-  **Date Pickers** - Enhanced date selection across all forms
+-  **Modern Interface** - Clean, intuitive dashboard with gradient effects
+-  **Auto-Apply Filters** - Instant data refresh on filter changes
 
 ### Technical Features
-- 🔄 **RESTful API** - Well-structured backend with Express.js
-- 🗄️ **MongoDB Integration** - Efficient data storage with Mongoose ODM
-- 📧 **Email System** - Nodemailer integration for notifications and password resets
-- 🖼️ **File Uploads** - Multer for handling avatar uploads
-- 🔒 **Security** - bcrypt password hashing, JWT tokens, CORS protection
-- 📊 **Data Visualization** - Chart.js integration for analytics
+-  **RESTful API** - Well-structured backend with Express.js
+-  **MongoDB Integration** - Efficient data storage with Mongoose ODM
+-  **Email System** - Nodemailer integration for notifications and password resets
+-  **File Uploads** - Multer for handling avatar uploads
+-  **Security** - bcrypt password hashing, JWT tokens, CORS protection
+-  **Data Visualization** - Chart.js integration for analytics
 
 ---
 
@@ -199,23 +199,6 @@ VITE_API_URL=http://localhost:5000/api
 
 ---
 
-## 🏃 Running the Application
-
-### Option 1: Run Both Servers Separately
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-npm run dev
-# Server runs on http://localhost:5000
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
-# App runs on http://localhost:5173
-```
 
 ### Option 2: Using Concurrent Scripts (Recommended)
 
@@ -472,27 +455,7 @@ backend/
 
 ---
 
-## 🧪 Testing
 
-### Run Frontend Tests
-```bash
-cd frontend
-npm run test              # Unit tests with Vitest
-npm run test:e2e          # E2E tests with Playwright
-```
-
-### Run Backend Tests
-```bash
-cd backend
-npm test
-```
-
-### Test Coverage
-- Unit tests for components
-- Integration tests for API endpoints
-- E2E tests for critical user flows
-
----
 
 ## 📸 Screenshots
 
@@ -522,33 +485,7 @@ npm test
 
 ---
 
-## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
-### Code Style Guidelines
-- Follow existing code formatting
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Write tests for new features
-- Update documentation as needed
-
----
 
 ## 📝 License
 
@@ -568,15 +505,6 @@ This project is licensed under the **ISC License**.
 - Coffee farmers and cooperatives for inspiring this project
 - Open source community for amazing tools and libraries
 - Contributors and testers who helped improve the system
-
----
-
-## 📞 Support
-
-For issues, questions, or feature requests:
-- 📧 Open an issue on GitHub
-- 💬 Contact via email: [bonfacenyandoro3@gmail.com]
-- 📚 Check the [documentation](docs/)
 
 ---
 
@@ -722,24 +650,5 @@ npm run preview    # Preview production build
 npm run lint       # Run ESLint
 ```
 
----
+**Made for the coffee community**
 
-## 🎓 Learning Resources
-
-### For Beginners
-- [React Documentation](https://react.dev/)
-- [Express.js Guide](https://expressjs.com/en/guide/routing.html)
-- [MongoDB University](https://university.mongodb.com/)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
-
-### For Advanced Users
-- [React Performance Optimization](https://react.dev/learn/render-and-commit)
-- [MongoDB Aggregation](https://www.mongodb.com/docs/manual/aggregation/)
-- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
-- [Node.js Security](https://nodejs.org/en/docs/guides/security/)
-
----
-
-**Made with ☕ and ❤️ for the coffee community**
-
-⭐ **Star this repository if you find it helpful!** ⭐
