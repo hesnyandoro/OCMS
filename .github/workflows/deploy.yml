@@ -57,6 +57,27 @@ jobs:
               "Namespace=aws:elasticbeanstalk:application:environment,OptionName=MONGO_URI,Value=$MONGO_URI" \
               "Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=$JWT_SECRET"
 
+      - name: Wait for EB environment to be Ready
+        env:
+          EB_APP: ${{ secrets.EB_APP_NAME }}
+          EB_ENV: ${{ secrets.EB_ENV_NAME }}
+        run: |
+          echo "Waiting for environment to be Ready..."
+          for i in {1..20}; do
+            STATUS=$(aws elasticbeanstalk describe-environments \
+              --application-name "$EB_APP" \
+              --environment-names "$EB_ENV" \
+              --query "Environments[0].Status" \
+              --output text)
+            echo "Current status: $STATUS"
+            if [ "$STATUS" = "Ready" ]; then
+              echo "Environment is Ready!"
+              break
+            fi
+            echo "Attempt $i/20 - waiting 30 seconds..."
+            sleep 30
+          done
+
       - name: Create deployment package
         run: |
           cp docker-compose.prod.yml docker-compose.yml
