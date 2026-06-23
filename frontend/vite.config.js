@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -15,18 +14,23 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Split vendor chunks for better caching
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'chart-vendor': ['chart.js', 'react-chartjs-2'],
-          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'yup'],
-          'ui-vendor': ['lucide-react', 'react-icons', 'react-datepicker', 'react-select'],
+        manualChunks: (id) => {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+            return 'react-vendor'
+          }
+          if (id.includes('chart.js') || id.includes('react-chartjs-2')) {
+            return 'chart-vendor'
+          }
+          if (id.includes('react-hook-form') || id.includes('@hookform') || id.includes('yup')) {
+            return 'form-vendor'
+          }
+          if (id.includes('lucide-react') || id.includes('react-icons') || id.includes('react-datepicker') || id.includes('react-select')) {
+            return 'ui-vendor'
+          }
         },
       },
     },
-    // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000,
-    // Enable source maps for debugging (disable in production)
     sourcemap: false,
   },
   optimizeDeps: {
