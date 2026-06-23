@@ -1,0 +1,68 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build, Push & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:backend-latest ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:backend-latest
+
+      - name: Build and push frontend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:frontend-latest ./frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:frontend-latest
+
+      - name: Set EB environment variables
+        run: |
+          aws elasticbeanstalk update-environment \
+            --application-name ${{ secrets.EB_APP_NAME }} \
+            --environment-name ${{ secrets.EB_ENV_NAME }} \
+            --option-settings \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=NODE_ENV,Value=${{ secrets.NODE_ENV }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=MONGO_URI,Value=${{ secrets.MONGO_URI }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=${{ secrets.JWT_SECRET }}
+
+      - name: Create deployment package
+        run: |
+          cp docker-compose.prod.yml docker-compose.yml
+          zip deploy.zip docker-compose.yml
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ${{ secrets.EB_APP_NAME }}
+          environment_name: ${{ secrets.EB_ENV_NAME }}
+          region: ${{ secrets.AWS_REGION }}
+          version_label: "v${{ github.run_number }}"
+          deployment_package: deploy.zip
