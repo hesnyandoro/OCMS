@@ -13,6 +13,8 @@ const app = express();
 // CORS configuration - allow development and production origins
 const allowedOrigins = [
   'http://localhost:5173', // Vite dev server
+  'http://localhost', // Docker frontend container
+  'http://frontend', // Docker internal DNS
   process.env.FRONTEND_URL, // Production frontend URL
 ].filter(Boolean);
 
