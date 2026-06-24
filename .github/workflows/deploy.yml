@@ -48,6 +48,8 @@ jobs:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
           aws elasticbeanstalk update-environment \
             --application-name "$EB_APP" \
@@ -55,7 +57,9 @@ jobs:
             --option-settings \
               "Namespace=aws:elasticbeanstalk:application:environment,OptionName=NODE_ENV,Value=$NODE_ENV" \
               "Namespace=aws:elasticbeanstalk:application:environment,OptionName=MONGO_URI,Value=$MONGO_URI" \
-              "Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=$JWT_SECRET"
+              "Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=$JWT_SECRET" \
+              "Namespace=aws:elasticbeanstalk:application:environment,OptionName=PORT,Value=$PORT" \
+              "Namespace=aws:elasticbeanstalk:application:environment,OptionName=FRONTEND_URL,Value=$FRONTEND_URL"
 
       - name: Wait for EB environment to be Ready
         env:
