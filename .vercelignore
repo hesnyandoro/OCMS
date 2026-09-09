@@ -1,0 +1,7 @@
+backend/uploads
+docker-compose.yml
+docker-compose.prod.yml
+backend/Dockerfile
+frontend/Dockerfile
+frontend/nginx.conf
+Procfile

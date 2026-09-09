@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const path = require('path');
+const { put } = require('@vercel/blob');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const User = require('../models/User');
@@ -283,12 +285,17 @@ exports.uploadAvatar = async (req, res) => {
     }
 
     const userId = req.user.id;
-    const avatarPath = `/uploads/avatars/${req.file.filename}`;
+    const extension = path.extname(req.file.originalname) || '.jpg';
+    const { url: avatarUrl } = await put(
+      `avatars/${userId}-${Date.now()}${extension}`,
+      req.file.buffer,
+      { access: 'public', contentType: req.file.mimetype }
+    );
 
     // Update user's avatar in database
     const user = await User.findByIdAndUpdate(
       userId,
-      { avatar: avatarPath },
+      { avatar: avatarUrl },
       { new: true }
     ).select('-password');
 
@@ -298,7 +305,7 @@ exports.uploadAvatar = async (req, res) => {
 
     res.json({ 
       msg: 'Avatar uploaded successfully',
-      avatar: avatarPath,
+      avatar: avatarUrl,
       user
     });
   } catch (err) {
