@@ -18,7 +18,13 @@ const connectDB = async () => {
     if (!uri) throw new Error('MONGO_URI is not set');
 
     cached.promise = mongoose
-      .connect(uri, { bufferCommands: false })
+      .connect(uri, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 8000,
+        connectTimeoutMS: 8000,
+        socketTimeoutMS: 15000,
+        family: 4,
+      })
       .then((mongooseInstance) => mongooseInstance.connection);
   }
 
