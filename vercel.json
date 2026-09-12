@@ -4,7 +4,7 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/index.js": { "maxDuration": 15 }
+    "api/index.js": { "maxDuration": 20 }
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },

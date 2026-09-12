@@ -13,7 +13,7 @@ const withTimeout = (promise, ms) =>
 
 module.exports = async (req, res) => {
   try {
-    await withTimeout(connectDB(), 9000);
+    await withTimeout(connectDB(), 5000);
   } catch (err) {
     console.error('MongoDB CONNECTION FAILED', err.message);
     return res.status(503).json({ msg: 'Database unavailable' });

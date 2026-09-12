@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 mongoose.set('strictQuery', true);
+// Index creation should be a deliberate one-off (see backend/optimize-db-indexes.js),
+// not something that silently runs inside a user-facing request on cold start.
+mongoose.set('autoIndex', false);
 
 // Serverless invocations reuse the same process, so the connection promise is
 // memoized on globalThis to keep cold starts from opening a new Atlas pool each time.
@@ -20,9 +23,9 @@ const connectDB = async () => {
     cached.promise = mongoose
       .connect(uri, {
         bufferCommands: false,
-        serverSelectionTimeoutMS: 8000,
-        connectTimeoutMS: 8000,
-        socketTimeoutMS: 15000,
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000,
+        socketTimeoutMS: 8000,
         family: 4,
       })
       .then((mongooseInstance) => mongooseInstance.connection);
