@@ -26,17 +26,22 @@ const getDeviceInfo = (userAgent) => {
 const createSession = async (userId, token, req) => {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
   
-  const session = new Session({
-    userId,
-    token,
-    deviceInfo: getDeviceInfo(req.headers['user-agent']),
-    ipAddress: req.ip || req.connection.remoteAddress,
-    userAgent: req.headers['user-agent'],
-    expiresAt
-  });
-  
-  await session.save();
-  return session;
+  try {
+    const session = new Session({
+      userId,
+      token,
+      deviceInfo: getDeviceInfo(req.headers['user-agent']),
+      ipAddress: req.ip || req.connection?.remoteAddress || 'unknown',
+      userAgent: req.headers['user-agent'],
+      expiresAt
+    });
+    
+    await session.save();
+    return session;
+  } catch (err) {
+    console.error('Session creation failed:', err);
+    throw err;
+  }
 };
 
 exports.register = async (req, res) => {
@@ -46,6 +51,11 @@ exports.register = async (req, res) => {
   const { username, email, password, role, assignedRegion, name } = req.body;
 
   try {
+    // Validate required fields
+    if (!username || !email || !password) {
+      return res.status(400).json({ msg: 'Username, email, and password are required' });
+    }
+
     // ensure username and email are unique
     let user = await User.findOne({ username });
     if (user) return res.status(400).json({ msg: 'Username already exists' });
@@ -64,6 +74,11 @@ exports.register = async (req, res) => {
     });
     await user.save();
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ msg: 'Server configuration error' });
+    }
+
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
     const token = await new Promise((resolve, reject) => {
       jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
@@ -85,8 +100,8 @@ exports.register = async (req, res) => {
     };
     res.json({ token, user: userData });
   } catch (err) {
-    console.error("USER REGISTRATION FAILED", err);
-    res.status(500).send('Server error');
+    console.error("USER REGISTRATION FAILED", err.message || err);
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 
@@ -98,11 +113,21 @@ exports.login = async (req, res) => {
   let { username, password } = req.body;
 
   try {
+    // Validate required fields
+    if (!username || !password) {
+      return res.status(400).json({ msg: 'Username/email and password are required' });
+    }
+
     const user = await User.findOne({ $or: [{ username }, { email: username }] });
     if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ msg: 'Server configuration error' });
+    }
 
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
     const token = await new Promise((resolve, reject) => {
@@ -125,7 +150,8 @@ exports.login = async (req, res) => {
     };
     res.json({ token, user: userData });
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error("USER LOGIN FAILED", err.message || err);
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 

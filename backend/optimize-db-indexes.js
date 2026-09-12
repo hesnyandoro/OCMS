@@ -13,6 +13,8 @@ const Delivery = require('./models/Delivery');
 const Payment = require('./models/Payment');
 const Farmer = require('./models/Farmer');
 const User = require('./models/User');
+const Session = require('./models/Session');
+const PasswordReset = require('./models/PasswordReset');
 
 async function optimizeIndexes() {
   try {
@@ -52,6 +54,20 @@ async function optimizeIndexes() {
     await User.collection.createIndex({ role: 1 }); // Filter by role
     console.log('  ✓ User indexes created');
 
+    // Session indexes
+    console.log('🔐 Optimizing Session collection...');
+    await Session.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
+    await Session.collection.createIndex({ userId: 1 }); // Lookup by user
+    await Session.collection.createIndex({ token: 1 }); // Lookup by token
+    console.log('  ✓ Session indexes created');
+
+    // PasswordReset indexes
+    console.log('🔑 Optimizing PasswordReset collection...');
+    await PasswordReset.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
+    await PasswordReset.collection.createIndex({ userId: 1 }); // Lookup by user
+    await PasswordReset.collection.createIndex({ token: 1 }, { unique: true }); // Unique token
+    console.log('  ✓ PasswordReset indexes created');
+
     console.log('\n All indexes created successfully!');
     console.log('\n Index Statistics:');
     
@@ -59,11 +75,15 @@ async function optimizeIndexes() {
     const paymentIndexes = await Payment.collection.indexes();
     const farmerIndexes = await Farmer.collection.indexes();
     const userIndexes = await User.collection.indexes();
+    const sessionIndexes = await Session.collection.indexes();
+    const passwordResetIndexes = await PasswordReset.collection.indexes();
 
     console.log(`  Delivery: ${deliveryIndexes.length} indexes`);
     console.log(`  Payment: ${paymentIndexes.length} indexes`);
     console.log(`  Farmer: ${farmerIndexes.length} indexes`);
     console.log(`  User: ${userIndexes.length} indexes`);
+    console.log(`  Session: ${sessionIndexes.length} indexes`);
+    console.log(`  PasswordReset: ${passwordResetIndexes.length} indexes`);
 
     console.log('\n Database optimized for faster queries!');
     

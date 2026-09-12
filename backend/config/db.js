@@ -10,8 +10,33 @@ mongoose.set('autoIndex', false);
 let cached = globalThis._mongoose;
 
 if (!cached) {
-  cached = globalThis._mongoose = { conn: null, promise: null };
+  cached = globalThis._mongoose = { conn: null, promise: null, indexesCreated: false };
 }
+
+// Ensure critical indexes exist for Session and PasswordReset models
+const ensureCriticalIndexes = async () => {
+  if (cached.indexesCreated) return; // Only create indexes once per process
+  
+  try {
+    const Session = require('../models/Session');
+    const PasswordReset = require('../models/PasswordReset');
+    
+    // Session indexes - critical for auth
+    await Session.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
+    await Session.collection.createIndex({ userId: 1 }).catch(() => {});
+    await Session.collection.createIndex({ token: 1 }).catch(() => {});
+    
+    // PasswordReset indexes - critical for password recovery
+    await PasswordReset.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
+    await PasswordReset.collection.createIndex({ token: 1 }, { unique: true }).catch(() => {});
+    await PasswordReset.collection.createIndex({ userId: 1 }).catch(() => {});
+    
+    cached.indexesCreated = true;
+  } catch (err) {
+    console.warn('Warning: Could not create indexes:', err.message);
+    // Don't throw - indexes not existing shouldn't crash the app
+  }
+};
 
 const connectDB = async () => {
   if (cached.conn) return cached.conn;
@@ -33,6 +58,9 @@ const connectDB = async () => {
 
   try {
     cached.conn = await cached.promise;
+    
+    // Ensure critical indexes exist
+    await ensureCriticalIndexes();
   } catch (err) {
     cached.promise = null;
     throw err;
