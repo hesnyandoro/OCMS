@@ -65,22 +65,25 @@ exports.register = async (req, res) => {
     await user.save();
 
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, async (err, token) => {
-      if (err) throw err;
-      
-      // Create session
-      await createSession(user.id, token, req);
-      
-      const userData = { 
-        id: user.id, 
-        username: user.username, 
-        email: user.email, 
-        name: user.name,
-        role: user.role, 
-        assignedRegion: user.assignedRegion 
-      };
-      res.json({ token, user: userData });
+    const token = await new Promise((resolve, reject) => {
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        if (err) reject(err);
+        else resolve(token);
+      });
     });
+    
+    // Create session
+    await createSession(user.id, token, req);
+    
+    const userData = { 
+      id: user.id, 
+      username: user.username, 
+      email: user.email, 
+      name: user.name,
+      role: user.role, 
+      assignedRegion: user.assignedRegion 
+    };
+    res.json({ token, user: userData });
   } catch (err) {
     console.error("USER REGISTRATION FAILED", err);
     res.status(500).send('Server error');
@@ -102,22 +105,25 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, async (err, token) => {
-      if (err) throw err;
-      
-      // Create session
-      await createSession(user.id, token, req);
-      
-      const userData = { 
-        id: user.id, 
-        username: user.username, 
-        email: user.email, 
-        name: user.name,
-        role: user.role, 
-        assignedRegion: user.assignedRegion 
-      };
-      res.json({ token, user: userData });
+    const token = await new Promise((resolve, reject) => {
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        if (err) reject(err);
+        else resolve(token);
+      });
     });
+    
+    // Create session
+    await createSession(user.id, token, req);
+    
+    const userData = { 
+      id: user.id, 
+      username: user.username, 
+      email: user.email, 
+      name: user.name,
+      role: user.role, 
+      assignedRegion: user.assignedRegion 
+    };
+    res.json({ token, user: userData });
   } catch (err) {
     res.status(500).send('Server error');
   }
