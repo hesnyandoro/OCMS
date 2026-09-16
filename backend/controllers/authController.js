@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const path = require('path');
+const { put } = require('@vercel/blob');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const User = require('../models/User');
@@ -24,17 +26,22 @@ const getDeviceInfo = (userAgent) => {
 const createSession = async (userId, token, req) => {
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
   
-  const session = new Session({
-    userId,
-    token,
-    deviceInfo: getDeviceInfo(req.headers['user-agent']),
-    ipAddress: req.ip || req.connection.remoteAddress,
-    userAgent: req.headers['user-agent'],
-    expiresAt
-  });
-  
-  await session.save();
-  return session;
+  try {
+    const session = new Session({
+      userId,
+      token,
+      deviceInfo: getDeviceInfo(req.headers['user-agent']),
+      ipAddress: req.ip || req.connection?.remoteAddress || 'unknown',
+      userAgent: req.headers['user-agent'],
+      expiresAt
+    });
+    
+    await session.save();
+    return session;
+  } catch (err) {
+    console.error('Session creation failed:', err);
+    throw err;
+  }
 };
 
 exports.register = async (req, res) => {
@@ -44,6 +51,11 @@ exports.register = async (req, res) => {
   const { username, email, password, role, assignedRegion, name } = req.body;
 
   try {
+    // Validate required fields
+    if (!username || !email || !password) {
+      return res.status(400).json({ msg: 'Username, email, and password are required' });
+    }
+
     // ensure username and email are unique
     let user = await User.findOne({ username });
     if (user) return res.status(400).json({ msg: 'Username already exists' });
@@ -62,26 +74,34 @@ exports.register = async (req, res) => {
     });
     await user.save();
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ msg: 'Server configuration error' });
+    }
+
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, async (err, token) => {
-      if (err) throw err;
-      
-      // Create session
-      await createSession(user.id, token, req);
-      
-      const userData = { 
-        id: user.id, 
-        username: user.username, 
-        email: user.email, 
-        name: user.name,
-        role: user.role, 
-        assignedRegion: user.assignedRegion 
-      };
-      res.json({ token, user: userData });
+    const token = await new Promise((resolve, reject) => {
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        if (err) reject(err);
+        else resolve(token);
+      });
     });
+    
+    // Create session
+    await createSession(user.id, token, req);
+    
+    const userData = { 
+      id: user.id, 
+      username: user.username, 
+      email: user.email, 
+      name: user.name,
+      role: user.role, 
+      assignedRegion: user.assignedRegion 
+    };
+    res.json({ token, user: userData });
   } catch (err) {
-    console.error("USER REGISTRATION FAILED", err);
-    res.status(500).send('Server error');
+    console.error("USER REGISTRATION FAILED", err.message || err);
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 
@@ -93,31 +113,45 @@ exports.login = async (req, res) => {
   let { username, password } = req.body;
 
   try {
+    // Validate required fields
+    if (!username || !password) {
+      return res.status(400).json({ msg: 'Username/email and password are required' });
+    }
+
     const user = await User.findOne({ $or: [{ username }, { email: username }] });
     if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not configured');
+      return res.status(500).json({ msg: 'Server configuration error' });
+    }
+
     const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, async (err, token) => {
-      if (err) throw err;
-      
-      // Create session
-      await createSession(user.id, token, req);
-      
-      const userData = { 
-        id: user.id, 
-        username: user.username, 
-        email: user.email, 
-        name: user.name,
-        role: user.role, 
-        assignedRegion: user.assignedRegion 
-      };
-      res.json({ token, user: userData });
+    const token = await new Promise((resolve, reject) => {
+      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        if (err) reject(err);
+        else resolve(token);
+      });
     });
+    
+    // Create session
+    await createSession(user.id, token, req);
+    
+    const userData = { 
+      id: user.id, 
+      username: user.username, 
+      email: user.email, 
+      name: user.name,
+      role: user.role, 
+      assignedRegion: user.assignedRegion 
+    };
+    res.json({ token, user: userData });
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error("USER LOGIN FAILED", err.message || err);
+    res.status(500).json({ msg: 'Server error' });
   }
 };
 
@@ -283,12 +317,17 @@ exports.uploadAvatar = async (req, res) => {
     }
 
     const userId = req.user.id;
-    const avatarPath = `/uploads/avatars/${req.file.filename}`;
+    const extension = path.extname(req.file.originalname) || '.jpg';
+    const { url: avatarUrl } = await put(
+      `avatars/${userId}-${Date.now()}${extension}`,
+      req.file.buffer,
+      { access: 'public', contentType: req.file.mimetype }
+    );
 
     // Update user's avatar in database
     const user = await User.findByIdAndUpdate(
       userId,
-      { avatar: avatarPath },
+      { avatar: avatarUrl },
       { new: true }
     ).select('-password');
 
@@ -298,7 +337,7 @@ exports.uploadAvatar = async (req, res) => {
 
     res.json({ 
       msg: 'Avatar uploaded successfully',
-      avatar: avatarPath,
+      avatar: avatarUrl,
       user
     });
   } catch (err) {

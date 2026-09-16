@@ -8,6 +8,12 @@ const {
   logout,
   logoutAll,
   getSessions,
+const { 
+  register, 
+  login, 
+  logout, 
+  logoutAll, 
+  getSessions, 
   deleteSession,
   updateProfile,
   changePassword,
@@ -20,16 +26,9 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-// Configure multer for avatar upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/avatars/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// Avatars are held in memory and streamed to Vercel Blob; the deployment
+// filesystem is read-only, so nothing is written to disk.
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   // Accept only image files
