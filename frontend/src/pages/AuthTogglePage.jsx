@@ -141,6 +141,30 @@ const AuthTogglePage = () => {
 
       <div className="relative w-full max-w-4xl">
         {/* Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+          
+          {/* Toggle Header */}
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
+            <button
+              onClick={() => setView('login')}
+              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-200 ${
+                view === 'login'
+                  ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-100 dark:hover:bg-gray-700/70'
+              }`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setView('register')}
+              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-200 ${
+                view === 'register'
+                  ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-100 dark:hover:bg-gray-700/70'
+              }`}
+            >
+              Register
+            </button>
         <div className="grid md:grid-cols-2 rounded-3xl shadow-xl border border-gray-100 dark:border-dark-border-primary overflow-hidden bg-white dark:bg-dark-bg-secondary">
 
           {/* Brand Panel - visible on md and up */}
@@ -207,6 +231,9 @@ const AuthTogglePage = () => {
 
             {/* Heading */}
             <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">OCMS</h1>
+              <p className="text-gray-700 dark:text-gray-300 font-medium">
+                {view === 'login' ? 'Welcome back!' : 'Create your account'}
               <h1 className="text-2xl font-bold text-gray-900 dark:text-dark-text-primary mb-1">
                 {view === 'login' ? 'Welcome back' : 'Create your account'}
               </h1>
@@ -293,6 +320,7 @@ const AuthTogglePage = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/forgot-password')}
+                    className="text-sm text-[#1B4332] dark:text-dark-green-primary hover:text-[#2D6A4F] dark:hover:text-dark-green-hover hover:underline font-medium transition-colors duration-200"
                     className="text-sm text-harvest-gold-600 dark:text-harvest-gold-400 hover:underline font-medium"
                   >
                     Forgot Password?
@@ -300,6 +328,10 @@ const AuthTogglePage = () => {
                 </div>
 
                 {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-[#1B4332] dark:bg-dark-green-primary text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-md hover:shadow-lg"
+                >
                 <button type="submit" className={submitButtonClasses}>
                   Login
                 </button>
@@ -520,6 +552,10 @@ const AuthTogglePage = () => {
                 </div>
 
                 {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-[#1B4332] dark:bg-dark-green-primary text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-md hover:shadow-lg"
+                >
                 <button type="submit" className={submitButtonClasses}>
                   Create Account
                 </button>

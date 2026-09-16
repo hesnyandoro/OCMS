@@ -1,9 +1,8 @@
 const express = require('express');
-const auth = require('../middleware/auth');
-const { authorize } = require('../middleware/auth');
-const { 
-  generateReport, 
-  getSummary, 
+const { verifyToken, authorize } = require('../middleware/auth');
+const {
+  generateReport,
+  getSummary,
   getDeliveriesReport,
   getPaymentAnalytics,
   getCashflowForecast,
@@ -17,19 +16,19 @@ const {
 const router = express.Router();
 
 // Only admin can access all reports
-router.get('/', auth, authorize('admin'), generateReport);
-router.get('/deliveries', auth, authorize('admin'), getDeliveriesReport);
-router.get('/summary', auth, authorize('admin'), getSummary);
+router.get('/', verifyToken, authorize('admin'), generateReport);
+router.get('/deliveries', verifyToken, authorize('admin'), getDeliveriesReport);
+router.get('/summary', verifyToken, authorize('admin'), getSummary);
 
 // High Priority Features
-router.get('/payment-analytics', auth, authorize('admin'), getPaymentAnalytics);
-router.get('/cashflow-forecast', auth, authorize('admin'), getCashflowForecast);
-router.get('/farmer-performance', auth, authorize('admin'), getFarmerPerformance);
-router.get('/comparative-analytics', auth, authorize('admin'), getComparativeAnalytics);
+router.get('/payment-analytics', verifyToken, authorize('admin'), getPaymentAnalytics);
+router.get('/cashflow-forecast', verifyToken, authorize('admin'), getCashflowForecast);
+router.get('/farmer-performance', verifyToken, authorize('admin'), getFarmerPerformance);
+router.get('/comparative-analytics', verifyToken, authorize('admin'), getComparativeAnalytics);
 
 // Medium Priority Features
-router.get('/delivery-type-analytics', auth, authorize('admin'), getDeliveryTypeAnalytics);
-router.get('/regional-profitability', auth, authorize('admin'), getRegionalProfitability);
-router.get('/operational-metrics', auth, authorize('admin'), getOperationalMetrics);
+router.get('/delivery-type-analytics', verifyToken, authorize('admin'), getDeliveryTypeAnalytics);
+router.get('/regional-profitability', verifyToken, authorize('admin'), getRegionalProfitability);
+router.get('/operational-metrics', verifyToken, authorize('admin'), getOperationalMetrics);
 
 module.exports = router;
