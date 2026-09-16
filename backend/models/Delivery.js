@@ -32,6 +32,20 @@ const deliverySchema = new mongoose.Schema({
     required: true 
   },
 
+  pickupLocation: {
+    lat: { type: Number },
+    lng: { type: Number },
+    address: { type: String },
+    timestamp: { type: Date }
+  },
+
+  dropoffLocation: {
+    lat: { type: Number },
+    lng: { type: Number },
+    address: { type: String },
+    timestamp: { type: Date }
+  },
+
   payment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payment'

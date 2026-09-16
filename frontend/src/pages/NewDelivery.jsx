@@ -7,6 +7,7 @@ import api from '../services/api';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
 import ReactDatePicker from 'react-datepicker';
+import GeolocationCapture from '../components/GeolocationCapture';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const NewDelivery = () => {
@@ -34,6 +35,7 @@ const NewDelivery = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [_selectedFarmer, setSelectedFarmer] = useState(null);
+  const [pickupLocation, setPickupLocation] = useState(null);
   const dropdownRef = useRef(null);
   
   useEffect(() => {
@@ -65,6 +67,10 @@ const NewDelivery = () => {
   const onSubmit = async (payload) => {
     try {
       // payload: farmer (id), type, kgsDelivered, region, driver, date
+      // Add pickup location if captured
+      if (pickupLocation) {
+        payload.pickupLocation = pickupLocation;
+      }
       await api.post('/deliveries', payload);
       toast.success('Delivery recorded');
       navigate('/dashboard/deliveries');
@@ -213,6 +219,14 @@ const NewDelivery = () => {
           <div>
             <label className="form-label">Weigh Station (from farmer)</label>
             <input readOnly value={selectedWeigh} className="form-control bg-[#F3F4F6]" />
+          </div>
+
+          {/* Geolocation Capture */}
+          <div>
+            <GeolocationCapture
+              onLocationCapture={setPickupLocation}
+              initialLocation={pickupLocation}
+            />
           </div>
 
           <div className="d-flex gap-2">
