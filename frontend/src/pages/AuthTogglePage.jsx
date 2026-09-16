@@ -10,7 +10,7 @@ const passwordInputClasses = "w-full pl-10 pr-12 py-3 bg-white dark:bg-dark-bg-t
 const plainInputClasses = "w-full px-4 py-3 bg-white dark:bg-dark-bg-tertiary text-gray-900 dark:text-dark-text-primary border border-gray-300 dark:border-dark-border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent transition-all placeholder:text-gray-400 dark:placeholder:text-dark-text-tertiary";
 const labelClasses = "block text-sm font-medium text-gray-700 dark:text-dark-text-secondary mb-2";
 const iconClasses = "absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-dark-text-tertiary";
-const submitButtonClasses = "w-full bg-gradient-to-r from-[#1B4332] to-[#2D6A4F] dark:from-dark-green-primary dark:to-dark-green-secondary text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-[1.02] transition-all duration-300 shadow-md";
+const submitButtonClasses = "w-full bg-gradient-to-r from-[#1B4332] to-[#2D6A4F] dark:from-dark-green-primary dark:to-dark-green-secondary text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-md";
 const requiredMark = <span className="text-harvest-gold-600 dark:text-harvest-gold-400">*</span>;
 
 const AuthTogglePage = () => {
@@ -237,7 +237,7 @@ const AuthTogglePage = () => {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-dark-text-primary mb-1">
                 {view === 'login' ? 'Welcome back' : 'Create your account'}
               </h1>
-              <p className="text-gray-500 dark:text-dark-text-tertiary text-sm">
+              <p className="text-gray-700 dark:text-dark-text-secondary text-sm font-medium">
                 {view === 'login' ? 'Sign in to continue to your dashboard' : 'Fill in your details to get started'}
               </p>
             </div>
