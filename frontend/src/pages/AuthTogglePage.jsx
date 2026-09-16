@@ -135,20 +135,20 @@ const AuthTogglePage = () => {
           <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button
               onClick={() => setView('login')}
-              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-300 ${
+              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-200 ${
                 view === 'login'
                   ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-50 dark:hover:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-100 dark:hover:bg-gray-700/70'
               }`}
             >
               Login
             </button>
             <button
               onClick={() => setView('register')}
-              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-300 ${
+              className={`flex-1 py-4 text-center font-semibold text-lg transition-all duration-200 ${
                 view === 'register'
                   ? 'text-[#1B4332] dark:text-dark-green-primary border-b-4 border-[#1B4332] dark:border-dark-green-primary bg-[#F3F4F6] dark:bg-gray-700'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-50 dark:hover:bg-gray-700'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-[#1B4332] dark:hover:text-dark-green-primary hover:bg-gray-100 dark:hover:bg-gray-700/70'
               }`}
             >
               Register
@@ -161,7 +161,7 @@ const AuthTogglePage = () => {
             {/* Logo/Title */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">OCMS</h1>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-700 dark:text-gray-300 font-medium">
                 {view === 'login' ? 'Welcome back!' : 'Create your account'}
               </p>
             </div>
@@ -244,7 +244,7 @@ const AuthTogglePage = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/forgot-password')}
-                    className="text-sm text-[#1B4332] hover:text-[#2D6A4F] hover:underline font-medium"
+                    className="text-sm text-[#1B4332] dark:text-dark-green-primary hover:text-[#2D6A4F] dark:hover:text-dark-green-hover hover:underline font-medium transition-colors duration-200"
                   >
                     Forgot Password?
                   </button>
@@ -253,7 +253,7 @@ const AuthTogglePage = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-[#1B4332] text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="w-full bg-[#1B4332] dark:bg-dark-green-primary text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   Login
                 </button>
@@ -476,7 +476,7 @@ const AuthTogglePage = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full bg-[#1B4332] text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] transition-colors duration-300 shadow-md hover:shadow-lg"
+                  className="w-full bg-[#1B4332] dark:bg-dark-green-primary text-white py-3 rounded-lg font-semibold hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   Create Account
                 </button>
