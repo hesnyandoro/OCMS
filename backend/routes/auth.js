@@ -2,12 +2,6 @@ const express = require('express');
 const { body } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
-const {
-  register,
-  login,
-  logout,
-  logoutAll,
-  getSessions,
 const { 
   register, 
   login, 

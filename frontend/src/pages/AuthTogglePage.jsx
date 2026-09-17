@@ -206,10 +206,10 @@ const AuthTogglePage = () => {
 
             {/* Heading */}
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-dark-text-primary mb-1">
+              <h1 className="text-2xl font-bold !text-[#1B4332] dark:!text-dark-text-primary mb-1">
                 {view === 'login' ? 'Welcome back' : 'Create your account'}
               </h1>
-              <p className="text-gray-700 dark:text-dark-text-secondary text-sm font-medium">
+              <p className="text-sm font-medium !text-gray-700 dark:!text-dark-text-secondary">
                 {view === 'login' ? 'Sign in to continue to your dashboard' : 'Fill in your details to get started'}
               </p>
             </div>

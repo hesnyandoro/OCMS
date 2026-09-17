@@ -19,5 +19,12 @@ module.exports = async (req, res) => {
     return res.status(503).json({ msg: 'Database unavailable' });
   }
 
-  return app(req, res);
+  try {
+    return app(req, res);
+  } catch (err) {
+    console.error('API HANDLER FAILED', err.message || err);
+    if (!res.headersSent) {
+      return res.status(500).json({ msg: 'Server error' });
+    }
+  }
 };
