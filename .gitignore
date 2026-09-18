@@ -26,3 +26,6 @@ dist-ssr
 
 #ignore environment files
 .env
+
+# graphify
+graphify-out/cost.json
