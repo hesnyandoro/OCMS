@@ -290,3 +290,163 @@
     color: #57606a !important;
   }
 }
+
+/*
+  Auth forms: keep this OUTSIDE @layer.
+  Bootstrap (imported in App.jsx) and DaisyUI are unlayered, so they override
+  Tailwind utilities — including !text-* — which is why login/register contrast
+  tweaks never appeared in the UI.
+*/
+.auth-form-panel {
+  color: #1f2937;
+  background-color: #ffffff !important;
+}
+
+.auth-form-panel h1,
+.auth-form-panel h2 {
+  color: #1B4332 !important;
+}
+
+.auth-form-panel label,
+.auth-form-panel .form-label {
+  color: #111827 !important;
+  font-weight: 600;
+}
+
+.auth-form-panel label span {
+  color: #4b5563 !important;
+}
+
+.auth-form-panel p {
+  color: #374151 !important;
+}
+
+.auth-form-panel input,
+.auth-form-panel select,
+.auth-form-panel textarea,
+.auth-form-panel .form-control {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  border-color: #9ca3af !important;
+  caret-color: #111827;
+}
+
+.auth-form-panel input::placeholder,
+.auth-form-panel textarea::placeholder,
+.auth-form-panel .form-control::placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+}
+
+.auth-form-panel option {
+  color: #111827;
+  background-color: #ffffff;
+}
+
+.auth-form-panel .auth-link {
+  color: #b45309 !important;
+}
+
+.auth-form-panel .auth-inline-link {
+  color: #1B4332 !important;
+}
+
+.auth-form-panel input:-webkit-autofill,
+.auth-form-panel input:-webkit-autofill:hover,
+.auth-form-panel input:-webkit-autofill:focus,
+.auth-form-panel .form-control:-webkit-autofill {
+  -webkit-text-fill-color: #111827;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  caret-color: #111827;
+}
+
+.auth-form-panel .auth-toggle {
+  background-color: #e5e7eb !important;
+}
+
+.auth-form-panel .auth-toggle-btn {
+  color: #1f2937 !important;
+}
+
+.auth-form-panel .auth-toggle-btn.is-active {
+  color: #ffffff !important;
+}
+
+/*
+  Keep the auth card in a high-contrast light theme even when html.dark is set.
+  DaisyUI/Bootstrap leave the card white while Tailwind dark: text classes
+  invert to light gray — that mix is why headings/labels looked invisible.
+*/
+html.dark .auth-form-panel {
+  color: #1f2937 !important;
+  background-color: #ffffff !important;
+}
+
+.dark .auth-form-panel h1,
+.dark .auth-form-panel h2 {
+  color: #1B4332 !important;
+}
+
+.dark .auth-form-panel label,
+.dark .auth-form-panel .form-label {
+  color: #111827 !important;
+}
+
+.dark .auth-form-panel label span {
+  color: #4b5563 !important;
+}
+
+.dark .auth-form-panel p {
+  color: #374151 !important;
+}
+
+.dark .auth-form-panel input,
+.dark .auth-form-panel select,
+.dark .auth-form-panel textarea,
+.dark .auth-form-panel .form-control {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  border-color: #9ca3af !important;
+  caret-color: #111827;
+}
+
+.dark .auth-form-panel input::placeholder,
+.dark .auth-form-panel textarea::placeholder,
+.dark .auth-form-panel .form-control::placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+}
+
+.dark .auth-form-panel option {
+  color: #111827;
+  background-color: #ffffff;
+}
+
+.dark .auth-form-panel .auth-link {
+  color: #b45309 !important;
+}
+
+.dark .auth-form-panel .auth-inline-link {
+  color: #1B4332 !important;
+}
+
+.dark .auth-form-panel .auth-toggle {
+  background-color: #e5e7eb !important;
+}
+
+.dark .auth-form-panel .auth-toggle-btn {
+  color: #1f2937 !important;
+}
+
+.dark .auth-form-panel .auth-toggle-btn.is-active {
+  color: #ffffff !important;
+}
+
+.dark .auth-form-panel input:-webkit-autofill,
+.dark .auth-form-panel input:-webkit-autofill:hover,
+.dark .auth-form-panel input:-webkit-autofill:focus,
+.dark .auth-form-panel .form-control:-webkit-autofill {
+  -webkit-text-fill-color: #111827;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  caret-color: #111827;
+}

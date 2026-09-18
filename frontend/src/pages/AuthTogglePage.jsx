@@ -166,7 +166,7 @@ const AuthTogglePage = () => {
           </div>
 
           {/* Form Panel */}
-          <div className="p-8 sm:p-10">
+          <div className="auth-form-panel p-8 sm:p-10">
 
             {/* Mobile-only compact logo (brand panel is hidden below md) */}
             <div className="md:hidden flex items-center justify-center gap-2 mb-6">
@@ -175,29 +175,25 @@ const AuthTogglePage = () => {
             </div>
 
             {/* Pill Toggle */}
-            <div className="relative flex bg-gray-100 dark:bg-dark-bg-tertiary rounded-full p-1 mb-8">
+            <div className="auth-toggle relative flex rounded-full p-1 mb-8">
               <span
                 aria-hidden="true"
-                className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#1B4332] dark:bg-dark-green-primary shadow-md transition-transform duration-300 ease-out ${
+                className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#1B4332] shadow-md transition-transform duration-300 ease-out ${
                   view === 'register' ? 'translate-x-full' : 'translate-x-0'
                 }`}
               />
               <button
                 onClick={() => setView('login')}
-                className={`relative z-10 flex-1 py-2.5 text-center font-semibold text-sm rounded-full transition-colors duration-300 ${
-                  view === 'login'
-                    ? 'text-white'
-                    : 'text-gray-500 dark:text-dark-text-tertiary hover:text-[#1B4332] dark:hover:text-dark-green-primary'
+                className={`auth-toggle-btn relative z-10 flex-1 py-2.5 text-center font-semibold text-sm rounded-full transition-colors duration-300 ${
+                  view === 'login' ? 'is-active' : ''
                 }`}
               >
                 Login
               </button>
               <button
                 onClick={() => setView('register')}
-                className={`relative z-10 flex-1 py-2.5 text-center font-semibold text-sm rounded-full transition-colors duration-300 ${
-                  view === 'register'
-                    ? 'text-white'
-                    : 'text-gray-500 dark:text-dark-text-tertiary hover:text-[#1B4332] dark:hover:text-dark-green-primary'
+                className={`auth-toggle-btn relative z-10 flex-1 py-2.5 text-center font-semibold text-sm rounded-full transition-colors duration-300 ${
+                  view === 'register' ? 'is-active' : ''
                 }`}
               >
                 Register
@@ -206,10 +202,10 @@ const AuthTogglePage = () => {
 
             {/* Heading */}
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold !text-[#1B4332] dark:!text-dark-text-primary mb-1">
+              <h1 className="text-2xl font-bold mb-1">
                 {view === 'login' ? 'Welcome back' : 'Create your account'}
               </h1>
-              <p className="text-sm font-medium !text-gray-700 dark:!text-dark-text-secondary">
+              <p className="text-sm font-medium">
                 {view === 'login' ? 'Sign in to continue to your dashboard' : 'Fill in your details to get started'}
               </p>
             </div>
@@ -292,7 +288,7 @@ const AuthTogglePage = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/forgot-password')}
-                    className="text-sm text-[#1B4332] dark:text-dark-green-primary hover:text-[#2D6A4F] dark:hover:text-dark-green-hover hover:underline font-medium transition-colors duration-200"
+                    className="auth-inline-link text-sm hover:underline font-medium transition-colors duration-200"
                   >
                     Forgot Password?
                   </button>
@@ -305,12 +301,12 @@ const AuthTogglePage = () => {
 
                 {/* Toggle to Register */}
                 <div className="text-center mt-6">
-                  <p className="text-gray-600 dark:text-dark-text-tertiary">
+                  <p>
                     Don't have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setView('register')}
-                      className="text-harvest-gold-600 dark:text-harvest-gold-400 font-semibold hover:underline"
+                      className="auth-link font-semibold hover:underline"
                     >
                       Sign up
                     </button>
@@ -525,12 +521,12 @@ const AuthTogglePage = () => {
 
                 {/* Toggle to Login */}
                 <div className="text-center mt-6">
-                  <p className="text-gray-600 dark:text-dark-text-tertiary">
+                  <p>
                     Already have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setView('login')}
-                      className="text-harvest-gold-600 dark:text-harvest-gold-400 font-semibold hover:underline"
+                      className="auth-link font-semibold hover:underline"
                     >
                       Login
                     </button>

@@ -44,11 +44,11 @@ const ForgotPassword = () => {
         </div>
 
         {/* Forgot Password Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
+        <div className="auth-form-panel bg-white rounded-2xl shadow-2xl p-8">
           {!emailSent ? (
             <>
-              <h2 className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mb-2 text-center">Forgot Password?</h2>
-              <p className="text-gray-600 dark:text-gray-400 text-center mb-6 text-sm">
+              <h2 className="text-2xl font-bold mb-2 text-center">Forgot Password?</h2>
+              <p className="text-center mb-6 text-sm">
                 Enter your email address and we'll send you a link to reset your password.
               </p>
               
@@ -97,8 +97,8 @@ const ForgotPassword = () => {
                   <CheckCircle size={48} className="text-green-600" />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">Check Your Email</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <h2 className="text-2xl font-bold mb-2">Check Your Email</h2>
+              <p className="mb-6">
                 We've sent a password reset link to <strong>{email}</strong>
               </p>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">

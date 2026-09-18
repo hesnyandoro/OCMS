@@ -34,8 +34,10 @@ export const ThemeProvider = ({ children }) => {
         // Remove both classes first
         root.classList.remove('light', 'dark');
         
-        // Add the current theme class
+        // Add the current theme class (Tailwind) and data-theme (DaisyUI)
         root.classList.add(theme);
+        root.setAttribute('data-theme', theme);
+        root.style.colorScheme = theme;
         
         // Save to localStorage
         localStorage.setItem('ocms-theme', theme);
