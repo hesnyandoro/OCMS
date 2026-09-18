@@ -81,7 +81,7 @@ const ResetPassword = () => {
               to="/forgot-password"
               className="inline-block w-full bg-[#1B4332] dark:bg-dark-green-primary hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              Request New Link
+              Resend reset email
             </Link>
           </div>
         </div>
@@ -169,14 +169,24 @@ const ResetPassword = () => {
                 </button>
               </form>
 
-              {/* Back to Login */}
-              <div className="mt-6 text-center">
-                <Link 
-                  to="/login" 
-                  className="text-sm text-[#1B4332] dark:text-dark-green-primary hover:text-[#2D6A4F] dark:hover:text-dark-green-hover hover:underline font-medium"
+              <div className="mt-6 text-center space-y-3">
+                <p className="text-sm">
+                  Didn't get the email, or has the link expired?
+                </p>
+                <Link
+                  to="/forgot-password"
+                  className="inline-block w-full border-2 border-[#1B4332] text-[#1B4332] hover:bg-[#1B4332] hover:text-white font-semibold py-3 rounded-lg transition-all duration-200"
                 >
-                  Back to Login
+                  Resend reset email
                 </Link>
+                <div>
+                  <Link 
+                    to="/login" 
+                    className="text-sm auth-inline-link hover:underline font-medium"
+                  >
+                    Back to Login
+                  </Link>
+                </div>
               </div>
             </>
           ) : (

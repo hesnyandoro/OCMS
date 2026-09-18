@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Mail, ArrowLeft, Coffee, CheckCircle } from 'lucide-react';
 import api from '../services/api';
 
+const RESEND_COOLDOWN_SECONDS = 60;
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  useEffect(() => {
+    if (cooldown <= 0) return undefined;
+    const timer = setInterval(() => {
+      setCooldown((seconds) => (seconds <= 1 ? 0 : seconds - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
+  const sendResetLink = async () => {
     if (!email.trim()) {
       toast.error('Please enter your email address');
       return;
@@ -19,8 +28,9 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post('/auth/forgot-password', { email: email.trim() });
       setEmailSent(true);
+      setCooldown(RESEND_COOLDOWN_SECONDS);
       toast.success('Password reset link sent to your email');
     } catch (err) {
       console.error('Forgot password error:', err);
@@ -29,6 +39,16 @@ const ForgotPassword = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await sendResetLink();
+  };
+
+  const handleResend = async () => {
+    if (loading || cooldown > 0) return;
+    await sendResetLink();
   };
 
   return (
@@ -104,12 +124,24 @@ const ForgotPassword = () => {
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <p className="text-sm text-blue-800">
                   <strong>Didn't receive the email?</strong><br />
-                  Check your spam folder or try again in a few minutes.
+                  Check your spam folder, then resend the link if it still hasn't arrived.
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={loading || cooldown > 0}
+                className="w-full bg-[#1B4332] hover:bg-[#2D6A4F] text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+              >
+                {loading
+                  ? 'Sending...'
+                  : cooldown > 0
+                    ? `Resend email in ${cooldown}s`
+                    : 'Resend email'}
+              </button>
               <Link 
                 to="/login"
-                className="inline-block w-full bg-[#1B4332] hover:bg-[#2D6A4F] text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+                className="inline-block w-full border-2 border-[#1B4332] text-[#1B4332] hover:bg-[#1B4332] hover:text-white font-semibold py-3 rounded-lg transition-all duration-200"
               >
                 Back to Login
               </Link>
