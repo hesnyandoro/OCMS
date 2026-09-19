@@ -39,7 +39,7 @@ const upload = multer({
 });
 
 router.post('/login', [
-  body('username').notEmpty(),
+  body('username').trim().notEmpty(),
   body('password').notEmpty()
 ], login);
 
@@ -81,7 +81,7 @@ router.post('/logout-all', verifyToken, logoutAll);
 
 // Password reset
 router.post('/forgot-password', [
-  body('email').isEmail().withMessage('Valid email is required')
+  body('email').trim().isEmail().withMessage('Valid email is required')
 ], forgotPassword);
 
 router.post('/reset-password', [

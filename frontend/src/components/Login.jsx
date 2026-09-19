@@ -45,7 +45,7 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Username Field */}
             <div>
-              <label className="form-label">Username</label>
+              <label className="form-label">Username or email</label>
               <div className="relative">
                 <User size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
@@ -54,7 +54,7 @@ const Login = () => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
+                  placeholder="Enter your username or email"
                   autoComplete="username"
                   required
                   className="form-control pl-10"
