@@ -2,20 +2,33 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const PasswordReset = require('../models/PasswordReset');
 
+let verifiedTransporter = false;
+let cachedTransporter = null;
+
 const isEmailConfigured = () => {
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
   return Boolean(
     process.env.EMAIL_HOST &&
-    process.env.EMAIL_USER &&
-    process.env.EMAIL_PASS &&
-    process.env.EMAIL_USER !== 'your-email@gmail.com' &&
-    process.env.EMAIL_PASS !== 'your-app-password-here'
+    user &&
+    pass &&
+    user !== 'your-email@gmail.com' &&
+    pass !== 'your-app-password-here'
   );
 };
 
+const fromAddress = () => {
+  if (process.env.EMAIL_FROM) return process.env.EMAIL_FROM;
+  if (process.env.EMAIL_USER) return `OCMS <${process.env.EMAIL_USER}>`;
+  return 'OCMS <noreply@ocms.com>';
+};
+
 const createEmailTransporter = () => {
+  if (cachedTransporter) return cachedTransporter;
+
   if (isEmailConfigured()) {
-    console.log('✅ Using configured email service:', process.env.EMAIL_HOST);
-    return nodemailer.createTransport({
+    console.log('Using configured email service:', process.env.EMAIL_HOST);
+    cachedTransporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: parseInt(process.env.EMAIL_PORT, 10) || 587,
       secure: process.env.EMAIL_SECURE === 'true',
@@ -27,18 +40,17 @@ const createEmailTransporter = () => {
         rejectUnauthorized: false
       }
     });
+    return cachedTransporter;
   }
 
-  console.warn('⚠️  EMAIL NOT CONFIGURED: Emails will be logged to console only.');
-  console.warn('⚠️  To enable email functionality:');
-  console.warn('   1. Update .env file with your email credentials');
-  console.warn('   2. For Gmail: Enable 2FA and generate an App Password');
-  console.warn('   3. Restart the server');
+  console.warn('EMAIL NOT CONFIGURED: Emails will be logged to console only.');
+  console.warn('To enable Gmail SMTP: set EMAIL_HOST, EMAIL_USER, and EMAIL_PASS (Gmail App Password, not account password).');
 
-  return {
+  cachedTransporter = {
+    verify: async () => false,
     sendMail: async (mailOptions) => {
       console.log('\n' + '='.repeat(80));
-      console.log('📧 EMAIL WOULD BE SENT (Not actually sent - email not configured)');
+      console.log('EMAIL WOULD BE SENT (Not actually sent - email not configured)');
       console.log('='.repeat(80));
       console.log('To:', mailOptions.to);
       console.log('From:', mailOptions.from);
@@ -55,6 +67,21 @@ const createEmailTransporter = () => {
       return { messageId: 'dev-email-' + Date.now() };
     }
   };
+  return cachedTransporter;
+};
+
+const verifyTransporterOnce = async (transporter) => {
+  if (verifiedTransporter || !isEmailConfigured() || typeof transporter.verify !== 'function') {
+    return;
+  }
+  try {
+    await transporter.verify();
+    verifiedTransporter = true;
+    console.log('SMTP connection verified:', process.env.EMAIL_HOST);
+  } catch (err) {
+    console.error('SMTP verify failed:', err.message);
+    throw err;
+  }
 };
 
 const wrapEmail = (title, bodyHtml) => `
@@ -104,9 +131,31 @@ const createPasswordToken = async (userId, expiresInMs) => {
 
 const sendMail = async ({ to, subject, html }) => {
   const transporter = createEmailTransporter();
-  const from = process.env.EMAIL_FROM || 'OCMS <noreply@ocms.com>';
+  const from = fromAddress();
+
+  if (isEmailConfigured()) {
+    await verifyTransporterOnce(transporter);
+  }
+
   await transporter.sendMail({ from, to, subject, html });
-  return isEmailConfigured();
+  return { emailSent: isEmailConfigured(), emailError: null };
+};
+
+const sendTemplatedEmail = async (user, { subject, html, logLabel }) => {
+  console.log(`Attempting to send ${logLabel} email to: ${user.email}`);
+  try {
+    const result = await sendMail({ to: user.email, subject, html });
+    console.log(`${logLabel} email processed`, { emailSent: result.emailSent });
+    return result;
+  } catch (emailError) {
+    console.error(`Failed to send ${logLabel} email:`, emailError.message);
+    console.error('Email error details:', {
+      code: emailError.code,
+      command: emailError.command,
+      response: emailError.response
+    });
+    return { emailSent: false, emailError: emailError.message };
+  }
 };
 
 const sendPasswordResetEmail = async (user, resetUrl) => {
@@ -123,24 +172,11 @@ const sendPasswordResetEmail = async (user, resetUrl) => {
     </div>
   `);
 
-  console.log(`📧 Attempting to send password reset email to: ${user.email}`);
-  try {
-    const emailSent = await sendMail({
-      to: user.email,
-      subject: 'Password Reset Request - OCMS',
-      html
-    });
-    console.log('✅ Password reset email processed');
-    return emailSent;
-  } catch (emailError) {
-    console.error('❌ Failed to send email:', emailError.message);
-    console.error('Email error details:', {
-      code: emailError.code,
-      command: emailError.command,
-      response: emailError.response
-    });
-    return false;
-  }
+  return sendTemplatedEmail(user, {
+    subject: 'Password Reset Request - OCMS',
+    html,
+    logLabel: 'password reset'
+  });
 };
 
 const sendInviteEmail = async (user, inviteUrl) => {
@@ -163,29 +199,21 @@ const sendInviteEmail = async (user, inviteUrl) => {
     </div>
   `);
 
-  console.log(`📧 Attempting to send invite email to: ${user.email}`);
-  try {
-    const emailSent = await sendMail({
-      to: user.email,
-      subject: 'You have been invited to OCMS',
-      html
-    });
-    console.log('✅ Invite email processed');
-    return emailSent;
-  } catch (emailError) {
-    console.error('❌ Failed to send invite email:', emailError.message);
-    return false;
-  }
+  return sendTemplatedEmail(user, {
+    subject: 'You have been invited to OCMS',
+    html,
+    logLabel: 'invite'
+  });
 };
 
 const issuePasswordResetLink = async (user, { hours = 1, invite = false } = {}) => {
   const rawToken = await createPasswordToken(user._id, hours * 60 * 60 * 1000);
   const query = invite ? `token=${rawToken}&invite=1` : `token=${rawToken}`;
   const url = `${frontendBaseUrl()}/reset-password?${query}`;
-  const emailSent = invite
+  const mailResult = invite
     ? await sendInviteEmail(user, url)
     : await sendPasswordResetEmail(user, url);
-  return { url, emailSent };
+  return { url, emailSent: mailResult.emailSent, emailError: mailResult.emailError };
 };
 
 module.exports = {
