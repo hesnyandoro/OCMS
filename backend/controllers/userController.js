@@ -1,44 +1,60 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const { issuePasswordResetLink } = require('../utils/sendAuthEmail');
 
-// Create a new field agent (Admin only)
+const publicUser = (user) => ({
+  id: user.id,
+  username: user.username,
+  email: user.email,
+  name: user.name,
+  role: user.role,
+  assignedRegion: user.assignedRegion
+});
+
+const sendInvite = async (user) => {
+  return issuePasswordResetLink(user, { hours: 24, invite: true });
+};
+
+// Create a field agent or admin (Admin only) and email an invite link
 exports.createFieldAgent = async (req, res) => {
   try {
-    const { username, email, password, name, assignedRegion } = req.body;
+    const { username, email, name, assignedRegion, role } = req.body;
+    const userRole = role === 'admin' ? 'admin' : 'fieldagent';
 
-    // Validation
-    if (!username || !email || !password || !assignedRegion) {
-      return res.status(400).json({ msg: 'Please provide all required fields: username, email, password, assignedRegion' });
+    if (!username || !email || !name) {
+      return res.status(400).json({ msg: 'Please provide name, username, and email' });
     }
 
-    // Check if user already exists
+    if (userRole === 'fieldagent' && !assignedRegion) {
+      return res.status(400).json({ msg: 'Assigned region is required for field agents' });
+    }
+
     let user = await User.findOne({ $or: [{ username }, { email }] });
     if (user) {
       return res.status(400).json({ msg: 'Username or email already exists' });
     }
 
-    // Create new field agent
+    const randomPassword = crypto.randomBytes(32).toString('hex');
     user = new User({
       username,
       email,
-      password: await bcrypt.hash(password, 10),
+      password: await bcrypt.hash(randomPassword, 10),
       name,
-      role: 'fieldagent',
-      assignedRegion
+      role: userRole,
+      assignedRegion: userRole === 'fieldagent' ? assignedRegion : undefined
     });
 
     await user.save();
 
+    const { emailSent } = await sendInvite(user);
+
     res.status(201).json({
-      msg: 'Field agent created successfully',
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        assignedRegion: user.assignedRegion
-      }
+      msg: emailSent
+        ? 'User created and invite email sent'
+        : 'User created. Invite email was logged on the server (email is not configured).',
+      emailSent,
+      user: publicUser(user)
     });
   } catch (err) {
     console.error('Create field agent error:', err);
@@ -46,7 +62,27 @@ exports.createFieldAgent = async (req, res) => {
   }
 };
 
-// Get all users (Admin only)
+exports.resendInvite = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const { emailSent } = await sendInvite(user);
+
+    res.json({
+      msg: emailSent
+        ? `Invite resent to ${user.email}`
+        : `Invite regenerated. Email was logged on the server (email is not configured).`,
+      emailSent
+    });
+  } catch (err) {
+    console.error('Resend invite error:', err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
+
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');
@@ -57,7 +93,6 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-// Update user (Admin only)
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -68,7 +103,6 @@ exports.updateUser = async (req, res) => {
       return res.status(404).json({ msg: 'User not found' });
     }
 
-    // Update fields
     if (name) user.name = name;
     if (email) user.email = email;
     if (assignedRegion) user.assignedRegion = assignedRegion;
@@ -78,14 +112,7 @@ exports.updateUser = async (req, res) => {
 
     res.json({
       msg: 'User updated successfully',
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        assignedRegion: user.assignedRegion
-      }
+      user: publicUser(user)
     });
   } catch (err) {
     console.error('Update user error:', err);
@@ -93,7 +120,6 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// Delete user (Admin only)
 exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

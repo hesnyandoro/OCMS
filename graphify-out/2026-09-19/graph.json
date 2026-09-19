@@ -182,7 +182,7 @@
       "file_type": "code",
       "norm_label": "authtogglepage()",
       "source_file": "frontend/src/pages/AuthTogglePage.jsx",
-      "source_location": "L16"
+      "source_location": "L13"
     },
     {
       "id": "frontend_src_pages_dashboard_dashboard",
@@ -326,7 +326,7 @@
       "file_type": "code",
       "norm_label": "users()",
       "source_file": "frontend/src/pages/Users.jsx",
-      "source_location": "L7"
+      "source_location": "L8"
     },
     {
       "id": "frontend_src_pages_usersettings_usersettings",
@@ -365,6 +365,90 @@
       "source_location": "L54"
     },
     {
+      "id": "frontend_src_utils_permissions_canread",
+      "label": "canRead()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "canread()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L44"
+    },
+    {
+      "id": "frontend_src_utils_permissions_canupdate",
+      "label": "canUpdate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "canupdate()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L49"
+    },
+    {
+      "id": "frontend_src_utils_permissions_getaccessiblenavitems",
+      "label": "getAccessibleNavItems()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "getaccessiblenavitems()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L69"
+    },
+    {
+      "id": "frontend_src_utils_permissions_getaccessiblequickactions",
+      "label": "getAccessibleQuickActions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "getaccessiblequickactions()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L85"
+    },
+    {
+      "id": "frontend_src_utils_permissions_haspermission",
+      "label": "hasPermission()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "haspermission()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L30"
+    },
+    {
+      "id": "frontend_src_utils_permissions_isadmin",
+      "label": "isAdmin()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "isadmin()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L59"
+    },
+    {
+      "id": "frontend_src_utils_permissions_isfieldagent",
+      "label": "isFieldAgent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "isfieldagent()",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L64"
+    },
+    {
       "id": "backend_controllers_authcontroller_changepassword",
       "label": "changePassword()",
       "_callable": true,
@@ -374,19 +458,7 @@
       "file_type": "code",
       "norm_label": "changepassword()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L276"
-    },
-    {
-      "id": "backend_controllers_authcontroller_createemailtransporter",
-      "label": "createEmailTransporter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "authController.js",
-      "file_type": "code",
-      "norm_label": "createemailtransporter()",
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L350"
+      "source_location": "L215"
     },
     {
       "id": "backend_controllers_authcontroller_createsession",
@@ -410,7 +482,7 @@
       "file_type": "code",
       "norm_label": "deletesession()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L208"
+      "source_location": "L147"
     },
     {
       "id": "backend_controllers_authcontroller_forgotpassword",
@@ -422,7 +494,7 @@
       "file_type": "code",
       "norm_label": "forgotpassword()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L405"
+      "source_location": "L289"
     },
     {
       "id": "backend_controllers_authcontroller_getdeviceinfo",
@@ -446,7 +518,7 @@
       "file_type": "code",
       "norm_label": "getsessions()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L184"
+      "source_location": "L123"
     },
     {
       "id": "backend_controllers_authcontroller_login",
@@ -458,7 +530,7 @@
       "file_type": "code",
       "norm_label": "login()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L108"
+      "source_location": "L47"
     },
     {
       "id": "backend_controllers_authcontroller_logout",
@@ -470,7 +542,7 @@
       "file_type": "code",
       "norm_label": "logout()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L159"
+      "source_location": "L98"
     },
     {
       "id": "backend_controllers_authcontroller_logoutall",
@@ -482,19 +554,7 @@
       "file_type": "code",
       "norm_label": "logoutall()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L173"
-    },
-    {
-      "id": "backend_controllers_authcontroller_register",
-      "label": "register()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "authController.js",
-      "file_type": "code",
-      "norm_label": "register()",
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L47"
+      "source_location": "L112"
     },
     {
       "id": "backend_controllers_authcontroller_resetpassword",
@@ -506,7 +566,7 @@
       "file_type": "code",
       "norm_label": "resetpassword()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L516"
+      "source_location": "L320"
     },
     {
       "id": "backend_controllers_authcontroller_updateprofile",
@@ -518,7 +578,7 @@
       "file_type": "code",
       "norm_label": "updateprofile()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L231"
+      "source_location": "L170"
     },
     {
       "id": "backend_controllers_authcontroller_uploadavatar",
@@ -530,7 +590,7 @@
       "file_type": "code",
       "norm_label": "uploadavatar()",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L313"
+      "source_location": "L252"
     },
     {
       "id": "backend_routes_auth_filefilter",
@@ -542,7 +602,7 @@
       "file_type": "code",
       "norm_label": "filefilter()",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L27"
+      "source_location": "L26"
     },
     {
       "id": "backend_optimize_db_indexes_optimizeindexes",
@@ -603,6 +663,30 @@
       "norm_label": "getdelivery()",
       "source_file": "backend/controllers/deliveryController.js",
       "source_location": "L29"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_getdeliverytypesbyfarmer",
+      "label": "getDeliveryTypesByFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "getdeliverytypesbyfarmer()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L191"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_gettotalkgsbytype",
+      "label": "getTotalKgsByType()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "gettotalkgsbytype()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L233"
     },
     {
       "id": "backend_controllers_deliverycontroller_updatedelivery",
@@ -742,11 +826,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "seeddata()",
       "source_file": "backend/config/seed.js",
-      "source_location": "L9"
+      "source_location": "L13"
     },
     {
       "id": "frontend_src_utils_apicache_apicache_clear",
@@ -857,232 +941,208 @@
       "source_location": "L108"
     },
     {
-      "id": "backend_controllers_reportcontroller_generatereport",
-      "label": "generateReport()",
+      "id": "backend_controllers_usercontroller_createfieldagent",
+      "label": "createFieldAgent()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "generatereport()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L23"
+      "norm_label": "createfieldagent()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L20"
     },
     {
-      "id": "backend_controllers_reportcontroller_getcashflowforecast",
-      "label": "getCashflowForecast()",
+      "id": "backend_controllers_usercontroller_deleteuser",
+      "label": "deleteUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getcashflowforecast()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L218"
+      "norm_label": "deleteuser()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L123"
     },
     {
-      "id": "backend_controllers_reportcontroller_getcomparativeanalytics",
-      "label": "getComparativeAnalytics()",
+      "id": "backend_controllers_usercontroller_getusers",
+      "label": "getUsers()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getcomparativeanalytics()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L463"
+      "norm_label": "getusers()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L86"
     },
     {
-      "id": "backend_controllers_reportcontroller_getdeliveriesreport",
-      "label": "getDeliveriesReport()",
+      "id": "backend_controllers_usercontroller_publicuser",
+      "label": "publicUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getdeliveriesreport()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L45"
+      "norm_label": "publicuser()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L6"
     },
     {
-      "id": "backend_controllers_reportcontroller_getdeliverytypeanalytics",
-      "label": "getDeliveryTypeAnalytics()",
+      "id": "backend_controllers_usercontroller_resendinvite",
+      "label": "resendInvite()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getdeliverytypeanalytics()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L574"
+      "norm_label": "resendinvite()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L65"
     },
     {
-      "id": "backend_controllers_reportcontroller_getfarmerperformance",
-      "label": "getFarmerPerformance()",
+      "id": "backend_controllers_usercontroller_sendinvite",
+      "label": "sendInvite()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getfarmerperformance()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L320"
+      "norm_label": "sendinvite()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L15"
     },
     {
-      "id": "backend_controllers_reportcontroller_getoperationalmetrics",
-      "label": "getOperationalMetrics()",
+      "id": "backend_controllers_usercontroller_updateuser",
+      "label": "updateUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getoperationalmetrics()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L705"
+      "norm_label": "updateuser()",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L96"
     },
     {
-      "id": "backend_controllers_reportcontroller_getpaymentanalytics",
-      "label": "getPaymentAnalytics()",
+      "id": "backend_utils_sendauthemail_actionbutton",
+      "label": "actionButton()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getpaymentanalytics()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L131"
+      "norm_label": "actionbutton()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L76"
     },
     {
-      "id": "backend_controllers_reportcontroller_getregionalprofitability",
-      "label": "getRegionalProfitability()",
+      "id": "backend_utils_sendauthemail_createemailtransporter",
+      "label": "createEmailTransporter()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getregionalprofitability()",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L635"
+      "norm_label": "createemailtransporter()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L15"
     },
     {
-      "id": "backend_controllers_reportcontroller_getsummary",
-      "label": "getSummary()",
+      "id": "backend_utils_sendauthemail_createpasswordtoken",
+      "label": "createPasswordToken()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getsummary()",
-      "source_file": "backend/controllers/reportController.js",
+      "norm_label": "createpasswordtoken()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L91"
+    },
+    {
+      "id": "backend_utils_sendauthemail_frontendbaseurl",
+      "label": "frontendBaseUrl()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "frontendbaseurl()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L89"
+    },
+    {
+      "id": "backend_utils_sendauthemail_isemailconfigured",
+      "label": "isEmailConfigured()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "isemailconfigured()",
+      "source_file": "backend/utils/sendAuthEmail.js",
       "source_location": "L5"
     },
     {
-      "id": "frontend_src_utils_permissions_canread",
-      "label": "canRead()",
+      "id": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "label": "issuePasswordResetLink()",
       "_callable": true,
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "canread()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L44"
+      "norm_label": "issuepasswordresetlink()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L181"
     },
     {
-      "id": "frontend_src_utils_permissions_canupdate",
-      "label": "canUpdate()",
+      "id": "backend_utils_sendauthemail_sendinviteemail",
+      "label": "sendInviteEmail()",
       "_callable": true,
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "canupdate()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L49"
+      "norm_label": "sendinviteemail()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L146"
     },
     {
-      "id": "frontend_src_utils_permissions_getaccessiblenavitems",
-      "label": "getAccessibleNavItems()",
+      "id": "backend_utils_sendauthemail_sendmail",
+      "label": "sendMail()",
       "_callable": true,
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getaccessiblenavitems()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L69"
+      "norm_label": "sendmail()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L105"
     },
     {
-      "id": "frontend_src_utils_permissions_getaccessiblequickactions",
-      "label": "getAccessibleQuickActions()",
+      "id": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "label": "sendPasswordResetEmail()",
       "_callable": true,
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "getaccessiblequickactions()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L85"
+      "norm_label": "sendpasswordresetemail()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L112"
     },
     {
-      "id": "frontend_src_utils_permissions_haspermission",
-      "label": "hasPermission()",
+      "id": "backend_utils_sendauthemail_wrapemail",
+      "label": "wrapEmail()",
       "_callable": true,
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "haspermission()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L30"
-    },
-    {
-      "id": "frontend_src_utils_permissions_isadmin",
-      "label": "isAdmin()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
-      "file_type": "code",
-      "norm_label": "isadmin()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L59"
-    },
-    {
-      "id": "frontend_src_utils_permissions_isfieldagent",
-      "label": "isFieldAgent()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
-      "file_type": "code",
-      "norm_label": "isfieldagent()",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L64"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_getdeliverytypesbyfarmer",
-      "label": "getDeliveryTypesByFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "getdeliverytypesbyfarmer()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L191"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_gettotalkgsbytype",
-      "label": "getTotalKgsByType()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "gettotalkgsbytype()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L233"
+      "norm_label": "wrapemail()",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L60"
     },
     {
       "id": "backend_controllers_deliverycontroller_getunpaiddeliveriesbyfarmer",
@@ -1226,7 +1286,19 @@
       "file_type": "code",
       "norm_label": "start()",
       "source_file": "backend/server.js",
-      "source_location": "L68"
+      "source_location": "L6"
+    },
+    {
+      "id": "backend_utils_bootstrapadmin_bootstrapadmin",
+      "label": "bootstrapAdmin()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "bootstrapadmin()",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L4"
     },
     {
       "id": "backend_controllers_geolocationcontroller_calculatedistancebetweenpoints",
@@ -1462,7 +1534,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "createfarmer()",
       "source_file": "backend/controllers/farmerController.js",
@@ -1474,7 +1546,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "deletefarmer()",
       "source_file": "backend/controllers/farmerController.js",
@@ -1486,7 +1558,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "getfarmer()",
       "source_file": "backend/controllers/farmerController.js",
@@ -1498,7 +1570,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "getfarmers()",
       "source_file": "backend/controllers/farmerController.js",
@@ -1510,7 +1582,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "searchfarmers()",
       "source_file": "backend/controllers/farmerController.js",
@@ -1522,59 +1594,131 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "updatefarmer()",
       "source_file": "backend/controllers/farmerController.js",
       "source_location": "L89"
     },
     {
-      "id": "backend_controllers_usercontroller_createfieldagent",
-      "label": "createFieldAgent()",
+      "id": "backend_controllers_reportcontroller_generatereport",
+      "label": "generateReport()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
-      "norm_label": "createfieldagent()",
-      "source_file": "backend/controllers/userController.js",
+      "norm_label": "generatereport()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L23"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getcashflowforecast",
+      "label": "getCashflowForecast()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getcashflowforecast()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L218"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getcomparativeanalytics",
+      "label": "getComparativeAnalytics()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getcomparativeanalytics()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L463"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getdeliveriesreport",
+      "label": "getDeliveriesReport()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getdeliveriesreport()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L45"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getdeliverytypeanalytics",
+      "label": "getDeliveryTypeAnalytics()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getdeliverytypeanalytics()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L574"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getfarmerperformance",
+      "label": "getFarmerPerformance()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getfarmerperformance()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L320"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getoperationalmetrics",
+      "label": "getOperationalMetrics()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getoperationalmetrics()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L705"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getpaymentanalytics",
+      "label": "getPaymentAnalytics()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getpaymentanalytics()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L131"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getregionalprofitability",
+      "label": "getRegionalProfitability()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getregionalprofitability()",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L635"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_getsummary",
+      "label": "getSummary()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "getsummary()",
+      "source_file": "backend/controllers/reportController.js",
       "source_location": "L5"
-    },
-    {
-      "id": "backend_controllers_usercontroller_deleteuser",
-      "label": "deleteUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "farmers.js",
-      "file_type": "code",
-      "norm_label": "deleteuser()",
-      "source_file": "backend/controllers/userController.js",
-      "source_location": "L97"
-    },
-    {
-      "id": "backend_controllers_usercontroller_getusers",
-      "label": "getUsers()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "farmers.js",
-      "file_type": "code",
-      "norm_label": "getusers()",
-      "source_file": "backend/controllers/userController.js",
-      "source_location": "L50"
-    },
-    {
-      "id": "backend_controllers_usercontroller_updateuser",
-      "label": "updateUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "farmers.js",
-      "file_type": "code",
-      "norm_label": "updateuser()",
-      "source_file": "backend/controllers/userController.js",
-      "source_location": "L61"
     },
     {
       "id": "backend_middleware_auth_authorize",
@@ -1582,7 +1726,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "authorize()",
       "source_file": "backend/middleware/auth.js",
@@ -1594,7 +1738,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "verifytoken()",
       "source_file": "backend/middleware/auth.js",
@@ -2118,6 +2262,28 @@
       "source_location": "L3"
     },
     {
+      "id": "frontend_src_utils_permissions",
+      "label": "permissions.js",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "permissions.js",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_utils_permissions_permissions",
+      "label": "PERMISSIONS",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "permissions",
+      "source_file": "frontend/src/utils/permissions.js",
+      "source_location": "L6"
+    },
+    {
       "id": "ref_chart_js",
       "label": "chart.js",
       "_origin": "ast",
@@ -2283,6 +2449,17 @@
       "source_location": "L3"
     },
     {
+      "id": "backend_controllers_authcontroller_issuepasswordresetlink",
+      "label": "{ issuePasswordResetLink }",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "authController.js",
+      "file_type": "code",
+      "norm_label": "{ issuepasswordresetlink }",
+      "source_file": "backend/controllers/authController.js",
+      "source_location": "L10"
+    },
+    {
       "id": "backend_controllers_authcontroller_jwt",
       "label": "jwt",
       "_origin": "ast",
@@ -2294,17 +2471,6 @@
       "source_location": "L2"
     },
     {
-      "id": "backend_controllers_authcontroller_nodemailer",
-      "label": "nodemailer",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "authController.js",
-      "file_type": "code",
-      "norm_label": "nodemailer",
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L7"
-    },
-    {
       "id": "backend_controllers_authcontroller_passwordreset",
       "label": "PasswordReset",
       "_origin": "ast",
@@ -2313,7 +2479,7 @@
       "file_type": "code",
       "norm_label": "passwordreset",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L10"
+      "source_location": "L9"
     },
     {
       "id": "backend_controllers_authcontroller_path",
@@ -2346,7 +2512,7 @@
       "file_type": "code",
       "norm_label": "session",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L9"
+      "source_location": "L8"
     },
     {
       "id": "backend_controllers_authcontroller_user",
@@ -2357,7 +2523,7 @@
       "file_type": "code",
       "norm_label": "user",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L8"
+      "source_location": "L7"
     },
     {
       "id": "backend_controllers_authcontroller_validationresult",
@@ -2448,6 +2614,17 @@
       "source_location": "L1"
     },
     {
+      "id": "backend_routes_auth_login_logout_logoutall_getsessions_deletesession_updateprofile_changepassword_uploadavatar_forgotpassword_resetpassword",
+      "label": "{ \r\n  login, \r\n  logout, \r\n  logoutAll, \r\n  getSessions, \r\n  deleteSession,\r\n  updateProfile,\r\n  changePassword,\r\n  uploadAvatar,\r\n  forgotPassword,\r\n  resetPassword\r\n}",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "authController.js",
+      "file_type": "code",
+      "norm_label": "{ \r\n  login, \r\n  logout, \r\n  logoutall, \r\n  getsessions, \r\n  deletesession,\r\n  updateprofile,\r\n  changepassword,\r\n  uploadavatar,\r\n  forgotpassword,\r\n  resetpassword\r\n}",
+      "source_file": "backend/routes/auth.js",
+      "source_location": "L5"
+    },
+    {
       "id": "backend_routes_auth_multer",
       "label": "multer",
       "_origin": "ast",
@@ -2470,17 +2647,6 @@
       "source_location": "L4"
     },
     {
-      "id": "backend_routes_auth_register_login_logout_logoutall_getsessions_deletesession_updateprofile_changepassword_uploadavatar_forgotpassword_resetpassword",
-      "label": "{ \r\n  register, \r\n  login, \r\n  logout, \r\n  logoutAll, \r\n  getSessions, \r\n  deleteSession,\r\n  updateProfile,\r\n  changePassword,\r\n  uploadAvatar,\r\n  forgotPassword,\r\n  resetPassword\r\n}",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "authController.js",
-      "file_type": "code",
-      "norm_label": "{ \r\n  register, \r\n  login, \r\n  logout, \r\n  logoutall, \r\n  getsessions, \r\n  deletesession,\r\n  updateprofile,\r\n  changepassword,\r\n  uploadavatar,\r\n  forgotpassword,\r\n  resetpassword\r\n}",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L5"
-    },
-    {
       "id": "backend_routes_auth_router",
       "label": "router",
       "_origin": "ast",
@@ -2489,7 +2655,7 @@
       "file_type": "code",
       "norm_label": "router",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L21"
+      "source_location": "L20"
     },
     {
       "id": "backend_routes_auth_storage",
@@ -2500,7 +2666,7 @@
       "file_type": "code",
       "norm_label": "storage",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L25"
+      "source_location": "L24"
     },
     {
       "id": "backend_routes_auth_upload",
@@ -2511,7 +2677,7 @@
       "file_type": "code",
       "norm_label": "upload",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L36"
+      "source_location": "L35"
     },
     {
       "id": "backend_routes_auth_user",
@@ -2522,7 +2688,7 @@
       "file_type": "code",
       "norm_label": "user",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L19"
+      "source_location": "L18"
     },
     {
       "id": "backend_routes_auth_verifytoken",
@@ -2533,7 +2699,7 @@
       "file_type": "code",
       "norm_label": "{ verifytoken }",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L18"
+      "source_location": "L17"
     },
     {
       "id": "backend_models_passwordreset",
@@ -2734,28 +2900,6 @@
       "source_location": "L4"
     },
     {
-      "id": "backend_package_devdependencies",
-      "label": "devDependencies",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "backend/package.json",
-      "file_type": "code",
-      "norm_label": "devdependencies",
-      "source_file": "backend/package.json",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_package_devdependencies_nodemon",
-      "label": "nodemon",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "backend/package.json",
-      "file_type": "code",
-      "norm_label": "nodemon",
-      "source_file": "backend/package.json",
-      "source_location": "L29"
-    },
-    {
       "id": "backend_package_keywords",
       "label": "keywords",
       "_origin": "ast",
@@ -2844,26 +2988,26 @@
       "source_location": "L24"
     },
     {
-      "id": "package_json_ref_compression",
-      "label": "compression",
+      "id": "package_json_ref_express_validator",
+      "label": "express-validator",
       "_origin": "ast",
       "community": 11,
       "community_name": "backend/package.json",
       "file_type": "concept",
-      "norm_label": "compression",
+      "norm_label": "express-validator",
       "source_file": "package.json",
-      "source_location": "L19"
+      "source_location": "L24"
     },
     {
-      "id": "package_json_ref_express_rate_limit",
-      "label": "express-rate-limit",
+      "id": "package_json_ref_jsonwebtoken",
+      "label": "jsonwebtoken",
       "_origin": "ast",
       "community": 11,
       "community_name": "backend/package.json",
       "file_type": "concept",
-      "norm_label": "express-rate-limit",
+      "norm_label": "jsonwebtoken",
       "source_file": "package.json",
-      "source_location": "L23"
+      "source_location": "L25"
     },
     {
       "id": "package_json_ref_multer",
@@ -2877,15 +3021,15 @@
       "source_location": "L27"
     },
     {
-      "id": "package_json_ref_vercel_blob",
-      "label": "@vercel/blob",
+      "id": "package_json_ref_nodemailer",
+      "label": "nodemailer",
       "_origin": "ast",
       "community": 11,
       "community_name": "backend/package.json",
       "file_type": "concept",
-      "norm_label": "@vercel/blob",
+      "norm_label": "nodemailer",
       "source_file": "package.json",
-      "source_location": "L17"
+      "source_location": "L28"
     },
     {
       "id": "ref_nodemon",
@@ -3075,6 +3219,17 @@
       "source_location": "L18"
     },
     {
+      "id": "package_json_ref_compression",
+      "label": "compression",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "package.json",
+      "file_type": "concept",
+      "norm_label": "compression",
+      "source_file": "package.json",
+      "source_location": "L19"
+    },
+    {
       "id": "package_json_ref_cors",
       "label": "cors",
       "_origin": "ast",
@@ -3108,26 +3263,15 @@
       "source_location": "L22"
     },
     {
-      "id": "package_json_ref_express_validator",
-      "label": "express-validator",
+      "id": "package_json_ref_express_rate_limit",
+      "label": "express-rate-limit",
       "_origin": "ast",
       "community": 13,
       "community_name": "package.json",
       "file_type": "concept",
-      "norm_label": "express-validator",
+      "norm_label": "express-rate-limit",
       "source_file": "package.json",
-      "source_location": "L24"
-    },
-    {
-      "id": "package_json_ref_jsonwebtoken",
-      "label": "jsonwebtoken",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "package.json",
-      "file_type": "concept",
-      "norm_label": "jsonwebtoken",
-      "source_file": "package.json",
-      "source_location": "L25"
+      "source_location": "L23"
     },
     {
       "id": "package_json_ref_mongoose",
@@ -3141,15 +3285,15 @@
       "source_location": "L26"
     },
     {
-      "id": "package_json_ref_nodemailer",
-      "label": "nodemailer",
+      "id": "package_json_ref_vercel_blob",
+      "label": "@vercel/blob",
       "_origin": "ast",
       "community": 13,
       "community_name": "package.json",
       "file_type": "concept",
-      "norm_label": "nodemailer",
+      "norm_label": "@vercel/blob",
       "source_file": "package.json",
-      "source_location": "L28"
+      "source_location": "L17"
     },
     {
       "id": "frontend_src_components_geolocationcapture",
@@ -3486,84 +3630,117 @@
       "label": "seed.js",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "seed.js",
       "source_file": "backend/config/seed.js",
       "source_location": "L1"
     },
     {
+      "id": "backend_config_seed_bcrypt",
+      "label": "bcrypt",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "seed.js",
+      "file_type": "code",
+      "norm_label": "bcrypt",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L4"
+    },
+    {
       "id": "backend_config_seed_dotenv",
       "label": "dotenv",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "dotenv",
       "source_file": "backend/config/seed.js",
-      "source_location": "L2"
+      "source_location": "L3"
     },
     {
       "id": "backend_config_seed_farmer",
       "label": "Farmer",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "farmer",
       "source_file": "backend/config/seed.js",
-      "source_location": "L3"
+      "source_location": "L5"
     },
     {
       "id": "backend_config_seed_mongoose",
       "label": "mongoose",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "mongoose",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "backend_config_seed_path",
+      "label": "path",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "seed.js",
+      "file_type": "code",
+      "norm_label": "path",
       "source_file": "backend/config/seed.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_models_farmer",
-      "label": "Farmer.js",
+      "id": "backend_config_seed_user",
+      "label": "User",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
-      "norm_label": "farmer.js",
-      "source_file": "backend/models/Farmer.js",
+      "norm_label": "user",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L6"
+    },
+    {
+      "id": "backend_models_user",
+      "label": "User.js",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "seed.js",
+      "file_type": "code",
+      "norm_label": "user.js",
+      "source_file": "backend/models/User.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_models_farmer_farmerschema",
-      "label": "farmerSchema",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "Farmer.js",
-      "file_type": "code",
-      "norm_label": "farmerschema",
-      "source_file": "backend/models/Farmer.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_models_farmer_mongoose",
+      "id": "backend_models_user_mongoose",
       "label": "mongoose",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "mongoose",
-      "source_file": "backend/models/Farmer.js",
+      "source_file": "backend/models/User.js",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_models_user_userschema",
+      "label": "userSchema",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "seed.js",
+      "file_type": "code",
+      "norm_label": "userschema",
+      "source_file": "backend/models/User.js",
+      "source_location": "L3"
     },
     {
       "id": "backend_test_env",
       "label": "test-env.js",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "test-env.js",
       "source_file": "backend/test-env.js",
@@ -3574,7 +3751,7 @@
       "label": "dotenv",
       "_origin": "ast",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "file_type": "code",
       "norm_label": "dotenv",
       "source_file": "backend/test-env.js",
@@ -3592,158 +3769,422 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_models_user",
-      "label": "User.js",
+      "id": "readme",
+      "label": "README.md",
       "_origin": "ast",
       "community": 19,
-      "community_name": "User.js",
-      "file_type": "code",
-      "norm_label": "user.js",
-      "source_file": "backend/models/User.js",
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "readme.md",
+      "source_file": "README.md",
       "source_location": "L1"
     },
     {
-      "id": "backend_models_user_mongoose",
-      "label": "mongoose",
+      "id": "readme_acknowledgments",
+      "label": "Acknowledgments",
       "_origin": "ast",
       "community": 19,
-      "community_name": "User.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "backend/models/User.js",
-      "source_location": "L1"
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "acknowledgments",
+      "source_file": "README.md",
+      "source_location": "L501"
     },
     {
-      "id": "backend_models_user_userschema",
-      "label": "userSchema",
+      "id": "readme_author",
+      "label": "Author",
       "_origin": "ast",
       "community": 19,
-      "community_name": "User.js",
-      "file_type": "code",
-      "norm_label": "userschema",
-      "source_file": "backend/models/User.js",
-      "source_location": "L3"
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "author",
+      "source_file": "README.md",
+      "source_location": "L494"
     },
     {
-      "id": "backend_controllers_reportcontroller",
-      "label": "reportController.js",
+      "id": "readme_environment_variables",
+      "label": "Environment Variables",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "reportcontroller.js",
-      "source_file": "backend/controllers/reportController.js",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "environment variables",
+      "source_file": "README.md",
+      "source_location": "L593"
+    },
+    {
+      "id": "readme_license",
+      "label": "License",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "license",
+      "source_file": "README.md",
+      "source_location": "L488"
+    },
+    {
+      "id": "readme_ocms_organic_coffee_management_system",
+      "label": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "\ud83c\udf3f ocms - organic coffee management system",
+      "source_file": "README.md",
       "source_location": "L1"
     },
     {
-      "id": "backend_controllers_reportcontroller_delivery",
-      "label": "Delivery",
+      "id": "readme_prerequisites",
+      "label": "Prerequisites",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "prerequisites",
+      "source_file": "README.md",
+      "source_location": "L125"
+    },
+    {
+      "id": "readme_required_backend_variables",
+      "label": "Required Backend Variables",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "required backend variables",
+      "source_file": "README.md",
+      "source_location": "L595"
+    },
+    {
+      "id": "readme_required_frontend_variables",
+      "label": "Required Frontend Variables",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "required frontend variables",
+      "source_file": "README.md",
+      "source_location": "L607"
+    },
+    {
+      "id": "readme_roadmap",
+      "label": "Roadmap",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "roadmap",
+      "source_file": "README.md",
+      "source_location": "L509"
+    },
+    {
+      "id": "readme_system_architecture",
+      "label": "System Architecture",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "system architecture",
+      "source_file": "README.md",
+      "source_location": "L99"
+    },
+    {
+      "id": "readme_table_of_contents",
+      "label": "Table of Contents",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "table of contents",
+      "source_file": "README.md",
+      "source_location": "L6"
+    },
+    {
+      "id": "readme_upcoming_features",
+      "label": "Upcoming Features",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "\ud83c\udf3f OCMS - Organic Coffee Management System",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "upcoming features",
+      "source_file": "README.md",
+      "source_location": "L511"
+    },
+    {
+      "id": "backend_controllers_usercontroller",
+      "label": "userController.js",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "delivery",
-      "source_file": "backend/controllers/reportController.js",
+      "norm_label": "usercontroller.js",
+      "source_file": "backend/controllers/userController.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_controllers_reportcontroller_farmer",
-      "label": "Farmer",
+      "id": "backend_controllers_usercontroller_bcrypt",
+      "label": "bcrypt",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "farmer",
-      "source_file": "backend/controllers/reportController.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_controllers_reportcontroller_payment",
-      "label": "Payment",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "payment",
-      "source_file": "backend/controllers/reportController.js",
+      "norm_label": "bcrypt",
+      "source_file": "backend/controllers/userController.js",
       "source_location": "L2"
     },
     {
-      "id": "backend_routes_reports",
-      "label": "reports.js",
+      "id": "backend_controllers_usercontroller_crypto",
+      "label": "crypto",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "reports.js",
-      "source_file": "backend/routes/reports.js",
+      "norm_label": "crypto",
+      "source_file": "backend/controllers/userController.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_routes_reports_express",
+      "id": "backend_controllers_usercontroller_issuepasswordresetlink",
+      "label": "{ issuePasswordResetLink }",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "{ issuepasswordresetlink }",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "backend_controllers_usercontroller_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_users",
+      "label": "users.js",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "users.js",
+      "source_file": "backend/routes/users.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_users_createfieldagent_resendinvite_getusers_updateuser_deleteuser",
+      "label": "{ createFieldAgent, resendInvite, getUsers, updateUser, deleteUser }",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "{ createfieldagent, resendinvite, getusers, updateuser, deleteuser }",
+      "source_file": "backend/routes/users.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_users_express",
       "label": "express",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
       "norm_label": "express",
-      "source_file": "backend/routes/reports.js",
+      "source_file": "backend/routes/users.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_routes_reports_generatereport_getsummary_getdeliveriesreport_getpaymentanalytics_getcashflowforecast_getdeliverytypeanalytics_getfarmerperformance_getregionalprofitability_getoperationalmetrics_getcomparativeanalytics",
-      "label": "{\r\n  generateReport,\r\n  getSummary,\r\n  getDeliveriesReport,\r\n  getPaymentAnalytics,\r\n  getCashflowForecast,\r\n  getDeliveryTypeAnalytics,\r\n  getFarmerPerformance,\r\n  getRegionalProfitability,\r\n  getOperationalMetrics,\r\n  getComparativeAnalytics\r\n}",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "{\r\n  generatereport,\r\n  getsummary,\r\n  getdeliveriesreport,\r\n  getpaymentanalytics,\r\n  getcashflowforecast,\r\n  getdeliverytypeanalytics,\r\n  getfarmerperformance,\r\n  getregionalprofitability,\r\n  getoperationalmetrics,\r\n  getcomparativeanalytics\r\n}",
-      "source_file": "backend/routes/reports.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_routes_reports_router",
+      "id": "backend_routes_users_router",
       "label": "router",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
       "norm_label": "router",
-      "source_file": "backend/routes/reports.js",
-      "source_location": "L16"
+      "source_file": "backend/routes/users.js",
+      "source_location": "L5"
     },
     {
-      "id": "backend_routes_reports_verifytoken_authorize",
+      "id": "backend_routes_users_verifytoken_authorize",
       "label": "{ verifyToken, authorize }",
       "_origin": "ast",
       "community": 2,
-      "community_name": "reports.js",
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
       "norm_label": "{ verifytoken, authorize }",
-      "source_file": "backend/routes/reports.js",
+      "source_file": "backend/routes/users.js",
       "source_location": "L2"
     },
     {
-      "id": "frontend_src_utils_permissions",
-      "label": "permissions.js",
+      "id": "backend_utils_sendauthemail",
+      "label": "sendAuthEmail.js",
       "_origin": "ast",
-      "community": 20,
-      "community_name": "permissions.js",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
       "file_type": "code",
-      "norm_label": "permissions.js",
-      "source_file": "frontend/src/utils/permissions.js",
+      "norm_label": "sendauthemail.js",
+      "source_file": "backend/utils/sendAuthEmail.js",
       "source_location": "L1"
     },
     {
-      "id": "frontend_src_utils_permissions_permissions",
-      "label": "PERMISSIONS",
+      "id": "backend_utils_sendauthemail_crypto",
+      "label": "crypto",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "crypto",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_utils_sendauthemail_nodemailer",
+      "label": "nodemailer",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "nodemailer",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "backend_utils_sendauthemail_passwordreset",
+      "label": "PasswordReset",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "file_type": "code",
+      "norm_label": "passwordreset",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "readme_api_documentation",
+      "label": "API Documentation",
       "_origin": "ast",
       "community": 20,
-      "community_name": "permissions.js",
-      "file_type": "code",
-      "norm_label": "permissions",
-      "source_file": "frontend/src/utils/permissions.js",
-      "source_location": "L6"
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "api documentation",
+      "source_file": "README.md",
+      "source_location": "L236"
+    },
+    {
+      "id": "readme_authentication_endpoints",
+      "label": "Authentication Endpoints",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "authentication endpoints",
+      "source_file": "README.md",
+      "source_location": "L238"
+    },
+    {
+      "id": "readme_dashboard_endpoints",
+      "label": "Dashboard Endpoints",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "dashboard endpoints",
+      "source_file": "README.md",
+      "source_location": "L279"
+    },
+    {
+      "id": "readme_delivery_endpoints",
+      "label": "Delivery Endpoints",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "delivery endpoints",
+      "source_file": "README.md",
+      "source_location": "L261"
+    },
+    {
+      "id": "readme_farmer_endpoints",
+      "label": "Farmer Endpoints",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "farmer endpoints",
+      "source_file": "README.md",
+      "source_location": "L251"
+    },
+    {
+      "id": "readme_payment_endpoints",
+      "label": "Payment Endpoints",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "payment endpoints",
+      "source_file": "README.md",
+      "source_location": "L270"
+    },
+    {
+      "id": "readme_query_parameters_for_filtering",
+      "label": "Query Parameters for Filtering",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "query parameters for filtering",
+      "source_file": "README.md",
+      "source_location": "L303"
+    },
+    {
+      "id": "readme_report_endpoints_admin_only",
+      "label": "Report Endpoints (Admin Only)",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "report endpoints (admin only)",
+      "source_file": "README.md",
+      "source_location": "L286"
+    },
+    {
+      "id": "readme_user_management_endpoints_admin_only",
+      "label": "User Management Endpoints (Admin Only)",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "API Documentation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "user management endpoints (admin only)",
+      "source_file": "README.md",
+      "source_location": "L295"
     },
     {
       "id": "vercel",
@@ -3845,6 +4286,39 @@
       "source_location": "L2"
     },
     {
+      "id": "backend_models_farmer",
+      "label": "Farmer.js",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "farmer.js",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_farmer_farmerschema",
+      "label": "farmerSchema",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "farmerschema",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_models_farmer_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L1"
+    },
+    {
       "id": "backend_models_payment",
       "label": "Payment.js",
       "_origin": "ast",
@@ -3876,6 +4350,246 @@
       "norm_label": "paymentschema",
       "source_file": "backend/models/Payment.js",
       "source_location": "L3"
+    },
+    {
+      "id": "readme_1_dashboard_with_real_time_analytics",
+      "label": "1. Dashboard with Real-Time Analytics",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "1. dashboard with real-time analytics",
+      "source_file": "README.md",
+      "source_location": "L401"
+    },
+    {
+      "id": "readme_2_farmer_management",
+      "label": "2. Farmer Management",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "2. farmer management",
+      "source_file": "README.md",
+      "source_location": "L408"
+    },
+    {
+      "id": "readme_3_delivery_tracking",
+      "label": "3. Delivery Tracking",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "3. delivery tracking",
+      "source_file": "README.md",
+      "source_location": "L415"
+    },
+    {
+      "id": "readme_4_payment_processing",
+      "label": "4. Payment Processing",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "4. payment processing",
+      "source_file": "README.md",
+      "source_location": "L422"
+    },
+    {
+      "id": "readme_5_advanced_reports_analytics",
+      "label": "5. Advanced Reports & Analytics",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "5. advanced reports & analytics",
+      "source_file": "README.md",
+      "source_location": "L429"
+    },
+    {
+      "id": "readme_6_notification_system",
+      "label": "6. Notification System",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "6. notification system",
+      "source_file": "README.md",
+      "source_location": "L437"
+    },
+    {
+      "id": "readme_7_user_settings",
+      "label": "7. User Settings",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "7. user settings",
+      "source_file": "README.md",
+      "source_location": "L446"
+    },
+    {
+      "id": "readme_key_functionalities",
+      "label": "Key Functionalities",
+      "_origin": "ast",
+      "community": 23,
+      "community_name": "Key Functionalities",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "key functionalities",
+      "source_file": "README.md",
+      "source_location": "L399"
+    },
+    {
+      "id": "readme_analytics_reports",
+      "label": "Analytics Reports",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "analytics reports",
+      "source_file": "README.md",
+      "source_location": "L476"
+    },
+    {
+      "id": "readme_dark_mode",
+      "label": "Dark Mode",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "dark mode",
+      "source_file": "README.md",
+      "source_location": "L480"
+    },
+    {
+      "id": "readme_dashboard",
+      "label": "Dashboard",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "dashboard",
+      "source_file": "README.md",
+      "source_location": "L460"
+    },
+    {
+      "id": "readme_delivery_tracking",
+      "label": "Delivery Tracking",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "delivery tracking",
+      "source_file": "README.md",
+      "source_location": "L468"
+    },
+    {
+      "id": "readme_farmer_management",
+      "label": "Farmer Management",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "farmer management",
+      "source_file": "README.md",
+      "source_location": "L464"
+    },
+    {
+      "id": "readme_payment_processing",
+      "label": "Payment Processing",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "payment processing",
+      "source_file": "README.md",
+      "source_location": "L472"
+    },
+    {
+      "id": "readme_screenshots",
+      "label": "Screenshots",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "Screenshots",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "screenshots",
+      "source_file": "README.md",
+      "source_location": "L458"
+    },
+    {
+      "id": "readme_check_mongodb_connection",
+      "label": "Check MongoDB Connection",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Tips for Development",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "check mongodb connection",
+      "source_file": "README.md",
+      "source_location": "L636"
+    },
+    {
+      "id": "readme_common_commands",
+      "label": "Common Commands",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Tips for Development",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "common commands",
+      "source_file": "README.md",
+      "source_location": "L641"
+    },
+    {
+      "id": "readme_quick_start_development",
+      "label": "Quick Start Development",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Tips for Development",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "quick start development",
+      "source_file": "README.md",
+      "source_location": "L616"
+    },
+    {
+      "id": "readme_seed_sample_data",
+      "label": "Seed Sample Data",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Tips for Development",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "seed sample data",
+      "source_file": "README.md",
+      "source_location": "L630"
+    },
+    {
+      "id": "readme_tips_for_development",
+      "label": "Tips for Development",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Tips for Development",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "tips for development",
+      "source_file": "README.md",
+      "source_location": "L614"
     },
     {
       "id": "package_scripts",
@@ -4030,6 +4744,17 @@
       "norm_label": "app",
       "source_file": "api/index.js",
       "source_location": "L1"
+    },
+    {
+      "id": "api_index_bootstrapadmin",
+      "label": "bootstrapAdmin",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "bootstrapadmin",
+      "source_file": "api/index.js",
+      "source_location": "L3"
     },
     {
       "id": "api_index_connectdb",
@@ -4263,17 +4988,6 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_server_allowedorigins",
-      "label": "allowedOrigins",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "app.js",
-      "file_type": "code",
-      "norm_label": "allowedorigins",
-      "source_file": "backend/server.js",
-      "source_location": "L10"
-    },
-    {
       "id": "backend_server_app",
       "label": "app",
       "_origin": "ast",
@@ -4283,6 +4997,17 @@
       "norm_label": "app",
       "source_file": "backend/server.js",
       "source_location": "L2"
+    },
+    {
+      "id": "backend_server_bootstrapadmin",
+      "label": "bootstrapAdmin",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "bootstrapadmin",
+      "source_file": "backend/server.js",
+      "source_location": "L4"
     },
     {
       "id": "backend_server_connectdb",
@@ -4296,15 +5021,157 @@
       "source_location": "L3"
     },
     {
-      "id": "backend_server_path",
-      "label": "path",
+      "id": "backend_utils_bootstrapadmin",
+      "label": "bootstrapAdmin.js",
       "_origin": "ast",
       "community": 3,
       "community_name": "app.js",
       "file_type": "code",
-      "norm_label": "path",
-      "source_file": "backend/server.js",
+      "norm_label": "bootstrapadmin.js",
+      "source_file": "backend/utils/bootstrapAdmin.js",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_utils_bootstrapadmin_bcrypt",
+      "label": "bcrypt",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "bcrypt",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_utils_bootstrapadmin_user",
+      "label": "User",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "readme_core_functionality",
+      "label": "Core Functionality",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "Features",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "core functionality",
+      "source_file": "README.md",
+      "source_location": "L28"
+    },
+    {
+      "id": "readme_features",
+      "label": "Features",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "Features",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "features",
+      "source_file": "README.md",
+      "source_location": "L26"
+    },
+    {
+      "id": "readme_technical_features",
+      "label": "Technical Features",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "Features",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "technical features",
+      "source_file": "README.md",
+      "source_location": "L50"
+    },
+    {
+      "id": "readme_ui_ux_features",
+      "label": "UI/UX Features",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "Features",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "ui/ux features",
+      "source_file": "README.md",
+      "source_location": "L42"
+    },
+    {
+      "id": "readme_user_management",
+      "label": "User Management",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "Features",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "user management",
+      "source_file": "README.md",
+      "source_location": "L36"
+    },
+    {
+      "id": "readme_database_schema",
+      "label": "Database Schema",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Database Schema",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "database schema",
+      "source_file": "README.md",
+      "source_location": "L539"
+    },
+    {
+      "id": "readme_delivery_schema",
+      "label": "Delivery Schema",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Database Schema",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "delivery schema",
+      "source_file": "README.md",
+      "source_location": "L565"
+    },
+    {
+      "id": "readme_farmer_schema",
+      "label": "Farmer Schema",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Database Schema",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "farmer schema",
+      "source_file": "README.md",
+      "source_location": "L554"
+    },
+    {
+      "id": "readme_payment_schema",
+      "label": "Payment Schema",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Database Schema",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "payment schema",
+      "source_file": "README.md",
+      "source_location": "L579"
+    },
+    {
+      "id": "readme_user_schema",
+      "label": "User Schema",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Database Schema",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "user schema",
+      "source_file": "README.md",
+      "source_location": "L541"
     },
     {
       "id": "package_engines",
@@ -4373,6 +5240,102 @@
       "source_location": "L31"
     },
     {
+      "id": "readme_1_clone_the_repository",
+      "label": "1. Clone the Repository",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Installation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "1. clone the repository",
+      "source_file": "README.md",
+      "source_location": "L138"
+    },
+    {
+      "id": "readme_2_install_backend_dependencies",
+      "label": "2. Install Backend Dependencies",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Installation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "2. install backend dependencies",
+      "source_file": "README.md",
+      "source_location": "L144"
+    },
+    {
+      "id": "readme_3_install_frontend_dependencies",
+      "label": "3. Install Frontend Dependencies",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Installation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "3. install frontend dependencies",
+      "source_file": "README.md",
+      "source_location": "L150"
+    },
+    {
+      "id": "readme_installation",
+      "label": "Installation",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "Installation",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "installation",
+      "source_file": "README.md",
+      "source_location": "L136"
+    },
+    {
+      "id": "readme_backend",
+      "label": "Backend",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "Tech Stack",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "backend",
+      "source_file": "README.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "readme_development_tools",
+      "label": "Development Tools",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "Tech Stack",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "development tools",
+      "source_file": "README.md",
+      "source_location": "L91"
+    },
+    {
+      "id": "readme_frontend",
+      "label": "Frontend",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "Tech Stack",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "frontend",
+      "source_file": "README.md",
+      "source_location": "L62"
+    },
+    {
+      "id": "readme_tech_stack",
+      "label": "Tech Stack",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "Tech Stack",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "tech stack",
+      "source_file": "README.md",
+      "source_location": "L60"
+    },
+    {
       "id": "frontend_postcss_config",
       "label": "postcss.config.js",
       "_origin": "ast",
@@ -4382,6 +5345,126 @@
       "norm_label": "postcss.config.js",
       "source_file": "frontend/postcss.config.js",
       "source_location": "L1"
+    },
+    {
+      "id": "readme_backend_configuration",
+      "label": "Backend Configuration",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Configuration",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "backend configuration",
+      "source_file": "README.md",
+      "source_location": "L160"
+    },
+    {
+      "id": "readme_configuration",
+      "label": "Configuration",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Configuration",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "configuration",
+      "source_file": "README.md",
+      "source_location": "L158"
+    },
+    {
+      "id": "readme_frontend_configuration",
+      "label": "Frontend Configuration",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Configuration",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "frontend configuration",
+      "source_file": "README.md",
+      "source_location": "L190"
+    },
+    {
+      "id": "readme_option_2_using_concurrent_scripts_recommended",
+      "label": "Option 2: Using Concurrent Scripts (Recommended)",
+      "_origin": "ast",
+      "community": 37,
+      "community_name": "Configuration",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "option 2: using concurrent scripts (recommended)",
+      "source_file": "README.md",
+      "source_location": "L201"
+    },
+    {
+      "id": "readme_admin",
+      "label": "Admin",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "User Roles & Permissions",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "admin",
+      "source_file": "README.md",
+      "source_location": "L214"
+    },
+    {
+      "id": "readme_field_agent",
+      "label": "Field Agent",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "User Roles & Permissions",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "field agent",
+      "source_file": "README.md",
+      "source_location": "L224"
+    },
+    {
+      "id": "readme_user_roles_permissions",
+      "label": "User Roles & Permissions",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "User Roles & Permissions",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "user roles & permissions",
+      "source_file": "README.md",
+      "source_location": "L212"
+    },
+    {
+      "id": "readme_backend_structure",
+      "label": "Backend Structure",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "\ud83d\udcc2 Project Structure",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "backend structure",
+      "source_file": "README.md",
+      "source_location": "L358"
+    },
+    {
+      "id": "readme_frontend_structure",
+      "label": "Frontend Structure",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "\ud83d\udcc2 Project Structure",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "frontend structure",
+      "source_file": "README.md",
+      "source_location": "L318"
+    },
+    {
+      "id": "readme_project_structure",
+      "label": "\ud83d\udcc2 Project Structure",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "\ud83d\udcc2 Project Structure",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "\ud83d\udcc2 project structure",
+      "source_file": "README.md",
+      "source_location": "L316"
     },
     {
       "id": "backend_controllers_geolocationcontroller",
@@ -4492,6 +5575,64 @@
       "norm_label": "utils/geolocation.js",
       "source_file": "backend/utils/geolocation.js",
       "source_location": "L1"
+    },
+    {
+      "id": "readme_reporting_security_issues",
+      "label": "Reporting Security Issues",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "Security",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "reporting security issues",
+      "source_file": "README.md",
+      "source_location": "L525"
+    },
+    {
+      "id": "readme_security",
+      "label": "Security",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "Security",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "security",
+      "source_file": "README.md",
+      "source_location": "L523"
+    },
+    {
+      "id": "readme_security_features",
+      "label": "Security Features",
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "Security",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "security features",
+      "source_file": "README.md",
+      "source_location": "L528"
+    },
+    {
+      "id": "backend_package_devdependencies",
+      "label": "devDependencies",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "devdependencies",
+      "source_file": "backend/package.json",
+      "source_location": "L28"
+    },
+    {
+      "id": "backend_package_devdependencies_nodemon",
+      "label": "nodemon",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "devDependencies",
+      "file_type": "code",
+      "norm_label": "nodemon",
+      "source_file": "backend/package.json",
+      "source_location": "L29"
     },
     {
       "id": "frontend_eslint_config",
@@ -5598,7 +6739,7 @@
       "label": "farmerController.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "farmercontroller.js",
       "source_file": "backend/controllers/farmerController.js",
@@ -5609,7 +6750,7 @@
       "label": "Farmer",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "farmer",
       "source_file": "backend/controllers/farmerController.js",
@@ -5620,7 +6761,7 @@
       "label": "User",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "user",
       "source_file": "backend/controllers/farmerController.js",
@@ -5631,43 +6772,54 @@
       "label": "{ validationResult }",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "{ validationresult }",
       "source_file": "backend/controllers/farmerController.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_controllers_usercontroller",
-      "label": "userController.js",
+      "id": "backend_controllers_reportcontroller",
+      "label": "reportController.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
-      "norm_label": "usercontroller.js",
-      "source_file": "backend/controllers/userController.js",
+      "norm_label": "reportcontroller.js",
+      "source_file": "backend/controllers/reportController.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_controllers_usercontroller_bcrypt",
-      "label": "bcrypt",
+      "id": "backend_controllers_reportcontroller_delivery",
+      "label": "Delivery",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
-      "norm_label": "bcrypt",
-      "source_file": "backend/controllers/userController.js",
+      "norm_label": "delivery",
+      "source_file": "backend/controllers/reportController.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_controllers_usercontroller_user",
-      "label": "User",
+      "id": "backend_controllers_reportcontroller_farmer",
+      "label": "Farmer",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
-      "norm_label": "user",
-      "source_file": "backend/controllers/userController.js",
+      "norm_label": "farmer",
+      "source_file": "backend/controllers/reportController.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_controllers_reportcontroller_payment",
+      "label": "Payment",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "payment",
+      "source_file": "backend/controllers/reportController.js",
       "source_location": "L2"
     },
     {
@@ -5675,7 +6827,7 @@
       "label": "middleware/auth.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "middleware/auth.js",
       "source_file": "backend/middleware/auth.js",
@@ -5686,7 +6838,7 @@
       "label": "jwt",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "jwt",
       "source_file": "backend/middleware/auth.js",
@@ -5697,7 +6849,7 @@
       "label": "farmers.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "farmers.js",
       "source_file": "backend/routes/farmers.js",
@@ -5708,7 +6860,7 @@
       "label": "express",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "express",
       "source_file": "backend/routes/farmers.js",
@@ -5719,7 +6871,7 @@
       "label": "{ getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer, searchFarmers }",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "{ getfarmers, getfarmer, createfarmer, updatefarmer, deletefarmer, searchfarmers }",
       "source_file": "backend/routes/farmers.js",
@@ -5730,7 +6882,7 @@
       "label": "router",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "router",
       "source_file": "backend/routes/farmers.js",
@@ -5741,65 +6893,65 @@
       "label": "{ verifyToken, authorize }",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "{ verifytoken, authorize }",
       "source_file": "backend/routes/farmers.js",
       "source_location": "L2"
     },
     {
-      "id": "backend_routes_users",
-      "label": "users.js",
+      "id": "backend_routes_reports",
+      "label": "reports.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
-      "norm_label": "users.js",
-      "source_file": "backend/routes/users.js",
+      "norm_label": "reports.js",
+      "source_file": "backend/routes/reports.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_routes_users_createfieldagent_getusers_updateuser_deleteuser",
-      "label": "{ createFieldAgent, getUsers, updateUser, deleteUser }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "farmers.js",
-      "file_type": "code",
-      "norm_label": "{ createfieldagent, getusers, updateuser, deleteuser }",
-      "source_file": "backend/routes/users.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_routes_users_express",
+      "id": "backend_routes_reports_express",
       "label": "express",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "express",
-      "source_file": "backend/routes/users.js",
+      "source_file": "backend/routes/reports.js",
       "source_location": "L1"
     },
     {
-      "id": "backend_routes_users_router",
+      "id": "backend_routes_reports_generatereport_getsummary_getdeliveriesreport_getpaymentanalytics_getcashflowforecast_getdeliverytypeanalytics_getfarmerperformance_getregionalprofitability_getoperationalmetrics_getcomparativeanalytics",
+      "label": "{\r\n  generateReport,\r\n  getSummary,\r\n  getDeliveriesReport,\r\n  getPaymentAnalytics,\r\n  getCashflowForecast,\r\n  getDeliveryTypeAnalytics,\r\n  getFarmerPerformance,\r\n  getRegionalProfitability,\r\n  getOperationalMetrics,\r\n  getComparativeAnalytics\r\n}",
+      "_origin": "ast",
+      "community": 9,
+      "community_name": "reports.js",
+      "file_type": "code",
+      "norm_label": "{\r\n  generatereport,\r\n  getsummary,\r\n  getdeliveriesreport,\r\n  getpaymentanalytics,\r\n  getcashflowforecast,\r\n  getdeliverytypeanalytics,\r\n  getfarmerperformance,\r\n  getregionalprofitability,\r\n  getoperationalmetrics,\r\n  getcomparativeanalytics\r\n}",
+      "source_file": "backend/routes/reports.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_reports_router",
       "label": "router",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "router",
-      "source_file": "backend/routes/users.js",
-      "source_location": "L5"
+      "source_file": "backend/routes/reports.js",
+      "source_location": "L16"
     },
     {
-      "id": "backend_routes_users_verifytoken_authorize",
+      "id": "backend_routes_reports_verifytoken_authorize",
       "label": "{ verifyToken, authorize }",
       "_origin": "ast",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "file_type": "code",
       "norm_label": "{ verifytoken, authorize }",
-      "source_file": "backend/routes/users.js",
+      "source_file": "backend/routes/reports.js",
       "source_location": "L2"
     },
     {
@@ -5875,18 +7027,6 @@
       "type": "external"
     },
     {
-      "id": "ref_crypto",
-      "label": "ref_crypto",
-      "_origin": "semantic",
-      "community": 1,
-      "community_name": "authController.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_crypto",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_multer",
       "label": "ref_multer",
       "_origin": "semantic",
@@ -5895,18 +7035,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_multer",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_nodemailer",
-      "label": "ref_nodemailer",
-      "_origin": "semantic",
-      "community": 1,
-      "community_name": "authController.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_nodemailer",
       "source_file": "",
       "type": "external"
     },
@@ -5939,10 +7067,34 @@
       "label": "ref_dotenv",
       "_origin": "semantic",
       "community": 17,
-      "community_name": "Farmer.js",
+      "community_name": "seed.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_dotenv",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_crypto",
+      "label": "ref_crypto",
+      "_origin": "semantic",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_crypto",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_nodemailer",
+      "label": "ref_nodemailer",
+      "_origin": "semantic",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_nodemailer",
       "source_file": "",
       "type": "external"
     },
@@ -5955,6 +7107,18 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_mongoose",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_bcryptjs",
+      "label": "ref_bcryptjs",
+      "_origin": "semantic",
+      "community": 3,
+      "community_name": "app.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_bcryptjs",
       "source_file": "",
       "type": "external"
     },
@@ -5979,18 +7143,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_cors",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_express",
-      "label": "ref_express",
-      "_origin": "semantic",
-      "community": 3,
-      "community_name": "app.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_express",
       "source_file": "",
       "type": "external"
     },
@@ -6031,14 +7183,14 @@
       "type": "external"
     },
     {
-      "id": "ref_bcryptjs",
-      "label": "ref_bcryptjs",
+      "id": "ref_express",
+      "label": "ref_express",
       "_origin": "semantic",
-      "community": 9,
-      "community_name": "farmers.js",
+      "community": 8,
+      "community_name": "payments.js",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_bcryptjs",
+      "norm_label": "ref_express",
       "source_file": "",
       "type": "external"
     },
@@ -6047,7 +7199,7 @@
       "label": "ref_express_validator",
       "_origin": "semantic",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_express_validator",
@@ -6059,10 +7211,32 @@
       "label": "ref_jsonwebtoken",
       "_origin": "semantic",
       "community": 9,
-      "community_name": "farmers.js",
+      "community_name": "reports.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_jsonwebtoken",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+      "label": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
+      "label": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
+      "community": 2,
+      "community_name": "sendAuthEmail.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
       "source_file": "",
       "type": "external"
     }
@@ -6130,14 +7304,14 @@
     },
     {
       "source": "backend_controllers_authcontroller_forgotpassword",
-      "target": "backend_controllers_authcontroller_createemailtransporter",
+      "target": "backend_utils_sendauthemail_issuepasswordresetlink",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L443",
+      "source_location": "L308",
       "weight": 1.0
     },
     {
@@ -6149,31 +7323,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L141",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller_register",
-      "target": "backend_controllers_authcontroller_user",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L67",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller_register",
-      "target": "backend_controllers_authcontroller_createsession",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L91",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -6233,7 +7383,79 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/controllers/userController.js",
-      "source_location": "L21",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller_createfieldagent",
+      "target": "backend_controllers_usercontroller_sendinvite",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller_createfieldagent",
+      "target": "backend_controllers_usercontroller_publicuser",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller_resendinvite",
+      "target": "backend_controllers_usercontroller_sendinvite",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller_sendinvite",
+      "target": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller_updateuser",
+      "target": "backend_controllers_usercontroller_publicuser",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L115",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_start",
+      "target": "backend_server_bootstrapadmin",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/server.js",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -6245,7 +7467,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/server.js",
-      "source_location": "L70",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin_bootstrapadmin",
+      "target": "backend_utils_bootstrapadmin_user",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -6294,6 +7528,174 @@
       "context": "call",
       "source_file": "backend/utils/geolocation.js",
       "source_location": "L102",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_createemailtransporter",
+      "target": "backend_utils_sendauthemail_isemailconfigured",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "target": "backend_utils_sendauthemail_createpasswordtoken",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "target": "backend_utils_sendauthemail_frontendbaseurl",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L184",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "target": "backend_utils_sendauthemail_sendinviteemail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L186",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "target": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L187",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendinviteemail",
+      "target": "backend_utils_sendauthemail_wrapemail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L152",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendinviteemail",
+      "target": "backend_utils_sendauthemail_actionbutton",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendinviteemail",
+      "target": "backend_utils_sendauthemail_sendmail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L168",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendmail",
+      "target": "backend_utils_sendauthemail_createemailtransporter",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendmail",
+      "target": "backend_utils_sendauthemail_sendmail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendmail",
+      "target": "backend_utils_sendauthemail_isemailconfigured",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "target": "backend_utils_sendauthemail_wrapemail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L113",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "target": "backend_utils_sendauthemail_actionbutton",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L117",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "target": "backend_utils_sendauthemail_sendmail",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L128",
       "weight": 1.0
     },
     {
@@ -6533,7 +7935,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Users.jsx",
-      "source_location": "L9",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -6828,6 +8230,30 @@
       "weight": 1.0
     },
     {
+      "source": "backend_controllers_authcontroller",
+      "target": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/controllers/authController.js",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
       "source": "backend_package",
       "target": "package_json_ref_vercel_blob",
       "relation": "imports",
@@ -6985,14 +8411,14 @@
     },
     {
       "source": "backend_routes_auth",
-      "target": "backend_middleware_auth_verifytoken",
+      "target": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -7070,18 +8496,6 @@
     {
       "source": "backend_routes_auth",
       "target": "backend_controllers_authcontroller_logoutall",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "backend/routes/auth.js",
-      "source_location": "L5",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_routes_auth",
-      "target": "backend_controllers_authcontroller_register",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7657,7 +9071,7 @@
     },
     {
       "source": "backend_routes_users",
-      "target": "backend_middleware_auth_authorize",
+      "target": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7669,7 +9083,7 @@
     },
     {
       "source": "backend_routes_users",
-      "target": "backend_middleware_auth_verifytoken",
+      "target": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -7706,6 +9120,18 @@
     {
       "source": "backend_routes_users",
       "target": "backend_controllers_usercontroller_getusers",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/routes/users.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_routes_users",
+      "target": "backend_controllers_usercontroller_resendinvite",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -8785,18 +10211,6 @@
     },
     {
       "source": "frontend_src_pages_users",
-      "target": "frontend_src_services_api_api",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/pages/Users.jsx",
-      "source_location": "L4",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pages_users",
       "target": "frontend_src_context_authcontext_useauth",
       "relation": "imports",
       "_origin": "ast",
@@ -8804,7 +10218,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Users.jsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -9012,6 +10426,18 @@
       "weight": 1.0
     },
     {
+      "source": "api_index",
+      "target": "backend_utils_bootstrapadmin",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "api/index.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "backend_app",
       "target": "ref_express",
       "relation": "imports_from",
@@ -9109,7 +10535,7 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "ref_mongoose",
+      "target": "ref_path",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9121,7 +10547,7 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "ref_dotenv",
+      "target": "ref_mongoose",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9133,7 +10559,7 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "backend_models_farmer",
+      "target": "ref_dotenv",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9141,6 +10567,42 @@
       "context": "import",
       "source_file": "backend/config/seed.js",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "ref_bcryptjs",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "backend_models_farmer",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "backend_models_user",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/config/seed.js",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -9157,7 +10619,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_models_passwordreset",
+      "target": "backend_utils_sendauthemail",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9229,7 +10691,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "ref_nodemailer",
+      "target": "backend_models_user",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9241,7 +10703,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_models_user",
+      "target": "backend_models_session",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9253,7 +10715,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_models_session",
+      "target": "backend_models_passwordreset",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9565,7 +11027,7 @@
     },
     {
       "source": "backend_controllers_usercontroller",
-      "target": "ref_bcryptjs",
+      "target": "ref_crypto",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9577,7 +11039,7 @@
     },
     {
       "source": "backend_controllers_usercontroller",
-      "target": "backend_models_user",
+      "target": "ref_bcryptjs",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -9585,6 +11047,30 @@
       "context": "import",
       "source_file": "backend/controllers/userController.js",
       "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_models_user",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_utils_sendauthemail",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -9812,7 +11298,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -9824,7 +11310,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -10129,18 +11615,6 @@
     },
     {
       "source": "backend_server",
-      "target": "ref_path",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "backend/server.js",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_server",
       "target": "backend_app",
       "relation": "imports_from",
       "_origin": "ast",
@@ -10165,14 +11639,14 @@
     },
     {
       "source": "backend_server",
-      "target": "ref_express",
+      "target": "backend_utils_bootstrapadmin",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "backend/server.js",
-      "source_location": "L60",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -10185,6 +11659,66 @@
       "context": "import",
       "source_file": "backend/test-env.js",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin",
+      "target": "ref_bcryptjs",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin",
+      "target": "backend_models_user",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "ref_crypto",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "ref_nodemailer",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_models_passwordreset",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -10989,18 +12523,6 @@
       "context": "import",
       "source_file": "frontend/src/pages/AuthTogglePage.jsx",
       "source_location": "L5",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pages_authtogglepage",
-      "target": "frontend_src_services_api",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/pages/AuthTogglePage.jsx",
-      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -12253,7 +13775,7 @@
     },
     {
       "source": "frontend_src_pages_users",
-      "target": "frontend_src_services_api",
+      "target": "ref_react_hot_toast",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12265,7 +13787,7 @@
     },
     {
       "source": "frontend_src_pages_users",
-      "target": "frontend_src_context_authcontext",
+      "target": "frontend_src_services_api",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12273,6 +13795,18 @@
       "context": "import",
       "source_file": "frontend/src/pages/Users.jsx",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_users",
+      "target": "frontend_src_context_authcontext",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/Users.jsx",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -12442,6 +13976,17 @@
       "weight": 1.0
     },
     {
+      "source": "api_index",
+      "target": "api_index_bootstrapadmin",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "api/index.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "backend_app",
       "target": "backend_app_express",
       "relation": "contains",
@@ -12575,7 +14120,7 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "backend_config_seed_mongoose",
+      "target": "backend_config_seed_path",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12586,7 +14131,18 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "backend_config_seed_dotenv",
+      "target": "backend_config_seed_seeddata",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/config/seed.js",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "backend_config_seed_mongoose",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12597,7 +14153,7 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "backend_config_seed_farmer",
+      "target": "backend_config_seed_dotenv",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12608,13 +14164,35 @@
     },
     {
       "source": "backend_config_seed",
-      "target": "backend_config_seed_seeddata",
+      "target": "backend_config_seed_bcrypt",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/config/seed.js",
-      "source_location": "L9",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "backend_config_seed_farmer",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/config/seed.js",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_config_seed",
+      "target": "backend_config_seed_user",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/config/seed.js",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -12630,7 +14208,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_passwordreset",
+      "target": "backend_controllers_authcontroller_issuepasswordresetlink",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12641,13 +14219,24 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_login",
+      "target": "backend_controllers_authcontroller_logoutall",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L108",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_authcontroller",
+      "target": "backend_controllers_authcontroller_getsessions",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/authController.js",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -12663,35 +14252,24 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_logout",
+      "target": "backend_controllers_authcontroller_deletesession",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L159",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_logoutall",
+      "target": "backend_controllers_authcontroller_updateprofile",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L173",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_getsessions",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L184",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -12707,24 +14285,24 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_deletesession",
+      "target": "backend_controllers_authcontroller_changepassword",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L208",
+      "source_location": "L215",
       "weight": 1.0
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_updateprofile",
+      "target": "backend_controllers_authcontroller_uploadavatar",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L231",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -12740,13 +14318,13 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_changepassword",
+      "target": "backend_controllers_authcontroller_forgotpassword",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L276",
+      "source_location": "L289",
       "weight": 1.0
     },
     {
@@ -12762,24 +14340,13 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_uploadavatar",
+      "target": "backend_controllers_authcontroller_resetpassword",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
-      "source_location": "L313",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_createemailtransporter",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L350",
+      "source_location": "L320",
       "weight": 1.0
     },
     {
@@ -12795,18 +14362,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_forgotpassword",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L405",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_register",
+      "target": "backend_controllers_authcontroller_login",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12828,17 +14384,6 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_resetpassword",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/controllers/authController.js",
-      "source_location": "L516",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_authcontroller",
       "target": "backend_controllers_authcontroller_validationresult",
       "relation": "contains",
       "_origin": "ast",
@@ -12850,7 +14395,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_nodemailer",
+      "target": "backend_controllers_authcontroller_user",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12861,7 +14406,7 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_user",
+      "target": "backend_controllers_authcontroller_session",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12872,13 +14417,24 @@
     },
     {
       "source": "backend_controllers_authcontroller",
-      "target": "backend_controllers_authcontroller_session",
+      "target": "backend_controllers_authcontroller_passwordreset",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/authController.js",
       "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_authcontroller",
+      "target": "backend_controllers_authcontroller_logout",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/authController.js",
+      "source_location": "L98",
       "weight": 1.0
     },
     {
@@ -13433,7 +14989,7 @@
     },
     {
       "source": "backend_controllers_usercontroller",
-      "target": "backend_controllers_usercontroller_bcrypt",
+      "target": "backend_controllers_usercontroller_crypto",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13444,7 +15000,29 @@
     },
     {
       "source": "backend_controllers_usercontroller",
-      "target": "backend_controllers_usercontroller_user",
+      "target": "backend_controllers_usercontroller_deleteuser",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L123",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_sendinvite",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_bcrypt",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13461,7 +15039,51 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/userController.js",
-      "source_location": "L5",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_user",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_issuepasswordresetlink",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_publicuser",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_controllers_usercontroller",
+      "target": "backend_controllers_usercontroller_resendinvite",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/controllers/userController.js",
+      "source_location": "L65",
       "weight": 1.0
     },
     {
@@ -13472,7 +15094,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/userController.js",
-      "source_location": "L50",
+      "source_location": "L86",
       "weight": 1.0
     },
     {
@@ -13483,18 +15105,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/controllers/userController.js",
-      "source_location": "L61",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_controllers_usercontroller",
-      "target": "backend_controllers_usercontroller_deleteuser",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/controllers/userController.js",
-      "source_location": "L97",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -14110,7 +15721,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/routes/auth.js",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -14121,7 +15732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/routes/auth.js",
-      "source_location": "L19",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -14143,7 +15754,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/routes/auth.js",
-      "source_location": "L21",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -14154,7 +15765,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/routes/auth.js",
-      "source_location": "L25",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -14176,7 +15787,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/routes/auth.js",
-      "source_location": "L36",
+      "source_location": "L35",
       "weight": 1.0
     },
     {
@@ -14192,7 +15803,7 @@
     },
     {
       "source": "backend_routes_auth",
-      "target": "backend_routes_auth_register_login_logout_logoutall_getsessions_deletesession_updateprofile_changepassword_uploadavatar_forgotpassword_resetpassword",
+      "target": "backend_routes_auth_login_logout_logoutall_getsessions_deletesession_updateprofile_changepassword_uploadavatar_forgotpassword_resetpassword",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14522,7 +16133,7 @@
     },
     {
       "source": "backend_routes_users",
-      "target": "backend_routes_users_createfieldagent_getusers_updateuser_deleteuser",
+      "target": "backend_routes_users_createfieldagent_resendinvite_getusers_updateuser_deleteuser",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14544,24 +16155,13 @@
     },
     {
       "source": "backend_server",
-      "target": "backend_server_path",
+      "target": "backend_server_app",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/server.js",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_server",
-      "target": "backend_server_allowedorigins",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/server.js",
-      "source_location": "L10",
+      "source_location": "L2",
       "weight": 1.0
     },
     {
@@ -14577,24 +16177,24 @@
     },
     {
       "source": "backend_server",
+      "target": "backend_server_bootstrapadmin",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server",
       "target": "backend_server_start",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/server.js",
-      "source_location": "L68",
-      "weight": 1.0
-    },
-    {
-      "source": "backend_server",
-      "target": "backend_server_app",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/server.js",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -14606,6 +16206,127 @@
       "confidence_score": 1.0,
       "source_file": "backend/test-env.js",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin",
+      "target": "backend_utils_bootstrapadmin_bcrypt",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin",
+      "target": "backend_utils_bootstrapadmin_user",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_bootstrapadmin",
+      "target": "backend_utils_bootstrapadmin_bootstrapadmin",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/bootstrapAdmin.js",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_crypto",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_sendmail",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L105",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_nodemailer",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_passwordreset",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_wrapemail",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_actionbutton",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_frontendbaseurl",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_createpasswordtoken",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L91",
       "weight": 1.0
     },
     {
@@ -15628,7 +17349,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pages/AuthTogglePage.jsx",
-      "source_location": "L16",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -15804,7 +17525,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pages/Users.jsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -16270,6 +17991,798 @@
       "weight": 1.0
     },
     {
+      "source": "readme",
+      "target": "readme_ocms_organic_coffee_management_system",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_authentication_endpoints",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L238",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_farmer_endpoints",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L251",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_delivery_endpoints",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L261",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_payment_endpoints",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L270",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_dashboard_endpoints",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L279",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_report_endpoints_admin_only",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L286",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_user_management_endpoints_admin_only",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L295",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_api_documentation",
+      "target": "readme_query_parameters_for_filtering",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L303",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_configuration",
+      "target": "readme_backend_configuration",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L160",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_configuration",
+      "target": "readme_frontend_configuration",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L190",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_configuration",
+      "target": "readme_option_2_using_concurrent_scripts_recommended",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L201",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_database_schema",
+      "target": "readme_user_schema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L541",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_database_schema",
+      "target": "readme_farmer_schema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L554",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_database_schema",
+      "target": "readme_delivery_schema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L565",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_database_schema",
+      "target": "readme_payment_schema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L579",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_environment_variables",
+      "target": "readme_required_backend_variables",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L595",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_environment_variables",
+      "target": "readme_required_frontend_variables",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L607",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_features",
+      "target": "readme_core_functionality",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_features",
+      "target": "readme_user_management",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_features",
+      "target": "readme_ui_ux_features",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_features",
+      "target": "readme_technical_features",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_installation",
+      "target": "readme_1_clone_the_repository",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_installation",
+      "target": "readme_2_install_backend_dependencies",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L144",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_installation",
+      "target": "readme_3_install_frontend_dependencies",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L150",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_1_dashboard_with_real_time_analytics",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L401",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_2_farmer_management",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L408",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_3_delivery_tracking",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L415",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_4_payment_processing",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L422",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_5_advanced_reports_analytics",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L429",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_6_notification_system",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L437",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_key_functionalities",
+      "target": "readme_7_user_settings",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L446",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_prerequisites",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_installation",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L136",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_configuration",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L158",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_user_roles_permissions",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L212",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_api_documentation",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L236",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_features",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_project_structure",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L316",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_key_functionalities",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L399",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_screenshots",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L458",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_license",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L488",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_author",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L494",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_acknowledgments",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L501",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_roadmap",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L509",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_security",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L523",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_database_schema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L539",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_environment_variables",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L593",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_table_of_contents",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_tech_stack",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_tips_for_development",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L614",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_ocms_organic_coffee_management_system",
+      "target": "readme_system_architecture",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_project_structure",
+      "target": "readme_frontend_structure",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L318",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_project_structure",
+      "target": "readme_backend_structure",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L358",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_roadmap",
+      "target": "readme_upcoming_features",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L511",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_dashboard",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L460",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_farmer_management",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L464",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_delivery_tracking",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L468",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_payment_processing",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L472",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_analytics_reports",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L476",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_screenshots",
+      "target": "readme_dark_mode",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L480",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_security",
+      "target": "readme_reporting_security_issues",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L525",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_security",
+      "target": "readme_security_features",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L528",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tech_stack",
+      "target": "readme_frontend",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tech_stack",
+      "target": "readme_backend",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tech_stack",
+      "target": "readme_development_tools",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L91",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tips_for_development",
+      "target": "readme_quick_start_development",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L616",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tips_for_development",
+      "target": "readme_seed_sample_data",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L630",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tips_for_development",
+      "target": "readme_check_mongodb_connection",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L636",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_tips_for_development",
+      "target": "readme_common_commands",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L641",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_user_roles_permissions",
+      "target": "readme_admin",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L214",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_user_roles_permissions",
+      "target": "readme_field_agent",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L224",
+      "weight": 1.0
+    },
+    {
       "source": "vercel",
       "target": "vercel_schema",
       "relation": "contains",
@@ -16602,7 +19115,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "backend/routes/auth.js",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -16687,6 +19200,66 @@
       "context": "collection",
       "source_file": "backend/utils/geolocation.js",
       "source_location": "L163",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_isemailconfigured",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L192",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_createemailtransporter",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L193",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_issuepasswordresetlink",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L194",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_sendpasswordresetemail",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L195",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_utils_sendauthemail",
+      "target": "backend_utils_sendauthemail_sendinviteemail",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "backend/utils/sendAuthEmail.js",
+      "source_location": "L196",
       "weight": 1.0
     },
     {
@@ -16799,5 +19372,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "528c49193463572ae165ac111a3dbb434f470d6c"
+  "built_at_commit": "cc40d5e6a29480a657ff46a76cfab337f66a21c2"
 }

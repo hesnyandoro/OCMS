@@ -3,7 +3,6 @@ const { body } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
 const { 
-  register, 
   login, 
   logout, 
   logoutAll, 
@@ -38,14 +37,6 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
   fileFilter: fileFilter
 });
-
-// Registration and Login
-router.post('/register', [
-  body('username').notEmpty(),
-  body('email').isEmail(),
-  body('password').isLength({ min: 6 }),
-  body('role').optional().isIn(['admin', 'fieldagent'])
-], register);
 
 router.post('/login', [
   body('username').notEmpty(),

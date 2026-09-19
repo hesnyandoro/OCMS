@@ -4,10 +4,10 @@ const crypto = require('crypto');
 const path = require('path');
 const { put } = require('@vercel/blob');
 const { validationResult } = require('express-validator');
-const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const Session = require('../models/Session');
 const PasswordReset = require('../models/PasswordReset');
+const { issuePasswordResetLink } = require('../utils/sendAuthEmail');
 
 // Helper to extract device info
 const getDeviceInfo = (userAgent) => {
@@ -41,67 +41,6 @@ const createSession = async (userId, token, req) => {
   } catch (err) {
     console.error('Session creation failed:', err);
     throw err;
-  }
-};
-
-exports.register = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
-  const { username, email, password, role, assignedRegion, name } = req.body;
-
-  try {
-    // Validate required fields
-    if (!username || !email || !password) {
-      return res.status(400).json({ msg: 'Username, email, and password are required' });
-    }
-
-    // ensure username and email are unique
-    let user = await User.findOne({ username });
-    if (user) return res.status(400).json({ msg: 'Username already exists' });
-
-    const emailExists = await User.findOne({ email });
-    if (emailExists) return res.status(400).json({ msg: 'Email already in use' });
-
-    const userRole = role || 'fieldagent';
-    user = new User({ 
-      username, 
-      email, 
-      password: await bcrypt.hash(password, 10), 
-      role: userRole, 
-      assignedRegion,
-      name 
-    });
-    await user.save();
-
-    if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET is not configured');
-      return res.status(500).json({ msg: 'Server configuration error' });
-    }
-
-    const payload = { user: { id: user.id, role: user.role, assignedRegion: user.assignedRegion } };
-    const token = await new Promise((resolve, reject) => {
-      jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-        if (err) reject(err);
-        else resolve(token);
-      });
-    });
-    
-    // Create session
-    await createSession(user.id, token, req);
-    
-    const userData = { 
-      id: user.id, 
-      username: user.username, 
-      email: user.email, 
-      name: user.name,
-      role: user.role, 
-      assignedRegion: user.assignedRegion 
-    };
-    res.json({ token, user: userData });
-  } catch (err) {
-    console.error("USER REGISTRATION FAILED", err.message || err);
-    res.status(500).json({ msg: 'Server error' });
   }
 };
 
@@ -346,61 +285,6 @@ exports.uploadAvatar = async (req, res) => {
   }
 };
 
-// Configure email transporter
-const createEmailTransporter = () => {
-  // Check if email credentials are properly configured
-  const hasEmailConfig = process.env.EMAIL_HOST && 
-                        process.env.EMAIL_USER && 
-                        process.env.EMAIL_PASS &&
-                        process.env.EMAIL_USER !== 'your-email@gmail.com' &&
-                        process.env.EMAIL_PASS !== 'your-app-password-here';
-  
-  if (hasEmailConfig) {
-    console.log('✅ Using configured email service:', process.env.EMAIL_HOST);
-    return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT) || 587,
-      secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      },
-      tls: {
-        rejectUnauthorized: false // Accept self-signed certificates
-      }
-    });
-  }
-  
-  // Fallback to console logging with clear warning
-  console.warn('⚠️  EMAIL NOT CONFIGURED: Emails will be logged to console only.');
-  console.warn('⚠️  To enable email functionality:');
-  console.warn('   1. Update .env file with your email credentials');
-  console.warn('   2. For Gmail: Enable 2FA and generate an App Password');
-  console.warn('   3. Restart the server');
-  
-  return {
-    sendMail: async (mailOptions) => {
-      console.log('\n' + '='.repeat(80));
-      console.log('📧 EMAIL WOULD BE SENT (Not actually sent - email not configured)');
-      console.log('='.repeat(80));
-      console.log('To:', mailOptions.to);
-      console.log('From:', mailOptions.from);
-      console.log('Subject:', mailOptions.subject);
-      console.log('\nMessage Preview:');
-      console.log('-'.repeat(80));
-      // Extract reset URL from HTML
-      const urlMatch = mailOptions.html.match(/href="([^"]+)"/);
-      if (urlMatch) {
-        console.log('Reset URL:', urlMatch[1]);
-      }
-      console.log('-'.repeat(80));
-      console.log('Full HTML:', mailOptions.html.substring(0, 500) + '...');
-      console.log('='.repeat(80) + '\n');
-      return { messageId: 'dev-email-' + Date.now() };
-    }
-  };
-};
-
 // Forgot Password - Send reset link
 exports.forgotPassword = async (req, res) => {
   const errors = validationResult(req);
@@ -421,87 +305,7 @@ exports.forgotPassword = async (req, res) => {
       });
     }
 
-    // Generate reset token
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-
-    // Delete any existing reset tokens for this user
-    await PasswordReset.deleteMany({ userId: user._id });
-
-    // Create new password reset token (expires in 1 hour)
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
-    await PasswordReset.create({
-      userId: user._id,
-      token: hashedToken,
-      expiresAt
-    });
-
-    // Create reset URL
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
-
-    // Send email
-    const transporter = createEmailTransporter();
-    const mailOptions = {
-      from: process.env.EMAIL_FROM || 'OCMS <noreply@ocms.com>',
-      to: user.email,
-      subject: 'Password Reset Request - OCMS',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background-color: #1B4332; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0;">OCMS</h1>
-            <p style="color: #F59E0B; margin: 5px 0;">Organic Coffee Management System</p>
-          </div>
-          <div style="background-color: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
-            <h2 style="color: #1B4332; margin-top: 0;">Password Reset Request</h2>
-            <p>Hello <strong>${user.name || user.username}</strong>,</p>
-            <p>You requested to reset your password for your OCMS account.</p>
-            <p>Click the button below to reset your password:</p>
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${resetUrl}" 
-                 style="background-color: #1B4332; color: white; padding: 15px 40px; 
-                        text-decoration: none; border-radius: 8px; display: inline-block;
-                        font-weight: bold; font-size: 16px;">
-                Reset Password
-              </a>
-            </div>
-            <p>Or copy and paste this link into your browser:</p>
-            <p style="word-break: break-all; color: #666; background-color: #e9e9e9; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px;">${resetUrl}</p>
-            <div style="background-color: #fff3cd; border-left: 4px solid #F59E0B; padding: 15px; margin-top: 30px; border-radius: 5px;">
-              <p style="margin: 0; color: #856404; font-size: 14px;">
-                <strong>⏰ Important:</strong> This link will expire in 1 hour.<br>
-                If you didn't request this, please ignore this email and your password will remain unchanged.
-              </p>
-            </div>
-          </div>
-          <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-            <p>© 2025 OCMS. All rights reserved.</p>
-          </div>
-        </div>
-      `
-    };
-
-    console.log(`📧 Attempting to send password reset email to: ${user.email}`);
-    
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('✅ Password reset email sent successfully');
-      console.log('Message ID:', info.messageId);
-      if (info.accepted) {
-        console.log('Accepted recipients:', info.accepted);
-      }
-      if (info.rejected && info.rejected.length > 0) {
-        console.warn('⚠️  Rejected recipients:', info.rejected);
-      }
-    } catch (emailError) {
-      console.error('❌ Failed to send email:', emailError.message);
-      // Don't throw error to prevent revealing if email exists
-      // But log it for debugging
-      console.error('Email error details:', {
-        code: emailError.code,
-        command: emailError.command,
-        response: emailError.response
-      });
-    }
+    await issuePasswordResetLink(user, { hours: 1, invite: false });
 
     res.json({ 
       msg: 'If an account with that email exists, a password reset link has been sent.' 

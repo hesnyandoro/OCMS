@@ -172,11 +172,16 @@ MONGO_URI=mongodb://localhost:27017/ocms
 # JWT Secret (use a strong random string)
 JWT_SECRET=your_jwt_secret_key_here
 
-# Email Configuration (for password reset)
+# Email Configuration (for password reset and user invites)
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_app_specific_password
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
+
+# First admin (created automatically if no admin exists)
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@ocms.local
+ADMIN_PASSWORD=change-this-password
 
 # Frontend URL (for CORS)
 FRONTEND_URL=http://localhost:5173
@@ -595,6 +600,9 @@ If you discover a security vulnerability, please email security@example.com inst
 | `JWT_SECRET` | Secret for JWT signing | `your_secret_key` |
 | `EMAIL_USER` | Email for notifications | `your_email@gmail.com` |
 | `EMAIL_PASS` | Email password/app password | `your_app_password` |
+| `ADMIN_USERNAME` | Bootstrap admin username if none exists | `admin` |
+| `ADMIN_EMAIL` | Bootstrap admin email if none exists | `admin@ocms.local` |
+| `ADMIN_PASSWORD` | Bootstrap admin password if none exists | `change-this-password` |
 
 ### Required Frontend Variables
 | Variable | Description | Example |
