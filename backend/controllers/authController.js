@@ -9,6 +9,38 @@ const Session = require('../models/Session');
 const PasswordReset = require('../models/PasswordReset');
 const { issuePasswordResetLink } = require('../utils/sendAuthEmail');
 
+const escapeRegex = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const findUserByIdentifier = async (raw) => {
+  const identifier = String(raw || '').trim();
+  if (!identifier) return null;
+
+  const insensitive = new RegExp(`^${escapeRegex(identifier)}$`, 'i');
+  return User.findOne({
+    $or: [
+      { username: identifier },
+      { email: identifier },
+      { username: insensitive },
+      { email: insensitive }
+    ]
+  });
+};
+
+const persistPassword = async (userId, newPassword) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const updated = await User.findByIdAndUpdate(
+    userId,
+    { $set: { password: hashedPassword } },
+    { new: true }
+  );
+  if (!updated) return null;
+  const matches = await bcrypt.compare(newPassword, updated.password);
+  if (!matches) {
+    throw new Error('Password hash did not persist');
+  }
+  return updated;
+};
+
 // Helper to extract device info
 const getDeviceInfo = (userAgent) => {
   if (!userAgent) return 'Unknown Device';
@@ -48,16 +80,14 @@ exports.login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  // Support login by username OR email
-  let { username, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    // Validate required fields
     if (!username || !password) {
       return res.status(400).json({ msg: 'Username/email and password are required' });
     }
 
-    const user = await User.findOne({ $or: [{ username }, { email: username }] });
+    const user = await findUserByIdentifier(username);
     if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -233,10 +263,7 @@ exports.changePassword = async (req, res) => {
       return res.status(400).json({ msg: 'Current password is incorrect' });
     }
     
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
+    await persistPassword(userId, newPassword);
     
     // Invalidate all sessions to force re-login
     await Session.deleteMany({ userId });
@@ -295,8 +322,7 @@ exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
-    // Find user by email
-    const user = await User.findOne({ email });
+    const user = await findUserByIdentifier(email);
     
     // Always return success message (don't reveal if email exists)
     if (!user) {
@@ -345,21 +371,16 @@ exports.resetPassword = async (req, res) => {
       return res.status(404).json({ msg: 'User not found' });
     }
 
-    // Hash new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    const updated = await persistPassword(user._id, newPassword);
 
-    // Update user password
-    user.password = hashedPassword;
-    await user.save();
-
-    // Delete the used reset token
     await PasswordReset.deleteOne({ _id: resetRecord._id });
-
-    // Invalidate all sessions for this user
     await Session.deleteMany({ userId: user._id });
 
-    res.json({ msg: 'Password reset successfully. Please login with your new password.' });
+    res.json({
+      msg: 'Password reset successfully. Please login with your new password.',
+      username: updated.username,
+      email: updated.email
+    });
   } catch (err) {
     console.error('Reset password error:', err);
     res.status(500).json({ msg: 'Server error resetting password' });

@@ -16,6 +16,7 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [loginHint, setLoginHint] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,11 +44,12 @@ const ResetPassword = () => {
 
     setLoading(true);
     try {
-      await api.post('/auth/reset-password', {
+      const { data } = await api.post('/auth/reset-password', {
         token,
         newPassword
       });
-      
+
+      setLoginHint(data.username || data.email || '');
       setSuccess(true);
       toast.success(isInvite ? 'Password set successfully' : 'Password reset successfully');
       
@@ -206,9 +208,14 @@ const ResetPassword = () => {
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 {isInvite
-                  ? 'Your account is ready. You can now login with your new password.'
-                  : 'Your password has been reset successfully. You can now login with your new password.'}
+                  ? 'Your account is ready. Sign in with your username or email and the password you just set.'
+                  : 'Your password has been reset. Sign in with your username or email and the password you just set.'}
               </p>
+              {loginHint ? (
+                <p className="text-sm text-[#1B4332] font-medium mb-6">
+                  Sign in as <span className="font-mono">{loginHint}</span>
+                </p>
+              ) : null}
               <p className="text-sm text-gray-500 mb-6">
                 Redirecting to login page...
               </p>

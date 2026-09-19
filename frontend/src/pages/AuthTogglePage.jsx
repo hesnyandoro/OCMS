@@ -91,7 +91,7 @@ const AuthTogglePage = () => {
             <form onSubmit={handleLoginSubmit} className="space-y-5">
               <div>
                 <label htmlFor="login-username" className={labelClasses}>
-                  Username
+                  Username or email
                 </label>
                 <div className="relative">
                   <User className={iconClasses} size={20} />
@@ -101,7 +101,7 @@ const AuthTogglePage = () => {
                     type="text"
                     value={loginData.username}
                     onChange={handleLoginChange}
-                    placeholder="Enter your username"
+                    placeholder="Enter your username or email"
                     autoComplete="username"
                     className={inputClasses}
                     required

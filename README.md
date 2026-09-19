@@ -35,8 +35,9 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 
 ### User Management
 -  **Role-Based Access Control (RBAC)** - Admin and Field Agent roles
+-  **Invite-only accounts** - No public register; admins invite field agents (and other admins) by email
 -  **Multi-User Support** - Session management with device tracking
--  **Secure Authentication** - JWT-based auth with password reset functionality
+-  **Secure Authentication** - JWT-based auth with invite set-password and password reset
 -  **Region-Based Filtering** - Field agents see only their assigned regions
 
 ### UI/UX Features
@@ -50,7 +51,7 @@ A comprehensive full-stack web application for managing organic coffee cooperati
 ### Technical Features
 -  **RESTful API** - Well-structured backend with Express.js
 -  **MongoDB Integration** - Efficient data storage with Mongoose ODM
--  **Email System** - Nodemailer integration for notifications and password resets
+-  **Email System** - Nodemailer/Gmail SMTP for invites, password resets, and notifications
 -  **File Uploads** - Multer for handling avatar uploads
 -  **Security** - bcrypt password hashing, JWT tokens, CORS protection
 -  **Data Visualization** - Chart.js integration for analytics
@@ -186,11 +187,13 @@ ADMIN_USERNAME=admin
 ADMIN_EMAIL=admin@ocms.local
 ADMIN_PASSWORD=change-this-password
 
-# Frontend URL (for CORS)
+# Site origin for CORS and invite/reset email links
 FRONTEND_URL=http://localhost:5173
 ```
 
-On Vercel (Project → Settings → Environment Variables), set the same `EMAIL_*` keys plus `FRONTEND_URL` to the live site origin (not localhost) so invite links work in production. `EMAIL_PASS` must be a Gmail **App Password**.
+There is no public signup. The first admin is created on boot from `ADMIN_*` only if the database has no admin yet. After that, admins invite users from **Users** (`POST /api/users/field-agent`).
+
+On Vercel (Project → Settings → Environment Variables), set `EMAIL_*`, `MONGO_URI`, a unique production `JWT_SECRET` (do not reuse the local dev secret), `ADMIN_*` for first boot, and `FRONTEND_URL` to the live origin (for this project: `https://ocms-rho.vercel.app`, not localhost). `EMAIL_PASS` must be a Gmail **App Password**. Redeploy after changing env vars.
 
 ### Frontend Configuration
 
@@ -222,7 +225,7 @@ concurrently "cd backend && npm run dev" "cd frontend && npm run dev"
 - ✅ View, create, update, and delete deliveries
 - ✅ View, create, update, and delete payments
 - ✅ Access all analytics and reports
-- ✅ Manage users (create field agents, assign regions)
+- ✅ Manage users (invite field agents or admins, assign regions)
 - ✅ View all regions and data
 - ✅ Export data to CSV/PDF
 
@@ -242,7 +245,6 @@ concurrently "cd backend && npm run dev" "cd frontend && npm run dev"
 
 ### Authentication Endpoints
 ```
-POST   /api/auth/register          - Register new user
 POST   /api/auth/login             - User login
 GET    /api/auth/me                - Get current user
 POST   /api/auth/logout            - Logout current session
@@ -300,7 +302,8 @@ GET    /api/reports/operational-metrics     - Operational metrics
 ### User Management Endpoints (Admin Only)
 ```
 GET    /api/users                  - Get all users
-POST   /api/users/field-agent      - Create field agent
+POST   /api/users/field-agent      - Invite field agent or admin (email set-password link)
+POST   /api/users/:id/resend-invite - Resend invite email
 PUT    /api/users/:id              - Update user
 DELETE /api/users/:id              - Delete user
 ```
@@ -602,14 +605,14 @@ If you discover a security vulnerability, please email security@example.com inst
 |----------|-------------|---------|
 | `PORT` | Server port | `5000` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ocms` |
-| `JWT_SECRET` | Secret for JWT signing | `your_secret_key` |
+| `JWT_SECRET` | Secret for JWT signing; use a unique value in production | `your_secret_key` |
 | `EMAIL_HOST` | SMTP host | `smtp.gmail.com` |
 | `EMAIL_PORT` | SMTP port (`587` STARTTLS or `465` SSL) | `587` |
 | `EMAIL_SECURE` | `true` only for port 465 | `false` |
 | `EMAIL_USER` | SMTP username (full Gmail address) | `your_email@gmail.com` |
 | `EMAIL_PASS` | Gmail App Password, not the account password | `xxxx xxxx xxxx xxxx` |
 | `EMAIL_FROM` | From header; should match Gmail | `OCMS <your_email@gmail.com>` |
-| `FRONTEND_URL` | Site origin used in invite/reset links | `http://localhost:5173` |
+| `FRONTEND_URL` | Site origin used in invite/reset links | Local: `http://localhost:5173`. Production: `https://ocms-rho.vercel.app` |
 | `ADMIN_USERNAME` | Bootstrap admin username if none exists | `admin` |
 | `ADMIN_EMAIL` | Bootstrap admin email if none exists | `admin@ocms.local` |
 | `ADMIN_PASSWORD` | Bootstrap admin password if none exists | `change-this-password` |

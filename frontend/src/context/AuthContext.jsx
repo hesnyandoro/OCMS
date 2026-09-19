@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     // Login function (Updated to use setAuthState)
     const login = async (username, password) => {
         try {
-            const { data } = await api.post('/auth/login', { username, password });
+            const { data } = await api.post('/auth/login', { username: String(username).trim(), password });
             if (data.token) localStorage.setItem('token', data.token);
 
             let user = data.user;
