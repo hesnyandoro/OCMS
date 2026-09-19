@@ -24,8 +24,8 @@
     "semantic_hash": ""
   },
   "backend/controllers/authController.js": {
-    "mtime": 1789842101.6996896,
-    "seen": 1789842141.190625,
+    "mtime": 1789842147.6172347,
+    "seen": 1789842704.4790218,
     "ast_hash": "dbbcb51a9708b540cbb71a7798927d6a",
     "semantic_hash": ""
   },
@@ -126,8 +126,8 @@
     "semantic_hash": "dbafcf9f979d32dff002ba2bae7f0227"
   },
   "backend/routes/auth.js": {
-    "mtime": 1789842101.693689,
-    "seen": 1789842141.1906734,
+    "mtime": 1789842147.6187742,
+    "seen": 1789842704.479076,
     "ast_hash": "9129906858a36501ca3619a1c3b6a867",
     "semantic_hash": ""
   },
@@ -246,8 +246,8 @@
     "semantic_hash": "c69d8602db73e42443b3cacc46fb515a"
   },
   "frontend/src/components/Login.jsx": {
-    "mtime": 1789842116.9954467,
-    "seen": 1789842141.1907325,
+    "mtime": 1789842147.6136017,
+    "seen": 1789842704.4791396,
     "ast_hash": "da194b3915cfebc0c58ed177ff096e47",
     "semantic_hash": ""
   },
@@ -270,8 +270,8 @@
     "semantic_hash": "003c5ac48ec88d51feeb50b4c2d8cf8d"
   },
   "frontend/src/context/AuthContext.jsx": {
-    "mtime": 1789842116.9954467,
-    "seen": 1789842141.190743,
+    "mtime": 1789842147.6156032,
+    "seen": 1789842704.4791505,
     "ast_hash": "2915ef6f9749d665f712dc913616ed41",
     "semantic_hash": ""
   },
@@ -300,8 +300,8 @@
     "semantic_hash": ""
   },
   "frontend/src/pages/AuthTogglePage.jsx": {
-    "mtime": 1789842107.4596128,
-    "seen": 1789842141.1907566,
+    "mtime": 1789842147.6146038,
+    "seen": 1789842704.4791658,
     "ast_hash": "cc5d74e3103fe11dda211064fc2cb52d",
     "semantic_hash": ""
   },
@@ -372,8 +372,8 @@
     "semantic_hash": "e592e5ac82658f3162f76cf3789725ac"
   },
   "frontend/src/pages/ResetPassword.jsx": {
-    "mtime": 1789842110.5770466,
-    "seen": 1789842141.1907873,
+    "mtime": 1789842147.6156032,
+    "seen": 1789842704.4792016,
     "ast_hash": "046549bb10f5380e26507c9e921aaa6b",
     "semantic_hash": ""
   },
