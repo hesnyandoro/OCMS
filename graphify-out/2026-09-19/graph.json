@@ -242,7 +242,7 @@
       "file_type": "code",
       "norm_label": "forgotpassword()",
       "source_file": "frontend/src/pages/ForgotPassword.jsx",
-      "source_location": "L7"
+      "source_location": "L9"
     },
     {
       "id": "frontend_src_pages_landingpage_landingpage",
@@ -15683,7 +15683,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pages/ForgotPassword.jsx",
-      "source_location": "L7",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -16799,5 +16799,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b38346e4b29460d5896601c9528975469670c1cb"
+  "built_at_commit": "528c49193463572ae165ac111a3dbb434f470d6c"
 }

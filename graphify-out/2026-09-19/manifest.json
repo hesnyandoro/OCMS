@@ -330,9 +330,9 @@
     "semantic_hash": "4161294136988c60659f94fde2a0f8ed"
   },
   "frontend/src/pages/ForgotPassword.jsx": {
-    "mtime": 1789769398.9316275,
-    "seen": 1789770026.517619,
-    "ast_hash": "c65895e23f6c81cb92d4924aba174faa",
+    "mtime": 1789771779.7175987,
+    "seen": 1789772054.9029765,
+    "ast_hash": "78a52506cdfaa033159304780fc9ec70",
     "semantic_hash": ""
   },
   "frontend/src/pages/LandingPage.jsx": {
@@ -372,9 +372,9 @@
     "semantic_hash": "e592e5ac82658f3162f76cf3789725ac"
   },
   "frontend/src/pages/ResetPassword.jsx": {
-    "mtime": 1789769400.5865095,
-    "seen": 1789770026.5176306,
-    "ast_hash": "0c72c22e26fab1a0df96ba578978be44",
+    "mtime": 1789771787.2087557,
+    "seen": 1789772054.9029899,
+    "ast_hash": "7550a1897808dcddc574c3c77e7437fc",
     "semantic_hash": ""
   },
   "frontend/src/pages/UserSettings.jsx": {

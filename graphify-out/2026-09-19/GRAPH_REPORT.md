@@ -1,7 +1,7 @@
 # Graph Report - OCMS  (2026-09-19)
 
 ## Corpus Check
-- 86 files · ~58,696 words
+- 86 files · ~58,836 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b38346e4`
+- Built from commit: `528c4919`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,8 +67,8 @@
   frontend/src/pages/Deliveries.jsx → frontend/src/utils/permissions.js
 - `NearbyFarmers()` --calls--> `useGeolocation()`  [EXTRACTED]
   frontend/src/components/NearbyFarmers.jsx → frontend/src/hooks/useGeolocation.js
-- `Header()` --calls--> `useTheme()`  [EXTRACTED]
-  frontend/src/components/Header.jsx → frontend/src/context/ThemeContext.jsx
+- `Header()` --calls--> `useAuth()`  [EXTRACTED]
+  frontend/src/components/Header.jsx → frontend/src/context/AuthContext.jsx
 
 ## Import Cycles
 - None detected.
@@ -188,7 +188,7 @@ Cohesion: 0.67
 Nodes (3): overrides, fast-xml-parser, path-to-regexp
 
 ## Knowledge Gaps
-- **240 isolated node(s):** `ThemeContext`, `allNavItems`, `allQuickActions`, `bcrypt`, `crypto` (+235 more)
+- **240 isolated node(s):** `allNavItems`, `allQuickActions`, `ThemeContext`, `bcrypt`, `crypto` (+235 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 292 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -201,7 +201,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `frontend/package.json`?**
   _High betweenness centrality (0.043) - this node is a cross-community bridge._
-- **What connects `ThemeContext`, `allNavItems`, `allQuickActions` to the rest of the system?**
+- **What connects `allNavItems`, `allQuickActions`, `ThemeContext` to the rest of the system?**
   _240 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.jsx` be split into smaller, more focused modules?**
   _Cohesion score 0.0681766186227408 - nodes in this community are weakly interconnected._
