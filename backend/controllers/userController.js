@@ -47,13 +47,19 @@ exports.createFieldAgent = async (req, res) => {
 
     await user.save();
 
-    const { emailSent } = await sendInvite(user);
+    const { emailSent, emailError } = await sendInvite(user);
+
+    let msg = 'User created and invite email sent';
+    if (!emailSent && emailError) {
+      msg = `User created, but the invite email failed: ${emailError}`;
+    } else if (!emailSent) {
+      msg = 'User created. Invite email was logged on the server (email is not configured).';
+    }
 
     res.status(201).json({
-      msg: emailSent
-        ? 'User created and invite email sent'
-        : 'User created. Invite email was logged on the server (email is not configured).',
+      msg,
       emailSent,
+      emailError: emailError || null,
       user: publicUser(user)
     });
   } catch (err) {
@@ -69,13 +75,19 @@ exports.resendInvite = async (req, res) => {
       return res.status(404).json({ msg: 'User not found' });
     }
 
-    const { emailSent } = await sendInvite(user);
+    const { emailSent, emailError } = await sendInvite(user);
+
+    let msg = `Invite resent to ${user.email}`;
+    if (!emailSent && emailError) {
+      msg = `Invite regenerated, but the email failed: ${emailError}`;
+    } else if (!emailSent) {
+      msg = 'Invite regenerated. Email was logged on the server (email is not configured).';
+    }
 
     res.json({
-      msg: emailSent
-        ? `Invite resent to ${user.email}`
-        : `Invite regenerated. Email was logged on the server (email is not configured).`,
-      emailSent
+      msg,
+      emailSent,
+      emailError: emailError || null
     });
   } catch (err) {
     console.error('Resend invite error:', err);

@@ -173,10 +173,13 @@ MONGO_URI=mongodb://localhost:27017/ocms
 JWT_SECRET=your_jwt_secret_key_here
 
 # Email Configuration (for password reset and user invites)
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_specific_password
+# Gmail: use an App Password (2-Step Verification), not your account password.
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_gmail_app_password
+EMAIL_FROM=OCMS <your_email@gmail.com>
 
 # First admin (created automatically if no admin exists)
 ADMIN_USERNAME=admin
@@ -186,6 +189,8 @@ ADMIN_PASSWORD=change-this-password
 # Frontend URL (for CORS)
 FRONTEND_URL=http://localhost:5173
 ```
+
+On Vercel (Project → Settings → Environment Variables), set the same `EMAIL_*` keys plus `FRONTEND_URL` to the live site origin (not localhost) so invite links work in production. `EMAIL_PASS` must be a Gmail **App Password**.
 
 ### Frontend Configuration
 
@@ -598,8 +603,13 @@ If you discover a security vulnerability, please email security@example.com inst
 | `PORT` | Server port | `5000` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ocms` |
 | `JWT_SECRET` | Secret for JWT signing | `your_secret_key` |
-| `EMAIL_USER` | Email for notifications | `your_email@gmail.com` |
-| `EMAIL_PASS` | Email password/app password | `your_app_password` |
+| `EMAIL_HOST` | SMTP host | `smtp.gmail.com` |
+| `EMAIL_PORT` | SMTP port (`587` STARTTLS or `465` SSL) | `587` |
+| `EMAIL_SECURE` | `true` only for port 465 | `false` |
+| `EMAIL_USER` | SMTP username (full Gmail address) | `your_email@gmail.com` |
+| `EMAIL_PASS` | Gmail App Password, not the account password | `xxxx xxxx xxxx xxxx` |
+| `EMAIL_FROM` | From header; should match Gmail | `OCMS <your_email@gmail.com>` |
+| `FRONTEND_URL` | Site origin used in invite/reset links | `http://localhost:5173` |
 | `ADMIN_USERNAME` | Bootstrap admin username if none exists | `admin` |
 | `ADMIN_EMAIL` | Bootstrap admin email if none exists | `admin@ocms.local` |
 | `ADMIN_PASSWORD` | Bootstrap admin password if none exists | `change-this-password` |

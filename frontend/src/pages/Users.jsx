@@ -102,6 +102,8 @@ const Users = () => {
             fetchUsers();
             if (data.emailSent) {
                 toast.success(`Invite sent to ${formData.email}`);
+            } else if (data.emailError) {
+                toast.error(`User created, but email failed: ${data.emailError}`);
             } else {
                 toast.success(data.msg || 'User created. Invite was logged on the server.');
             }
@@ -118,6 +120,8 @@ const Users = () => {
             const { data } = await api.post(`/users/${userId}/resend-invite`);
             if (data.emailSent) {
                 toast.success(`Invite resent to ${email}`);
+            } else if (data.emailError) {
+                toast.error(`Invite regenerated, but email failed: ${data.emailError}`);
             } else {
                 toast.success(data.msg || 'Invite regenerated. Check the server log for the link.');
             }
