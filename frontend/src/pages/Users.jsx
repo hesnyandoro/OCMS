@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users as UsersIcon, UserPlus, Trash2, Mail, Shield, MapPin, Search, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Users as UsersIcon, UserPlus, Trash2, Mail, Shield, MapPin, Search, Loader2, Send } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,17 +13,16 @@ const Users = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [formData, setFormData] = useState({
+    const emptyForm = {
         username: '',
         email: '',
-        password: '',
-        confirmPassword: '',
         name: '',
-        assignedRegion: ''
-    });
+        assignedRegion: '',
+        role: 'fieldagent'
+    };
+    const [formData, setFormData] = useState(emptyForm);
     const [formErrors, setFormErrors] = useState({});
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [resendingId, setResendingId] = useState(null);
 
     // Check if user is admin
     useEffect(() => {
@@ -80,11 +80,9 @@ const Users = () => {
         if (!formData.name.trim()) errors.name = 'Full name is required';
         if (!formData.username.trim()) errors.username = 'Username is required';
         if (!formData.email.trim()) errors.email = 'Email is required';
-        if (!formData.password.trim()) errors.password = 'Password is required';
-        if (formData.password.length < 6) errors.password = 'Password must be at least 6 characters';
-        if (!formData.confirmPassword.trim()) errors.confirmPassword = 'Please confirm password';
-        if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'Passwords do not match';
-        if (!formData.assignedRegion.trim()) errors.assignedRegion = 'Region is required';
+        if (formData.role === 'fieldagent' && !formData.assignedRegion.trim()) {
+            errors.assignedRegion = 'Region is required for field agents';
+        }
         
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
@@ -97,24 +95,36 @@ const Users = () => {
         if (!validateForm()) return;
 
         try {
-            await api.post('/users/field-agent', formData);
+            const { data } = await api.post('/users/field-agent', formData);
             setShowCreateModal(false);
-            setFormData({
-                username: '',
-                email: '',
-                password: '',
-                confirmPassword: '',
-                name: '',
-                assignedRegion: ''
-            });
+            setFormData(emptyForm);
             setFormErrors({});
-            setShowPassword(false);
-            setShowConfirmPassword(false);
             fetchUsers();
+            if (data.emailSent) {
+                toast.success(`Invite sent to ${formData.email}`);
+            } else {
+                toast.success(data.msg || 'User created. Invite was logged on the server.');
+            }
         } catch (error) {
-            const errorMsg = error.response?.data?.msg || 'Failed to create field agent';
+            const errorMsg = error.response?.data?.msg || 'Failed to create user';
             setFormErrors({ submit: errorMsg });
-            console.error('Error creating field agent:', error);
+            console.error('Error creating user:', error);
+        }
+    };
+
+    const handleResendInvite = async (userId, email) => {
+        setResendingId(userId);
+        try {
+            const { data } = await api.post(`/users/${userId}/resend-invite`);
+            if (data.emailSent) {
+                toast.success(`Invite resent to ${email}`);
+            } else {
+                toast.success(data.msg || 'Invite regenerated. Check the server log for the link.');
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.msg || 'Failed to resend invite');
+        } finally {
+            setResendingId(null);
         }
     };
 
@@ -223,7 +233,7 @@ const Users = () => {
                         className="bg-[#1B4332] dark:bg-dark-green-primary hover:bg-[#2D5F4D] dark:hover:bg-dark-green-hover text-white px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
                     >
                         <UserPlus size={20} />
-                        Create Field Agent
+                        Invite User
                     </button>
                 </div>
             </div>
@@ -280,15 +290,25 @@ const Users = () => {
                                                 )}
                                             </td>
                                             <td className="py-4 px-6">
-                                                {user._id !== authState?.user?.id && (
+                                                <div className="flex items-center gap-1">
                                                     <button
-                                                        onClick={() => handleDeleteUser(user._id, user.username)}
-                                                        className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-all duration-200"
-                                                        title="Delete user"
+                                                        onClick={() => handleResendInvite(user._id, user.email)}
+                                                        disabled={resendingId === user._id}
+                                                        className="text-[#1B4332] dark:text-dark-green-primary hover:bg-green-50 dark:hover:bg-green-900/20 p-2 rounded-lg transition-all duration-200 disabled:opacity-50"
+                                                        title="Resend invite"
                                                     >
-                                                        <Trash2 size={18} />
+                                                        {resendingId === user._id ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                                                     </button>
-                                                )}
+                                                    {user._id !== authState?.user?.id && (
+                                                        <button
+                                                            onClick={() => handleDeleteUser(user._id, user.username)}
+                                                            className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded-lg transition-all duration-200"
+                                                            title="Delete user"
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
@@ -314,8 +334,10 @@ const Users = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50 p-4">
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h2 className="text-2xl font-bold text-[#1B4332] dark:text-dark-green-primary">Create Field Agent</h2>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Add a new field agent to the system</p>
+                            <h2 className="text-2xl font-bold text-[#1B4332] dark:text-dark-green-primary">Invite User</h2>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                                They will receive an email to set a password and sign in.
+                            </p>
                         </div>
 
                         <form onSubmit={handleCreateFieldAgent} className="p-6 space-y-4">
@@ -373,79 +395,40 @@ const Users = () => {
                                 )}
                             </div>
 
-                            {/* Password */}
                             <div>
                                 <label className="form-label">
-                                    Password <span className="text-danger">*</span>
+                                    Role <span className="text-danger">*</span>
                                 </label>
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        className={`form-control pr-10 ${formErrors.password ? 'border-danger' : ''}`}
-                                        placeholder="Enter password"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                                    >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
-                                </div>
-                                {formErrors.password && (
-                                    <p className="text-danger text-xs mt-1">{formErrors.password}</p>
-                                )}
-                                <small className="text-muted">Must be at least 6 characters</small>
-                            </div>
-
-                            {/* Confirm Password */}
-                            <div>
-                                <label className="form-label">
-                                    Confirm Password <span className="text-danger">*</span>
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showConfirmPassword ? "text" : "password"}
-                                        name="confirmPassword"
-                                        value={formData.confirmPassword}
-                                        onChange={handleInputChange}
-                                        className={`form-control pr-10 ${formErrors.confirmPassword ? 'border-danger' : ''}`}
-                                        placeholder="Re-enter password"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                                    >
-                                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
-                                </div>
-                                {formErrors.confirmPassword && (
-                                    <p className="text-danger text-xs mt-1">{formErrors.confirmPassword}</p>
-                                )}
-                            </div>
-
-                            {/* Assigned Region */}
-                            <div>
-                                <label className="form-label">
-                                    Assigned Region <span className="text-danger">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    name="assignedRegion"
-                                    value={formData.assignedRegion}
+                                <select
+                                    name="role"
+                                    value={formData.role}
                                     onChange={handleInputChange}
-                                    className={`form-control ${formErrors.assignedRegion ? 'border-danger' : ''}`}
-                                    placeholder="Enter assigned region (e.g., Kiambu, Nyeri)"
-                                />
-                                {formErrors.assignedRegion && (
-                                    <p className="text-danger text-xs mt-1">{formErrors.assignedRegion}</p>
-                                )}
-                                <small className="text-muted">Enter the region this field agent will manage</small>
+                                    className="form-control"
+                                >
+                                    <option value="fieldagent">Field Agent</option>
+                                    <option value="admin">Administrator</option>
+                                </select>
                             </div>
+
+                            {formData.role === 'fieldagent' && (
+                                <div>
+                                    <label className="form-label">
+                                        Assigned Region <span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="assignedRegion"
+                                        value={formData.assignedRegion}
+                                        onChange={handleInputChange}
+                                        className={`form-control ${formErrors.assignedRegion ? 'border-danger' : ''}`}
+                                        placeholder="Enter assigned region (e.g., Kiambu, Nyeri)"
+                                    />
+                                    {formErrors.assignedRegion && (
+                                        <p className="text-danger text-xs mt-1">{formErrors.assignedRegion}</p>
+                                    )}
+                                    <small className="text-muted">Enter the region this field agent will manage</small>
+                                </div>
+                            )}
 
                             {/* Submit Error */}
                             {formErrors.submit && (
@@ -460,17 +443,8 @@ const Users = () => {
                                     type="button"
                                     onClick={() => {
                                         setShowCreateModal(false);
-                                        setFormData({
-                                            username: '',
-                                            email: '',
-                                            password: '',
-                                            confirmPassword: '',
-                                            name: '',
-                                            assignedRegion: ''
-                                        });
+                                        setFormData(emptyForm);
                                         setFormErrors({});
-                                        setShowPassword(false);
-                                        setShowConfirmPassword(false);
                                     }}
                                     className="flex-1 px-4 py-2.5 border border-gray-400 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-500 transition-all"
                                 >
@@ -480,7 +454,7 @@ const Users = () => {
                                     type="submit"
                                     className="flex-1 px-4 py-2.5 bg-[#1B4332] hover:bg-[#2D5F4D] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200"
                                 >
-                                    Create Agent
+                                    Send Invite
                                 </button>
                             </div>
                         </form>

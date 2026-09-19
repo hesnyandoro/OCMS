@@ -8,6 +8,7 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get('token');
+  const isInvite = searchParams.get('invite') === '1';
   
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -48,7 +49,7 @@ const ResetPassword = () => {
       });
       
       setSuccess(true);
-      toast.success('Password reset successfully');
+      toast.success(isInvite ? 'Password set successfully' : 'Password reset successfully');
       
       // Redirect to login after 3 seconds
       setTimeout(() => {
@@ -105,9 +106,13 @@ const ResetPassword = () => {
         <div className="auth-form-panel bg-white rounded-2xl shadow-2xl p-8">
           {!success ? (
             <>
-              <h2 className="text-2xl font-bold mb-2 text-center">Reset Password</h2>
+              <h2 className="text-2xl font-bold mb-2 text-center">
+                {isInvite ? 'Set your password' : 'Reset Password'}
+              </h2>
               <p className="text-center mb-6 text-sm">
-                Enter your new password below
+                {isInvite
+                  ? 'Choose a password to activate your OCMS account, then sign in.'
+                  : 'Enter your new password below'}
               </p>
               
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -196,9 +201,13 @@ const ResetPassword = () => {
                   <CheckCircle size={48} className="text-green-600" />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">Password Reset Successful!</h2>
+              <h2 className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mb-2">
+                {isInvite ? 'Password set successfully' : 'Password Reset Successful!'}
+              </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Your password has been reset successfully. You can now login with your new password.
+                {isInvite
+                  ? 'Your account is ready. You can now login with your new password.'
+                  : 'Your password has been reset successfully. You can now login with your new password.'}
               </p>
               <p className="text-sm text-gray-500 mb-6">
                 Redirecting to login page...

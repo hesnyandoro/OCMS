@@ -1,9 +1,11 @@
 const app = require('../backend/app');
 const connectDB = require('../backend/config/db');
+const bootstrapAdmin = require('../backend/utils/bootstrapAdmin');
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
+    await bootstrapAdmin();
   } catch (err) {
     console.error('MongoDB CONNECTION FAILED', err.message);
     return res.status(503).json({

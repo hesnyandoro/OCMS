@@ -1,78 +1,18 @@
-const path = require('path');
+require('dotenv').config();
 const app = require('./app');
 const connectDB = require('./config/db');
-
-dotenv.config();
-
-const app = express();
-
-// CORS configuration - allow development and production origins
-const allowedOrigins = [
-  'http://localhost:5173', // Vite dev server
-  process.env.FRONTEND_URL, // Production frontend URL
-].filter(Boolean);
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true); // Allow all in production (served from same origin)
-    }
-  },
-  methods: ['GET','HEAD', 'PATCH', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
-
-// Enable gzip compression for all responses
-app.use(compression());
-
-app.use(express.json());
-
-// Cache control for static assets
-app.use((req, res, next) => {
-  if (req.url.startsWith('/uploads')) {
-    res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
-  }
-  next();
-});
-
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-app.use('/api/dashboard', dashboardRoutes);
-
-// API Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/farmers', require('./routes/farmers'));
-app.use('/api/deliveries', require('./routes/deliveries'));
-app.use('/api/payments', require('./routes/payments'));
-app.use('/api/reports', require('./routes/reports'));
-app.use('/api/geolocation', require('./routes/geolocation'));
-
-// Serve React frontend in production
-// Serve React frontend in production (standalone/Docker deploys; on Vercel the
-// SPA is served from the CDN instead)
-if (process.env.NODE_ENV === 'production') {
-  const express = require('express');
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
+const bootstrapAdmin = require('./utils/bootstrapAdmin');
 
 const start = async () => {
   try {
     await connectDB();
     console.log('MongoDB CONNECTED SUCCESSFULLY');
+    await bootstrapAdmin();
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   } catch (err) {
     console.log('MongoDB CONNECTION FAILED', err.message);
+    process.exit(1);
   }
 };
 

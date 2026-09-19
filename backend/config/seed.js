@@ -1,8 +1,12 @@
+const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Farmer = require('../models/Farmer'); // Make sure this path is correct
+const bcrypt = require('bcryptjs');
+const Farmer = require('../models/Farmer');
+const User = require('../models/User');
 
-// 1. Load environment variables from the parent directory's .env file
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config({ path: './.env' });
 
 // 2. The main seeder function
@@ -29,6 +33,24 @@ const seedData = async () => {
       weighStation: 'Station1'
     });
     console.log('Sample farmer seeded successfully!');
+
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@ocms.local';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+    const existingAdmin = await User.findOne({ $or: [{ username: adminUsername }, { email: adminEmail }, { role: 'admin' }] });
+    if (!existingAdmin) {
+      await User.create({
+        username: adminUsername,
+        email: adminEmail,
+        password: await bcrypt.hash(adminPassword, 10),
+        name: process.env.ADMIN_NAME || 'Administrator',
+        role: 'admin'
+      });
+      console.log(`Admin seeded: ${adminUsername} / ${adminEmail}`);
+    } else {
+      console.log('Admin already exists; skipping admin seed.');
+    }
 
   } catch (err) {
     console.error('Error seeding data:', err);
