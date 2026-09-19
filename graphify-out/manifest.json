@@ -60,9 +60,9 @@
     "semantic_hash": "03b773b739743347b230f29da63078ca"
   },
   "backend/controllers/userController.js": {
-    "mtime": 1789823597.082597,
-    "seen": 1789823601.8559556,
-    "ast_hash": "fce5077d8261d4048316981b09747f72",
+    "mtime": 1789825696.1407826,
+    "seen": 1789837181.7701998,
+    "ast_hash": "2e366f0fda7cf4e5431cf2b485b26e11",
     "semantic_hash": ""
   },
   "backend/middleware/auth.js": {
@@ -384,9 +384,9 @@
     "semantic_hash": "7f8a47008e4bd61e2c965f3c9d12dea4"
   },
   "frontend/src/pages/Users.jsx": {
-    "mtime": 1789823597.094594,
-    "seen": 1789823601.85605,
-    "ast_hash": "72907b6325ea83f0a6d56b936af2e821",
+    "mtime": 1789825787.734327,
+    "seen": 1789837181.7702951,
+    "ast_hash": "a1ed9289a47b20b459376f29330ad950",
     "semantic_hash": ""
   },
   "frontend/src/services/api.js": {
@@ -510,9 +510,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789823597.0745955,
-    "seen": 1789823601.8560865,
-    "ast_hash": "d869838d796172e36c98f978f6b43b0f",
+    "mtime": 1789825787.732091,
+    "seen": 1789837181.7703304,
+    "ast_hash": "4acf48167a447e21ea4ac1aa156e0bf9",
     "semantic_hash": ""
   },
   "docker-compose.prod.yml": {
@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   "backend/utils/sendAuthEmail.js": {
-    "mtime": 1789823597.0895922,
-    "seen": 1789823601.855993,
-    "ast_hash": "b6f3b04b563fbba6102b8282127ba4a3",
+    "mtime": 1789825687.6776543,
+    "seen": 1789837181.7702403,
+    "ast_hash": "5a4355f18db40af1a5d2730153ab9b4f",
     "semantic_hash": ""
   }
 }
