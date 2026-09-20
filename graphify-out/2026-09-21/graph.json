@@ -26,7 +26,7 @@
       "file_type": "code",
       "norm_label": "app()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L36"
+      "source_location": "L37"
     },
     {
       "id": "frontend_src_app_loadingfallback",
@@ -38,7 +38,19 @@
       "file_type": "code",
       "norm_label": "loadingfallback()",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L26"
+      "source_location": "L27"
+    },
+    {
+      "id": "frontend_src_components_deliverymap_deliverymap",
+      "label": "DeliveryMap()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "deliverymap()",
+      "source_file": "frontend/src/components/DeliveryMap.jsx",
+      "source_location": "L35"
     },
     {
       "id": "frontend_src_components_farmerform_farmerform",
@@ -206,7 +218,67 @@
       "file_type": "code",
       "norm_label": "deliveries()",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L16"
+      "source_location": "L15"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_copytriplink",
+      "label": "copyTripLink()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "copytriplink()",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L47"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_deliverytrack",
+      "label": "DeliveryTrack()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "deliverytrack()",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L56"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_driverlinkfromstart",
+      "label": "driverLinkFromStart()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "driverlinkfromstart()",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L38"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_statusheadline",
+      "label": "statusHeadline()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "statusheadline()",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L26"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_stepindex",
+      "label": "stepIndex()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "stepindex()",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L32"
     },
     {
       "id": "frontend_src_pages_editdelivery_editdelivery",
@@ -653,12 +725,24 @@
       "source_location": "L26"
     },
     {
+      "id": "backend_controllers_deliverycontroller_getunpaiddeliveriesbyfarmer",
+      "label": "getUnpaidDeliveriesByFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "getunpaiddeliveriesbyfarmer()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L151"
+    },
+    {
       "id": "backend_optimize_db_indexes_optimizeindexes",
       "label": "optimizeIndexes()",
       "_callable": true,
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "optimizeindexes()",
       "source_file": "backend/optimize-db-indexes.js",
@@ -785,6 +869,186 @@
       "source_location": "L72"
     },
     {
+      "id": "backend_controllers_deliverycontroller_createdelivery",
+      "label": "createDelivery()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "createdelivery()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L58"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_deletedelivery",
+      "label": "deleteDelivery()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "deletedelivery()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L129"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_getdeliveries",
+      "label": "getDeliveries()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "getdeliveries()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_getdelivery",
+      "label": "getDelivery()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "getdelivery()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L30"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_getdeliverytypesbyfarmer",
+      "label": "getDeliveryTypesByFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "getdeliverytypesbyfarmer()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L209"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_gettotalkgsbytype",
+      "label": "getTotalKgsByType()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "gettotalkgsbytype()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L251"
+    },
+    {
+      "id": "backend_controllers_deliverycontroller_updatedelivery",
+      "label": "updateDelivery()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "updatedelivery()",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L96"
+    },
+    {
+      "id": "backend_middleware_auth_authorize",
+      "label": "authorize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "authorize()",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L19"
+    },
+    {
+      "id": "backend_middleware_auth_verifytoken",
+      "label": "verifyToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "verifytoken()",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_createfarmer",
+      "label": "createFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "createfarmer()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L50"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_deletefarmer",
+      "label": "deleteFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "deletefarmer()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L112"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_getfarmer",
+      "label": "getFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "getfarmer()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L30"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_getfarmers",
+      "label": "getFarmers()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "getfarmers()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_searchfarmers",
+      "label": "searchFarmers()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "searchfarmers()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L125"
+    },
+    {
+      "id": "backend_controllers_farmercontroller_updatefarmer",
+      "label": "updateFarmer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "updatefarmer()",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L89"
+    },
+    {
       "id": "frontend_src_utils_apicache_apicache_clear",
       "label": ".clear()",
       "_callable": true,
@@ -891,78 +1155,6 @@
       "norm_label": "invalidatecache()",
       "source_file": "frontend/src/utils/apiCache.js",
       "source_location": "L108"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_createfarmer",
-      "label": "createFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "createfarmer()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L50"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_deletefarmer",
-      "label": "deleteFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "deletefarmer()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L112"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_getfarmer",
-      "label": "getFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "getfarmer()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L30"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_getfarmers",
-      "label": "getFarmers()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "getfarmers()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_searchfarmers",
-      "label": "searchFarmers()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "searchfarmers()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L125"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_updatefarmer",
-      "label": "updateFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "updatefarmer()",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L89"
     },
     {
       "id": "backend_controllers_reportcontroller_generatereport",
@@ -1083,30 +1275,6 @@
       "norm_label": "getsummary()",
       "source_file": "backend/controllers/reportController.js",
       "source_location": "L5"
-    },
-    {
-      "id": "backend_middleware_auth_authorize",
-      "label": "authorize()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "authorize()",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L19"
-    },
-    {
-      "id": "backend_middleware_auth_verifytoken",
-      "label": "verifyToken()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "verifytoken()",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L4"
     },
     {
       "id": "backend_controllers_usercontroller_createfieldagent",
@@ -1397,16 +1565,88 @@
       "source_location": "L21"
     },
     {
-      "id": "frontend_src_components_deliverymap_deliverymap",
-      "label": "DeliveryMap()",
+      "id": "backend_utils_geolocation_calculatedistance",
+      "label": "calculateDistance()",
       "_callable": true,
       "_origin": "ast",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
       "file_type": "code",
-      "norm_label": "deliverymap()",
-      "source_file": "frontend/src/components/DeliveryMap.jsx",
-      "source_location": "L35"
+      "norm_label": "calculatedistance()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L14"
+    },
+    {
+      "id": "backend_utils_geolocation_filterbyradius",
+      "label": "filterByRadius()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "filterbyradius()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L74"
+    },
+    {
+      "id": "backend_utils_geolocation_findnearest",
+      "label": "findNearest()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "findnearest()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L49"
+    },
+    {
+      "id": "backend_utils_geolocation_formatlocation",
+      "label": "formatLocation()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "formatlocation()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L147"
+    },
+    {
+      "id": "backend_utils_geolocation_getboundingbox",
+      "label": "getBoundingBox()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "getboundingbox()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L128"
+    },
+    {
+      "id": "backend_utils_geolocation_iswithingeofence",
+      "label": "isWithinGeofence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "iswithingeofence()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L37"
+    },
+    {
+      "id": "backend_utils_geolocation_validateagentlocation",
+      "label": "validateAgentLocation()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "utils/geolocation.js",
+      "file_type": "code",
+      "norm_label": "validateagentlocation()",
+      "source_file": "backend/utils/geolocation.js",
+      "source_location": "L94"
     },
     {
       "id": "backend_server_start",
@@ -1503,102 +1743,6 @@
       "norm_label": "validateuserlocation()",
       "source_file": "backend/controllers/geolocationController.js",
       "source_location": "L104"
-    },
-    {
-      "id": "backend_utils_geolocation_calculatedistance",
-      "label": "calculateDistance()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "calculatedistance()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L14"
-    },
-    {
-      "id": "backend_utils_geolocation_filterbyradius",
-      "label": "filterByRadius()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "filterbyradius()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L74"
-    },
-    {
-      "id": "backend_utils_geolocation_findnearest",
-      "label": "findNearest()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "findnearest()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L49"
-    },
-    {
-      "id": "backend_utils_geolocation_formatlocation",
-      "label": "formatLocation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "formatlocation()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L147"
-    },
-    {
-      "id": "backend_utils_geolocation_getboundingbox",
-      "label": "getBoundingBox()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "getboundingbox()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L128"
-    },
-    {
-      "id": "backend_utils_geolocation_iswithingeofence",
-      "label": "isWithinGeofence()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "iswithingeofence()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L37"
-    },
-    {
-      "id": "backend_utils_geolocation_validateagentlocation",
-      "label": "validateAgentLocation()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "validateagentlocation()",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L94"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_getunpaiddeliveriesbyfarmer",
-      "label": "getUnpaidDeliveriesByFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "getunpaiddeliveriesbyfarmer()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L151"
     },
     {
       "id": "backend_config_seed_seeddata",
@@ -1745,96 +1889,12 @@
       "source_location": "L138"
     },
     {
-      "id": "backend_controllers_deliverycontroller_createdelivery",
-      "label": "createDelivery()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "createdelivery()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L58"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_deletedelivery",
-      "label": "deleteDelivery()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "deletedelivery()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L129"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_getdeliveries",
-      "label": "getDeliveries()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "getdeliveries()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_getdelivery",
-      "label": "getDelivery()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "getdelivery()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L30"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_getdeliverytypesbyfarmer",
-      "label": "getDeliveryTypesByFarmer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "getdeliverytypesbyfarmer()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L209"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_gettotalkgsbytype",
-      "label": "getTotalKgsByType()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "gettotalkgsbytype()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L251"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_updatedelivery",
-      "label": "updateDelivery()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "updatedelivery()",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L96"
-    },
-    {
       "id": "backend_controllers_tripcontroller_assertdeliveryaccess",
       "label": "assertDeliveryAccess()",
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "assertdeliveryaccess()",
       "source_file": "backend/controllers/tripController.js",
@@ -1846,7 +1906,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "endactivetrips()",
       "source_file": "backend/controllers/tripController.js",
@@ -1858,7 +1918,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "endtrip()",
       "source_file": "backend/controllers/tripController.js",
@@ -1870,7 +1930,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "frontendbase()",
       "source_file": "backend/controllers/tripController.js",
@@ -1882,7 +1942,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "getintransit()",
       "source_file": "backend/controllers/tripController.js",
@@ -1894,7 +1954,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "getpublictrip()",
       "source_file": "backend/controllers/tripController.js",
@@ -1906,7 +1966,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "hashtoken()",
       "source_file": "backend/controllers/tripController.js",
@@ -1918,7 +1978,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "pingtrip()",
       "source_file": "backend/controllers/tripController.js",
@@ -1930,7 +1990,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "starttrip()",
       "source_file": "backend/controllers/tripController.js",
@@ -1979,6 +2039,17 @@
       "norm_label": "deliveries",
       "source_file": "frontend/src/App.jsx",
       "source_location": "L16"
+    },
+    {
+      "id": "frontend_src_app_deliverytrack",
+      "label": "DeliveryTrack",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "deliverytrack",
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L19"
     },
     {
       "id": "frontend_src_app_editdelivery",
@@ -2055,7 +2126,7 @@
       "file_type": "code",
       "norm_label": "newpayment",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L20"
+      "source_location": "L21"
     },
     {
       "id": "frontend_src_app_payments",
@@ -2066,7 +2137,7 @@
       "file_type": "code",
       "norm_label": "payments",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19"
+      "source_location": "L20"
     },
     {
       "id": "frontend_src_app_reports",
@@ -2077,7 +2148,7 @@
       "file_type": "code",
       "norm_label": "reports",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "frontend_src_app_resetpassword",
@@ -2110,7 +2181,7 @@
       "file_type": "code",
       "norm_label": "users",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L22"
+      "source_location": "L23"
     },
     {
       "id": "frontend_src_app_usersettings",
@@ -2121,7 +2192,40 @@
       "file_type": "code",
       "norm_label": "usersettings",
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L23"
+      "source_location": "L24"
+    },
+    {
+      "id": "frontend_src_components_deliverymap",
+      "label": "DeliveryMap.jsx",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "deliverymap.jsx",
+      "source_file": "frontend/src/components/DeliveryMap.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_components_deliverymap_defaulticon",
+      "label": "DefaultIcon",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "defaulticon",
+      "source_file": "frontend/src/components/DeliveryMap.jsx",
+      "source_location": "L6"
+    },
+    {
+      "id": "frontend_src_components_deliverymap_truckicon",
+      "label": "TruckIcon",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "truckicon",
+      "source_file": "frontend/src/components/DeliveryMap.jsx",
+      "source_location": "L28"
     },
     {
       "id": "frontend_src_components_farmerform",
@@ -2309,6 +2413,28 @@
       "norm_label": "deliveries.jsx",
       "source_file": "frontend/src/pages/Deliveries.jsx",
       "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack",
+      "label": "DeliveryTrack.jsx",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "deliverytrack.jsx",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_pages_deliverytrack_steps",
+      "label": "STEPS",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "App.jsx",
+      "file_type": "code",
+      "norm_label": "steps",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L20"
     },
     {
       "id": "frontend_src_pages_editdelivery",
@@ -2916,11 +3042,110 @@
       "source_location": "L17"
     },
     {
+      "id": "backend_models_farmer",
+      "label": "Farmer.js",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "farmer.js",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_farmer_farmerschema",
+      "label": "farmerSchema",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "farmerschema",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_models_farmer_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "backend/models/Farmer.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_passwordreset",
+      "label": "PasswordReset.js",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "passwordreset.js",
+      "source_file": "backend/models/PasswordReset.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_passwordreset_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "backend/models/PasswordReset.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_passwordreset_passwordresetschema",
+      "label": "passwordResetSchema",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "passwordresetschema",
+      "source_file": "backend/models/PasswordReset.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_models_payment",
+      "label": "Payment.js",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "payment.js",
+      "source_file": "backend/models/Payment.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_payment_mongoose",
+      "label": "mongoose",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "mongoose",
+      "source_file": "backend/models/Payment.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_models_payment_paymentschema",
+      "label": "paymentSchema",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "ref_mongoose",
+      "file_type": "code",
+      "norm_label": "paymentschema",
+      "source_file": "backend/models/Payment.js",
+      "source_location": "L3"
+    },
+    {
       "id": "backend_models_session",
       "label": "Session.js",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "session.js",
       "source_file": "backend/models/Session.js",
@@ -2931,7 +3156,7 @@
       "label": "mongoose",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "mongoose",
       "source_file": "backend/models/Session.js",
@@ -2942,7 +3167,7 @@
       "label": "sessionSchema",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "sessionschema",
       "source_file": "backend/models/Session.js",
@@ -2953,7 +3178,7 @@
       "label": "optimize-db-indexes.js",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "optimize-db-indexes.js",
       "source_file": "backend/optimize-db-indexes.js",
@@ -2964,7 +3189,7 @@
       "label": "Delivery",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "delivery",
       "source_file": "backend/optimize-db-indexes.js",
@@ -2975,7 +3200,7 @@
       "label": "dotenv",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "dotenv",
       "source_file": "backend/optimize-db-indexes.js",
@@ -2986,7 +3211,7 @@
       "label": "Farmer",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "farmer",
       "source_file": "backend/optimize-db-indexes.js",
@@ -2997,7 +3222,7 @@
       "label": "mongoose",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "mongoose",
       "source_file": "backend/optimize-db-indexes.js",
@@ -3008,7 +3233,7 @@
       "label": "PasswordReset",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "passwordreset",
       "source_file": "backend/optimize-db-indexes.js",
@@ -3019,7 +3244,7 @@
       "label": "Payment",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "payment",
       "source_file": "backend/optimize-db-indexes.js",
@@ -3030,7 +3255,7 @@
       "label": "Session",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "session",
       "source_file": "backend/optimize-db-indexes.js",
@@ -3041,7 +3266,7 @@
       "label": "User",
       "_origin": "ast",
       "community": 10,
-      "community_name": "optimize-db-indexes.js",
+      "community_name": "ref_mongoose",
       "file_type": "code",
       "norm_label": "user",
       "source_file": "backend/optimize-db-indexes.js",
@@ -4342,92 +4567,136 @@
       "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts",
-      "label": "scripts",
+      "id": "backend_controllers_deliverycontroller",
+      "label": "deliveryController.js",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "scripts",
-      "source_file": "frontend/package.json",
-      "source_location": "L6"
+      "norm_label": "deliverycontroller.js",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts_build",
-      "label": "build",
+      "id": "backend_controllers_deliverycontroller_delivery",
+      "label": "Delivery",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "build",
-      "source_file": "frontend/package.json",
-      "source_location": "L9"
+      "norm_label": "delivery",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts_dev",
-      "label": "dev",
+      "id": "backend_controllers_deliverycontroller_trip",
+      "label": "Trip",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "dev",
-      "source_file": "frontend/package.json",
-      "source_location": "L8"
+      "norm_label": "trip",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L3"
     },
     {
-      "id": "frontend_package_scripts_lint",
-      "label": "lint",
+      "id": "backend_controllers_deliverycontroller_user",
+      "label": "User",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "lint",
-      "source_file": "frontend/package.json",
-      "source_location": "L10"
+      "norm_label": "user",
+      "source_file": "backend/controllers/deliveryController.js",
+      "source_location": "L2"
     },
     {
-      "id": "frontend_package_scripts_preview",
-      "label": "preview",
+      "id": "backend_middleware_auth",
+      "label": "middleware/auth.js",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "preview",
-      "source_file": "frontend/package.json",
-      "source_location": "L11"
+      "norm_label": "middleware/auth.js",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts_start",
-      "label": "start",
+      "id": "backend_middleware_auth_jwt",
+      "label": "jwt",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "start",
-      "source_file": "frontend/package.json",
-      "source_location": "L7"
+      "norm_label": "jwt",
+      "source_file": "backend/middleware/auth.js",
+      "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts_test",
-      "label": "test",
+      "id": "backend_routes_deliveries",
+      "label": "deliveries.js",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "test",
-      "source_file": "frontend/package.json",
-      "source_location": "L12"
+      "norm_label": "deliveries.js",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L1"
     },
     {
-      "id": "frontend_package_scripts_test_e2e",
-      "label": "test:e2e",
+      "id": "backend_routes_deliveries_express",
+      "label": "express",
       "_origin": "ast",
       "community": 15,
-      "community_name": "scripts",
+      "community_name": "deliveries.js",
       "file_type": "code",
-      "norm_label": "test:e2e",
-      "source_file": "frontend/package.json",
-      "source_location": "L13"
+      "norm_label": "express",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_deliveries_getdeliveries_getdelivery_createdelivery_deletedelivery_updatedelivery_getunpaiddeliveriesbyfarmer_getdeliverytypesbyfarmer_gettotalkgsbytype",
+      "label": "{ getDeliveries, getDelivery, createDelivery, deleteDelivery, updateDelivery, getUnpaidDeliveriesByFarmer, getDeliveryTypesByFarmer, getTotalKgsByType }",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "{ getdeliveries, getdelivery, createdelivery, deletedelivery, updatedelivery, getunpaiddeliveriesbyfarmer, getdeliverytypesbyfarmer, gettotalkgsbytype }",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_deliveries_router",
+      "label": "router",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "backend_routes_deliveries_starttrip_endtrip_getintransit",
+      "label": "{ startTrip, endTrip, getInTransit }",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "{ starttrip, endtrip, getintransit }",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "backend_routes_deliveries_verifytoken_authorize",
+      "label": "{ verifyToken, authorize }",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "deliveries.js",
+      "file_type": "code",
+      "norm_label": "{ verifytoken, authorize }",
+      "source_file": "backend/routes/deliveries.js",
+      "source_location": "L2"
     },
     {
       "id": "readme",
@@ -4586,59 +4855,103 @@
       "source_location": "L524"
     },
     {
-      "id": "frontend_eslint_config",
-      "label": "eslint.config.js",
+      "id": "backend_controllers_farmercontroller",
+      "label": "farmerController.js",
       "_origin": "ast",
       "community": 17,
-      "community_name": "eslint.config.js",
+      "community_name": "farmers.js",
       "file_type": "code",
-      "norm_label": "eslint.config.js",
-      "source_file": "frontend/eslint.config.js",
+      "norm_label": "farmercontroller.js",
+      "source_file": "backend/controllers/farmerController.js",
       "source_location": "L1"
     },
     {
-      "id": "ref_eslint_js",
-      "label": "@eslint/js",
+      "id": "backend_controllers_farmercontroller_farmer",
+      "label": "Farmer",
       "_origin": "ast",
       "community": 17,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "@eslint/js",
-      "source_file": "frontend/package.json",
-      "source_location": "L40"
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "farmer",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L2"
     },
     {
-      "id": "ref_eslint_plugin_react_hooks",
-      "label": "eslint-plugin-react-hooks",
+      "id": "backend_controllers_farmercontroller_user",
+      "label": "User",
       "_origin": "ast",
       "community": 17,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "eslint-plugin-react-hooks",
-      "source_file": "frontend/package.json",
-      "source_location": "L50"
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "user",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L3"
     },
     {
-      "id": "ref_eslint_plugin_react_refresh",
-      "label": "eslint-plugin-react-refresh",
+      "id": "backend_controllers_farmercontroller_validationresult",
+      "label": "{ validationResult }",
       "_origin": "ast",
       "community": 17,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "eslint-plugin-react-refresh",
-      "source_file": "frontend/package.json",
-      "source_location": "L51"
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "{ validationresult }",
+      "source_file": "backend/controllers/farmerController.js",
+      "source_location": "L1"
     },
     {
-      "id": "ref_globals",
-      "label": "globals",
+      "id": "backend_routes_farmers",
+      "label": "farmers.js",
       "_origin": "ast",
       "community": 17,
-      "community_name": "eslint.config.js",
-      "file_type": "concept",
-      "norm_label": "globals",
-      "source_file": "frontend/package.json",
-      "source_location": "L52"
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "farmers.js",
+      "source_file": "backend/routes/farmers.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_farmers_express",
+      "label": "express",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "express",
+      "source_file": "backend/routes/farmers.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_farmers_getfarmers_getfarmer_createfarmer_updatefarmer_deletefarmer_searchfarmers",
+      "label": "{ getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer, searchFarmers }",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "{ getfarmers, getfarmer, createfarmer, updatefarmer, deletefarmer, searchfarmers }",
+      "source_file": "backend/routes/farmers.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_farmers_router",
+      "label": "router",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "backend/routes/farmers.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "backend_routes_farmers_verifytoken_authorize",
+      "label": "{ verifyToken, authorize }",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "farmers.js",
+      "file_type": "code",
+      "norm_label": "{ verifytoken, authorize }",
+      "source_file": "backend/routes/farmers.js",
+      "source_location": "L2"
     },
     {
       "id": "frontend_src_utils_apicache",
@@ -4649,50 +4962,6 @@
       "file_type": "code",
       "norm_label": "apicache.js",
       "source_file": "frontend/src/utils/apiCache.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_controllers_farmercontroller",
-      "label": "farmerController.js",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "farmercontroller.js",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_farmer",
-      "label": "Farmer",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "farmer",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "backend/controllers/farmerController.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_controllers_farmercontroller_validationresult",
-      "label": "{ validationResult }",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "{ validationresult }",
-      "source_file": "backend/controllers/farmerController.js",
       "source_location": "L1"
     },
     {
@@ -4737,83 +5006,6 @@
       "file_type": "code",
       "norm_label": "payment",
       "source_file": "backend/controllers/reportController.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "backend_middleware_auth",
-      "label": "middleware/auth.js",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "middleware/auth.js",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_middleware_auth_jwt",
-      "label": "jwt",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "jwt",
-      "source_file": "backend/middleware/auth.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_farmers",
-      "label": "farmers.js",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "farmers.js",
-      "source_file": "backend/routes/farmers.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_farmers_express",
-      "label": "express",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "express",
-      "source_file": "backend/routes/farmers.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_farmers_getfarmers_getfarmer_createfarmer_updatefarmer_deletefarmer_searchfarmers",
-      "label": "{ getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer, searchFarmers }",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "{ getfarmers, getfarmer, createfarmer, updatefarmer, deletefarmer, searchfarmers }",
-      "source_file": "backend/routes/farmers.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_routes_farmers_router",
-      "label": "router",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "backend/routes/farmers.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "backend_routes_farmers_verifytoken_authorize",
-      "label": "{ verifyToken, authorize }",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "reports.js",
-      "file_type": "code",
-      "norm_label": "{ verifytoken, authorize }",
-      "source_file": "backend/routes/farmers.js",
       "source_location": "L2"
     },
     {
@@ -5213,136 +5405,15 @@
       "source_location": "L2"
     },
     {
-      "id": "backend_models_farmer",
-      "label": "Farmer.js",
+      "id": "backend_utils_geolocation",
+      "label": "utils/geolocation.js",
       "_origin": "ast",
       "community": 22,
-      "community_name": "dashboard.js",
+      "community_name": "utils/geolocation.js",
       "file_type": "code",
-      "norm_label": "farmer.js",
-      "source_file": "backend/models/Farmer.js",
+      "norm_label": "utils/geolocation.js",
+      "source_file": "backend/utils/geolocation.js",
       "source_location": "L1"
-    },
-    {
-      "id": "backend_models_farmer_farmerschema",
-      "label": "farmerSchema",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "farmerschema",
-      "source_file": "backend/models/Farmer.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_models_farmer_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "backend/models/Farmer.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_dashboard",
-      "label": "dashboard.js",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "dashboard.js",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_dashboard_dashboardreadlimiter",
-      "label": "dashboardReadLimiter",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "dashboardreadlimiter",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L10"
-    },
-    {
-      "id": "backend_routes_dashboard_delivery",
-      "label": "Delivery",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "delivery",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "backend_routes_dashboard_farmer",
-      "label": "Farmer",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "farmer",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_routes_dashboard_payment",
-      "label": "Payment",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "payment",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "backend_routes_dashboard_pending_status",
-      "label": "PENDING_STATUS",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "pending_status",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L8"
-    },
-    {
-      "id": "backend_routes_dashboard_ratelimit",
-      "label": "rateLimit",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "ratelimit",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L2"
-    },
-    {
-      "id": "backend_routes_dashboard_router",
-      "label": "router",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_dashboard_success_status",
-      "label": "SUCCESS_STATUS",
-      "_origin": "ast",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "file_type": "code",
-      "norm_label": "success_status",
-      "source_file": "backend/routes/dashboard.js",
-      "source_location": "L7"
     },
     {
       "id": "agents_skills_graphify_references_exports",
@@ -5672,50 +5743,6 @@
       "norm_label": "user management endpoints (admin only)",
       "source_file": "README.md",
       "source_location": "L307"
-    },
-    {
-      "id": "frontend_src_components_deliverymap",
-      "label": "DeliveryMap.jsx",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
-      "file_type": "code",
-      "norm_label": "deliverymap.jsx",
-      "source_file": "frontend/src/components/DeliveryMap.jsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "frontend_src_components_deliverymap_defaulticon",
-      "label": "DefaultIcon",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
-      "file_type": "code",
-      "norm_label": "defaulticon",
-      "source_file": "frontend/src/components/DeliveryMap.jsx",
-      "source_location": "L6"
-    },
-    {
-      "id": "frontend_src_components_deliverymap_truckicon",
-      "label": "TruckIcon",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
-      "file_type": "code",
-      "norm_label": "truckicon",
-      "source_file": "frontend/src/components/DeliveryMap.jsx",
-      "source_location": "L28"
-    },
-    {
-      "id": "ref_leaflet",
-      "label": "leaflet",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
-      "file_type": "concept",
-      "norm_label": "leaflet",
-      "source_file": "frontend/package.json",
-      "source_location": "L24"
     },
     {
       "id": "readme_1_dashboard_with_real_time_analytics",
@@ -6100,6 +6127,105 @@
       "norm_label": "express",
       "source_file": "backend/app.js",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_dashboard",
+      "label": "dashboard.js",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "dashboard.js",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_dashboard_dashboardreadlimiter",
+      "label": "dashboardReadLimiter",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "dashboardreadlimiter",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L10"
+    },
+    {
+      "id": "backend_routes_dashboard_delivery",
+      "label": "Delivery",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "delivery",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L4"
+    },
+    {
+      "id": "backend_routes_dashboard_farmer",
+      "label": "Farmer",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "farmer",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L3"
+    },
+    {
+      "id": "backend_routes_dashboard_payment",
+      "label": "Payment",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "payment",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L5"
+    },
+    {
+      "id": "backend_routes_dashboard_pending_status",
+      "label": "PENDING_STATUS",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "pending_status",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L8"
+    },
+    {
+      "id": "backend_routes_dashboard_ratelimit",
+      "label": "rateLimit",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "ratelimit",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L2"
+    },
+    {
+      "id": "backend_routes_dashboard_router",
+      "label": "router",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "router",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_dashboard_success_status",
+      "label": "SUCCESS_STATUS",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "app.js",
+      "file_type": "code",
+      "norm_label": "success_status",
+      "source_file": "backend/routes/dashboard.js",
+      "source_location": "L7"
     },
     {
       "id": "backend_server",
@@ -6757,17 +6883,6 @@
       "source_location": "L2"
     },
     {
-      "id": "backend_utils_geolocation",
-      "label": "utils/geolocation.js",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "geolocationController.js",
-      "file_type": "code",
-      "norm_label": "utils/geolocation.js",
-      "source_file": "backend/utils/geolocation.js",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_graphify_references_github_and_merge",
       "label": "github-and-merge.md",
       "_origin": "ast",
@@ -6984,136 +7099,26 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_models_passwordreset",
-      "label": "PasswordReset.js",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "passwordreset.js",
-      "source_file": "backend/models/PasswordReset.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_models_passwordreset_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "backend/models/PasswordReset.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_models_passwordreset_passwordresetschema",
-      "label": "passwordResetSchema",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "passwordresetschema",
-      "source_file": "backend/models/PasswordReset.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_models_payment",
-      "label": "Payment.js",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "payment.js",
-      "source_file": "backend/models/Payment.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_models_payment_mongoose",
-      "label": "mongoose",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "mongoose",
-      "source_file": "backend/models/Payment.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_models_payment_paymentschema",
-      "label": "paymentSchema",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "ref_mongoose",
-      "file_type": "code",
-      "norm_label": "paymentschema",
-      "source_file": "backend/models/Payment.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "frontend_vite_config",
-      "label": "vite.config.js",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "vite.config.js",
-      "file_type": "code",
-      "norm_label": "vite.config.js",
-      "source_file": "frontend/vite.config.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "ref_vite",
-      "label": "vite",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "vite.config.js",
-      "file_type": "concept",
-      "norm_label": "vite",
-      "source_file": "frontend/package.json",
-      "source_location": "L56"
-    },
-    {
-      "id": "ref_vitejs_plugin_react",
-      "label": "@vitejs/plugin-react",
-      "_origin": "ast",
-      "community": 48,
-      "community_name": "vite.config.js",
-      "file_type": "concept",
-      "norm_label": "@vitejs/plugin-react",
-      "source_file": "frontend/package.json",
-      "source_location": "L46"
-    },
-    {
       "id": "tailwindcss",
       "label": "tailwindcss",
       "_origin": "ast",
-      "community": 49,
-      "community_name": "tailwind.config.js",
+      "community": 5,
+      "community_name": "frontend/package.json",
       "confidence": "EXTRACTED",
       "file_type": "code",
       "norm_label": "tailwindcss",
       "source_file": "tailwindcss"
     },
     {
-      "id": "frontend_tailwind_config",
-      "label": "tailwind.config.js",
+      "id": "frontend_eslint_config",
+      "label": "eslint.config.js",
       "_origin": "ast",
-      "community": 49,
-      "community_name": "tailwind.config.js",
+      "community": 5,
+      "community_name": "frontend/package.json",
       "file_type": "code",
-      "norm_label": "tailwind.config.js",
-      "source_file": "frontend/tailwind.config.js",
+      "norm_label": "eslint.config.js",
+      "source_file": "frontend/eslint.config.js",
       "source_location": "L1"
-    },
-    {
-      "id": "ref_daisyui",
-      "label": "daisyui",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "tailwind.config.js",
-      "file_type": "concept",
-      "norm_label": "daisyui",
-      "source_file": "frontend/package.json",
-      "source_location": "L48"
     },
     {
       "id": "frontend_package",
@@ -7149,6 +7154,94 @@
       "source_location": "L3"
     },
     {
+      "id": "frontend_package_scripts",
+      "label": "scripts",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "scripts",
+      "source_file": "frontend/package.json",
+      "source_location": "L6"
+    },
+    {
+      "id": "frontend_package_scripts_build",
+      "label": "build",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "build",
+      "source_file": "frontend/package.json",
+      "source_location": "L9"
+    },
+    {
+      "id": "frontend_package_scripts_dev",
+      "label": "dev",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "dev",
+      "source_file": "frontend/package.json",
+      "source_location": "L8"
+    },
+    {
+      "id": "frontend_package_scripts_lint",
+      "label": "lint",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "lint",
+      "source_file": "frontend/package.json",
+      "source_location": "L10"
+    },
+    {
+      "id": "frontend_package_scripts_preview",
+      "label": "preview",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "preview",
+      "source_file": "frontend/package.json",
+      "source_location": "L11"
+    },
+    {
+      "id": "frontend_package_scripts_start",
+      "label": "start",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "start",
+      "source_file": "frontend/package.json",
+      "source_location": "L7"
+    },
+    {
+      "id": "frontend_package_scripts_test",
+      "label": "test",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "test",
+      "source_file": "frontend/package.json",
+      "source_location": "L12"
+    },
+    {
+      "id": "frontend_package_scripts_test_e2e",
+      "label": "test:e2e",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "test:e2e",
+      "source_file": "frontend/package.json",
+      "source_location": "L13"
+    },
+    {
       "id": "frontend_package_type",
       "label": "type",
       "_origin": "ast",
@@ -7169,6 +7262,39 @@
       "norm_label": "version",
       "source_file": "frontend/package.json",
       "source_location": "L4"
+    },
+    {
+      "id": "frontend_tailwind_config",
+      "label": "tailwind.config.js",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "tailwind.config.js",
+      "source_file": "frontend/tailwind.config.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_vite_config",
+      "label": "vite.config.js",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "vite.config.js",
+      "source_file": "frontend/vite.config.js",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_vitest_setup",
+      "label": "vitest.setup.js",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "code",
+      "norm_label": "vitest.setup.js",
+      "source_file": "frontend/vitest.setup.js",
+      "source_location": "L1"
     },
     {
       "id": "frontend_package_json_ref_jsonwebtoken",
@@ -7215,6 +7341,17 @@
       "source_location": "L18"
     },
     {
+      "id": "ref_daisyui",
+      "label": "daisyui",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "daisyui",
+      "source_file": "frontend/package.json",
+      "source_location": "L48"
+    },
+    {
       "id": "ref_date_fns",
       "label": "date-fns",
       "_origin": "ast",
@@ -7237,6 +7374,50 @@
       "source_location": "L49"
     },
     {
+      "id": "ref_eslint_js",
+      "label": "@eslint/js",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "@eslint/js",
+      "source_file": "frontend/package.json",
+      "source_location": "L40"
+    },
+    {
+      "id": "ref_eslint_plugin_react_hooks",
+      "label": "eslint-plugin-react-hooks",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "eslint-plugin-react-hooks",
+      "source_file": "frontend/package.json",
+      "source_location": "L50"
+    },
+    {
+      "id": "ref_eslint_plugin_react_refresh",
+      "label": "eslint-plugin-react-refresh",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "eslint-plugin-react-refresh",
+      "source_file": "frontend/package.json",
+      "source_location": "L51"
+    },
+    {
+      "id": "ref_globals",
+      "label": "globals",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "globals",
+      "source_file": "frontend/package.json",
+      "source_location": "L52"
+    },
+    {
       "id": "ref_hookform_resolvers",
       "label": "@hookform/resolvers",
       "_origin": "ast",
@@ -7257,6 +7438,17 @@
       "norm_label": "jsdom",
       "source_file": "frontend/package.json",
       "source_location": "L53"
+    },
+    {
+      "id": "ref_leaflet",
+      "label": "leaflet",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "leaflet",
+      "source_file": "frontend/package.json",
+      "source_location": "L24"
     },
     {
       "id": "ref_playwright_test",
@@ -7336,6 +7528,17 @@
       "source_location": "L55"
     },
     {
+      "id": "ref_testing_library_jest_dom",
+      "label": "@testing-library/jest-dom",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "@testing-library/jest-dom",
+      "source_file": "frontend/package.json",
+      "source_location": "L42"
+    },
+    {
       "id": "ref_testing_library_react",
       "label": "@testing-library/react",
       "_origin": "ast",
@@ -7369,6 +7572,28 @@
       "source_location": "L45"
     },
     {
+      "id": "ref_vite",
+      "label": "vite",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "vite",
+      "source_file": "frontend/package.json",
+      "source_location": "L56"
+    },
+    {
+      "id": "ref_vitejs_plugin_react",
+      "label": "@vitejs/plugin-react",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "file_type": "concept",
+      "norm_label": "@vitejs/plugin-react",
+      "source_file": "frontend/package.json",
+      "source_location": "L46"
+    },
+    {
       "id": "ref_vitest",
       "label": "vitest",
       "_origin": "ast",
@@ -7378,28 +7603,6 @@
       "norm_label": "vitest",
       "source_file": "frontend/package.json",
       "source_location": "L57"
-    },
-    {
-      "id": "frontend_vitest_setup",
-      "label": "vitest.setup.js",
-      "_origin": "ast",
-      "community": 50,
-      "community_name": "@testing-library/jest-dom",
-      "file_type": "code",
-      "norm_label": "vitest.setup.js",
-      "source_file": "frontend/vitest.setup.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "ref_testing_library_jest_dom",
-      "label": "@testing-library/jest-dom",
-      "_origin": "ast",
-      "community": 50,
-      "community_name": "@testing-library/jest-dom",
-      "file_type": "concept",
-      "norm_label": "@testing-library/jest-dom",
-      "source_file": "frontend/package.json",
-      "source_location": "L42"
     },
     {
       "id": "backend_config_seed",
@@ -8128,55 +8331,11 @@
       "source_location": "L2"
     },
     {
-      "id": "backend_controllers_deliverycontroller",
-      "label": "deliveryController.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "deliverycontroller.js",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_delivery",
-      "label": "Delivery",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "delivery",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_trip",
-      "label": "Trip",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "trip",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_controllers_deliverycontroller_user",
-      "label": "User",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "user",
-      "source_file": "backend/controllers/deliveryController.js",
-      "source_location": "L2"
-    },
-    {
       "id": "backend_controllers_tripcontroller",
       "label": "tripController.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "tripcontroller.js",
       "source_file": "backend/controllers/tripController.js",
@@ -8187,7 +8346,7 @@
       "label": "crypto",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "crypto",
       "source_file": "backend/controllers/tripController.js",
@@ -8198,7 +8357,7 @@
       "label": "Delivery",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "delivery",
       "source_file": "backend/controllers/tripController.js",
@@ -8209,7 +8368,7 @@
       "label": "Trip",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "trip",
       "source_file": "backend/controllers/tripController.js",
@@ -8220,7 +8379,7 @@
       "label": "TripPing",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "tripping",
       "source_file": "backend/controllers/tripController.js",
@@ -8231,84 +8390,18 @@
       "label": "User",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "user",
       "source_file": "backend/controllers/tripController.js",
       "source_location": "L5"
     },
     {
-      "id": "backend_routes_deliveries",
-      "label": "deliveries.js",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "deliveries.js",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_deliveries_express",
-      "label": "express",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "express",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_deliveries_getdeliveries_getdelivery_createdelivery_deletedelivery_updatedelivery_getunpaiddeliveriesbyfarmer_getdeliverytypesbyfarmer_gettotalkgsbytype",
-      "label": "{ getDeliveries, getDelivery, createDelivery, deleteDelivery, updateDelivery, getUnpaidDeliveriesByFarmer, getDeliveryTypesByFarmer, getTotalKgsByType }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "{ getdeliveries, getdelivery, createdelivery, deletedelivery, updatedelivery, getunpaiddeliveriesbyfarmer, getdeliverytypesbyfarmer, gettotalkgsbytype }",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L3"
-    },
-    {
-      "id": "backend_routes_deliveries_router",
-      "label": "router",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "router",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L5"
-    },
-    {
-      "id": "backend_routes_deliveries_starttrip_endtrip_getintransit",
-      "label": "{ startTrip, endTrip, getInTransit }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "{ starttrip, endtrip, getintransit }",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L4"
-    },
-    {
-      "id": "backend_routes_deliveries_verifytoken_authorize",
-      "label": "{ verifyToken, authorize }",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "deliveries.js",
-      "file_type": "code",
-      "norm_label": "{ verifytoken, authorize }",
-      "source_file": "backend/routes/deliveries.js",
-      "source_location": "L2"
-    },
-    {
       "id": "backend_routes_tracking",
       "label": "tracking.js",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "tracking.js",
       "source_file": "backend/routes/tracking.js",
@@ -8319,7 +8412,7 @@
       "label": "express",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "express",
       "source_file": "backend/routes/tracking.js",
@@ -8330,7 +8423,7 @@
       "label": "pingLimiter",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "pinglimiter",
       "source_file": "backend/routes/tracking.js",
@@ -8341,7 +8434,7 @@
       "label": "{ pingTrip, getPublicTrip }",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "{ pingtrip, getpublictrip }",
       "source_file": "backend/routes/tracking.js",
@@ -8352,7 +8445,7 @@
       "label": "rateLimit",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "ratelimit",
       "source_file": "backend/routes/tracking.js",
@@ -8363,7 +8456,7 @@
       "label": "router",
       "_origin": "ast",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "file_type": "code",
       "norm_label": "router",
       "source_file": "backend/routes/tracking.js",
@@ -8402,6 +8495,18 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_hookform_resolvers_yup",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_leaflet_dist_leaflet_css",
+      "label": "ref_leaflet_dist_leaflet_css",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "App.jsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_leaflet_dist_leaflet_css",
       "source_file": "",
       "type": "external"
     },
@@ -8478,26 +8583,14 @@
       "type": "external"
     },
     {
-      "id": "ref_eslint_config",
-      "label": "ref_eslint_config",
+      "id": "ref_mongoose",
+      "label": "ref_mongoose",
       "_origin": "semantic",
-      "community": 17,
-      "community_name": "eslint.config.js",
+      "community": 10,
+      "community_name": "ref_mongoose",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_eslint_config",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_express_validator",
-      "label": "ref_express_validator",
-      "_origin": "semantic",
-      "community": 19,
-      "community_name": "reports.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_express_validator",
+      "norm_label": "ref_mongoose",
       "source_file": "",
       "type": "external"
     },
@@ -8505,11 +8598,23 @@
       "id": "ref_jsonwebtoken",
       "label": "ref_jsonwebtoken",
       "_origin": "semantic",
-      "community": 19,
-      "community_name": "reports.js",
+      "community": 15,
+      "community_name": "deliveries.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_jsonwebtoken",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_express_validator",
+      "label": "ref_express_validator",
+      "_origin": "semantic",
+      "community": 17,
+      "community_name": "farmers.js",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_express_validator",
       "source_file": "",
       "type": "external"
     },
@@ -8534,30 +8639,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_nodemailer",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_express_rate_limit",
-      "label": "ref_express_rate_limit",
-      "_origin": "semantic",
-      "community": 22,
-      "community_name": "dashboard.js",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_express_rate_limit",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_leaflet_dist_leaflet_css",
-      "label": "ref_leaflet_dist_leaflet_css",
-      "_origin": "semantic",
-      "community": 26,
-      "community_name": "DeliveryMap.jsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_leaflet_dist_leaflet_css",
       "source_file": "",
       "type": "external"
     },
@@ -8598,14 +8679,26 @@
       "type": "external"
     },
     {
-      "id": "ref_mongoose",
-      "label": "ref_mongoose",
+      "id": "ref_express_rate_limit",
+      "label": "ref_express_rate_limit",
       "_origin": "semantic",
-      "community": 47,
-      "community_name": "ref_mongoose",
+      "community": 3,
+      "community_name": "app.js",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_mongoose",
+      "norm_label": "ref_express_rate_limit",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_eslint_config",
+      "label": "ref_eslint_config",
+      "_origin": "semantic",
+      "community": 5,
+      "community_name": "frontend/package.json",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_eslint_config",
       "source_file": "",
       "type": "external"
     },
@@ -8662,7 +8755,7 @@
       "label": "ref_express",
       "_origin": "semantic",
       "community": 9,
-      "community_name": "deliveries.js",
+      "community_name": "tripController.js",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_express",
@@ -9436,7 +9529,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L243",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -9448,7 +9541,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L440",
+      "source_location": "L392",
       "weight": 1.0
     },
     {
@@ -9460,7 +9553,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L440",
+      "source_location": "L392",
       "weight": 1.0
     },
     {
@@ -9472,7 +9565,79 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L58",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_driverlinkfromstart",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_copytriplink",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_stepindex",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L175",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_statusheadline",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L176",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_utils_permissions_cancreate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack_deliverytrack",
+      "target": "frontend_src_utils_permissions_canupdate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L333",
       "weight": 1.0
     },
     {
@@ -9707,6 +9872,19 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_app_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "deferred": true,
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_app_editdelivery",
       "target": "frontend_src_pages_editdelivery",
       "relation": "imports_from",
@@ -9794,7 +9972,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -9807,7 +9985,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -9820,7 +9998,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -9859,7 +10037,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -9872,7 +10050,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -11624,7 +11802,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L11",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -11636,7 +11814,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -11648,7 +11826,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -11660,7 +11838,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -11672,7 +11850,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -11684,7 +11862,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L14",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -11697,6 +11875,66 @@
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_services_api_api",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_context_authcontext_authcontext",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_utils_permissions_cancreate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_utils_permissions_canupdate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_components_deliverymap_deliverymap",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -14617,7 +14855,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "ref_jspdf_autotable",
+      "target": "frontend_src_services_api",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14629,7 +14867,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "frontend_src_services_api",
+      "target": "frontend_src_context_authcontext",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14641,7 +14879,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "frontend_src_context_authcontext",
+      "target": "frontend_src_utils_permissions",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14653,18 +14891,6 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "frontend_src_utils_permissions",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pages_deliveries",
       "target": "frontend_src_components_deliverymap",
       "relation": "imports_from",
       "_origin": "ast",
@@ -14672,7 +14898,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L14",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -14737,7 +14963,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "ref_react_hot_toast",
+      "target": "ref_papaparse",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14749,7 +14975,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "ref_papaparse",
+      "target": "ref_jspdf",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14761,7 +14987,7 @@
     },
     {
       "source": "frontend_src_pages_deliveries",
-      "target": "ref_jspdf",
+      "target": "ref_jspdf_autotable",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14769,6 +14995,102 @@
       "context": "import",
       "source_file": "frontend/src/pages/Deliveries.jsx",
       "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_services_api",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_context_authcontext",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_utils_permissions",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_components_deliverymap",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "ref_react_router_dom",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "ref_react_hot_toast",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "ref_lucide_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -20008,7 +20330,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_app_payments",
+      "target": "frontend_src_app_deliverytrack",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20019,7 +20341,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_app_newpayment",
+      "target": "frontend_src_app_payments",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20030,7 +20352,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_app_reports",
+      "target": "frontend_src_app_newpayment",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20041,7 +20363,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_app_users",
+      "target": "frontend_src_app_reports",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20052,7 +20374,7 @@
     },
     {
       "source": "frontend_src_app",
-      "target": "frontend_src_app_usersettings",
+      "target": "frontend_src_app_users",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20063,13 +20385,24 @@
     },
     {
       "source": "frontend_src_app",
+      "target": "frontend_src_app_usersettings",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/App.jsx",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_app",
       "target": "frontend_src_app_loadingfallback",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -20080,7 +20413,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/App.jsx",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0
     },
     {
@@ -20377,7 +20710,73 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pages/Deliveries.jsx",
-      "source_location": "L16",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_steps",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_statusheadline",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_stepindex",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_driverlinkfromstart",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_copytriplink",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_deliverytrack",
+      "target": "frontend_src_pages_deliverytrack_deliverytrack",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/pages/DeliveryTrack.jsx",
+      "source_location": "L56",
       "weight": 1.0
     },
     {
@@ -21908,6 +22307,15 @@
     {
       "source": "frontend_src_app",
       "target": "frontend_src_pages_deliveries",
+      "relation": "dynamic_import",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/App.jsx"
+    },
+    {
+      "source": "frontend_src_app",
+      "target": "frontend_src_pages_deliverytrack",
       "relation": "dynamic_import",
       "_origin": "ast",
       "confidence": "EXTRACTED",
