@@ -1,5 +1,6 @@
 const Delivery = require('../models/Delivery');
 const User = require('../models/User');
+const Trip = require('../models/Trip');
 
 exports.getDeliveries = async (req, res) => {
   try {
@@ -94,6 +95,11 @@ exports.createDelivery = async (req, res) => {
 
 exports.updateDelivery = async (req, res) => {
   try {
+    const dropoff = req.body.dropoffLocation;
+    if (dropoff && (dropoff.lat || dropoff.lng || dropoff.address || dropoff.timestamp)) {
+      req.body.trackingStatus = 'arrived';
+    }
+
     const updatedDelivery = await Delivery.findByIdAndUpdate(req.params.id,
       { $set: req.body },
       { new: true, runValidators: true }
@@ -102,6 +108,14 @@ exports.updateDelivery = async (req, res) => {
     if (!updatedDelivery) {
       return res.status(400).json({ msg: 'Delivery not found' });
     }
+
+    if (updatedDelivery.trackingStatus === 'arrived') {
+      await Trip.updateMany(
+        { delivery: updatedDelivery._id, status: { $in: ['pending', 'live'] } },
+        { $set: { status: 'ended' } }
+      );
+    }
+
     res.json(updatedDelivery);
   } catch (err) {
     console.error("DELIVERY UPDATE FAILED", err.message);
@@ -118,6 +132,10 @@ exports.deleteDelivery = async (req, res) => {
     if (!deletedDelivery) {
       return res.status(400).json({ msg: 'Delivery not found' });
     }
+    await Trip.updateMany(
+      { delivery: deletedDelivery._id, status: { $in: ['pending', 'live'] } },
+      { $set: { status: 'ended' } }
+    );
     res.json({ msg: 'Delivery successfully deleted' });
 
   } catch (err) {

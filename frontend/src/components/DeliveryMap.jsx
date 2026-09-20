@@ -25,12 +25,20 @@ const DefaultIcon = L.icon({
  * @param {Function} props.onMarkerClick - Callback when marker is clicked
  * @param {string} props.height - Map container height (default: 400px)
  */
+const TruckIcon = L.divIcon({
+  className: 'ocms-truck-marker',
+  html: '<div style="font-size:22px;line-height:22px;">🚚</div>',
+  iconSize: [22, 22],
+  iconAnchor: [11, 11],
+});
+
 export const DeliveryMap = ({
   centerLat = -1.2,
   centerLng = 34.75,
   zoom = 12,
   farmers = [],
   deliveries = [],
+  trucks = [],
   userLocation = null,
   onMarkerClick = null,
   height = '400px',
@@ -38,6 +46,7 @@ export const DeliveryMap = ({
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
+  const trailsRef = useRef([]);
 
   useEffect(() => {
     // Initialize map only once
@@ -63,6 +72,8 @@ export const DeliveryMap = ({
     // Clear existing markers
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
+    trailsRef.current.forEach((line) => line.remove());
+    trailsRef.current = [];
 
     // Add farmer markers (blue)
     farmers.forEach((farmer) => {
@@ -139,6 +150,40 @@ export const DeliveryMap = ({
       }
     });
 
+    trucks.forEach((truck) => {
+      const last = truck.lastPosition;
+      if (last?.lat && last?.lng) {
+        const marker = L.marker([last.lat, last.lng], {
+          icon: TruckIcon,
+          title: `Truck: ${truck.driver || 'In transit'}`,
+        })
+          .bindPopup(
+            `
+            <div style="font-size: 12px;">
+              <strong>In transit</strong><br />
+              Driver: ${truck.driver || 'N/A'}<br />
+              Type: ${truck.type || ''}<br />
+              Farmer: ${truck.farmer?.name || 'N/A'}<br />
+              Updated: ${last.recordedAt ? new Date(last.recordedAt).toLocaleTimeString() : 'waiting'}
+            </div>
+          `,
+            { maxWidth: 250 }
+          )
+          .addTo(mapInstanceRef.current);
+
+        markersRef.current.push(marker);
+      }
+
+      const path = (truck.trail || [])
+        .filter((p) => p.lat && p.lng)
+        .map((p) => [p.lat, p.lng]);
+      if (path.length > 1) {
+        const line = L.polyline(path, { color: '#1B4332', weight: 4, opacity: 0.7 })
+          .addTo(mapInstanceRef.current);
+        trailsRef.current.push(line);
+      }
+    });
+
     // Add user location marker (green)
     if (userLocation?.lat && userLocation?.lng) {
       const greenIcon = L.icon({
@@ -169,7 +214,7 @@ export const DeliveryMap = ({
 
       markersRef.current.push(userMarker);
     }
-  }, [farmers, deliveries, userLocation, onMarkerClick]);
+  }, [farmers, deliveries, trucks, userLocation, onMarkerClick]);
 
   return (
     <div

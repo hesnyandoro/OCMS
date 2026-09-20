@@ -9,6 +9,7 @@ const LandingPage = lazy(() => import('./pages/LandingPage.jsx'));
 const AuthTogglePage = lazy(() => import('./pages/AuthTogglePage.jsx'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword.jsx'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'));
+const TrackTrip = lazy(() => import('./pages/TrackTrip.jsx'));
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Farmers = lazy(() => import('./pages/Farmers.jsx'));
 const NewFarmer = lazy(() => import('./pages/NewFarmer.jsx'));
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="/auth" element={<AuthTogglePage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/track/:token" element={<TrackTrip />} />
           <Route
             path="/dashboard/*"
             element={
