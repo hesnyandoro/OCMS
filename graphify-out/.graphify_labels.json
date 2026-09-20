@@ -48,8 +48,11 @@
   "46": "frontend/README.md",
   "47": "ref_mongoose",
   "48": "vite.config.js",
-  "49": "daisyui",
+  "49": "tailwind.config.js",
   "50": "@testing-library/jest-dom",
   "51": "User.js",
-  "54": "Reports"
+  "52": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+  "53": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
+  "54": "Reports",
+  "55": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_utils_sendauthemail_issuepasswordresetlink"
 }
