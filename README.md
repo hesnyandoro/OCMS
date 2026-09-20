@@ -268,10 +268,15 @@ DELETE /api/farmers/:id            - Delete farmer (admin only)
 ### Delivery Endpoints
 ```
 GET    /api/deliveries             - Get all deliveries (filtered by region)
+GET    /api/deliveries/in-transit  - Live trips (last GPS + trail)
 GET    /api/deliveries/:id         - Get single delivery
 POST   /api/deliveries             - Create new delivery
+POST   /api/deliveries/:id/start-trip - Issue driver tracking link (24h)
+POST   /api/deliveries/:id/end-trip   - Mark arrived and revoke link
 PUT    /api/deliveries/:id         - Update delivery (admin only)
 DELETE /api/deliveries/:id         - Delete delivery (admin only)
+GET    /api/tracking/:token        - Public trip metadata for driver phone
+POST   /api/tracking/:token/ping   - Public GPS ping (no login)
 ```
 
 ### Payment Endpoints

@@ -55,6 +55,12 @@ const deliverySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+
+  trackingStatus: {
+    type: String,
+    enum: ['idle', 'in_transit', 'arrived'],
+    default: 'idle'
   }
 }, { 
   timestamps: true,
@@ -70,6 +76,7 @@ deliverySchema.virtual('paymentStatus').get(function() {
 });
 
 deliverySchema.index({ farmer: 1, date: 1 });
-deliverySchema.index({ payment: 1 }); // Index for efficient payment lookups
+deliverySchema.index({ payment: 1 });
+deliverySchema.index({ trackingStatus: 1, region: 1 });
 
 module.exports = mongoose.model('Delivery', deliverySchema);

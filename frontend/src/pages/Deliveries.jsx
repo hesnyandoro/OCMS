@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map } from 'lucide-react';
+import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Link2, Navigation, Square } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -24,6 +25,8 @@ const Deliveries = () => {
   const [driverFilter, setDriverFilter] = useState('All');
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
+  const [trucks, setTrucks] = useState([]);
+  const [tripBusyId, setTripBusyId] = useState(null);
 
   const fetchDeliveries = async () => {
     setLoading(true);
@@ -42,8 +45,34 @@ const Deliveries = () => {
     fetchDeliveries();
   }, []);
 
+  const fetchInTransit = async () => {
+    try {
+      const { data } = await api.get('/deliveries/in-transit');
+      setTrucks(data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Smart auto-refresh: 2 minutes, pauses on inactive tab
   useSmartRefresh(fetchDeliveries, 120000);
+
+  useEffect(() => {
+    if (viewMode !== 'map') return undefined;
+    fetchInTransit();
+    const tick = () => {
+      if (!document.hidden) fetchInTransit();
+    };
+    const id = setInterval(tick, 12000);
+    const onVis = () => {
+      if (!document.hidden) fetchInTransit();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, [viewMode]);
 
   useEffect(() => {
     let filtered = [...deliveries];
@@ -70,6 +99,58 @@ const Deliveries = () => {
   const totalKgs = filteredDeliveries.reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
   const cherryKgs = filteredDeliveries.filter(d => d.type === 'Cherry').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
   const parchmentKgs = filteredDeliveries.filter(d => d.type === 'Parchment').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
+
+  const copyTripLink = async (url) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success('Trip link copied. Send it to the driver’s phone.');
+    } catch {
+      toast.error(`Copy this link: ${url}`);
+    }
+  };
+
+  const handleStartTrip = async (deliveryId) => {
+    setTripBusyId(deliveryId);
+    try {
+      const { data } = await api.post(`/deliveries/${deliveryId}/start-trip`);
+      sessionStorage.setItem(`tripUrl:${deliveryId}`, data.url);
+      setDeliveries((prev) => prev.map((d) => (
+        d._id === deliveryId ? { ...d, trackingStatus: data.trackingStatus || 'in_transit' } : d
+      )));
+      await copyTripLink(data.url);
+      if (viewMode === 'map') fetchInTransit();
+    } catch (err) {
+      toast.error(err.response?.data?.msg || 'Could not start trip');
+    } finally {
+      setTripBusyId(null);
+    }
+  };
+
+  const handleCopyStoredLink = async (deliveryId) => {
+    const stored = sessionStorage.getItem(`tripUrl:${deliveryId}`);
+    if (stored) {
+      await copyTripLink(stored);
+      return;
+    }
+    await handleStartTrip(deliveryId);
+  };
+
+  const handleEndTrip = async (deliveryId) => {
+    setTripBusyId(deliveryId);
+    try {
+      await api.post(`/deliveries/${deliveryId}/end-trip`);
+      sessionStorage.removeItem(`tripUrl:${deliveryId}`);
+      setDeliveries((prev) => prev.map((d) => (
+        d._id === deliveryId ? { ...d, trackingStatus: 'arrived' } : d
+      )));
+      toast.success('Trip marked arrived');
+      fetchInTransit();
+    } catch (err) {
+      toast.error(err.response?.data?.msg || 'Could not end trip');
+    } finally {
+      setTripBusyId(null);
+    }
+  };
 
   const handleEdit = (deliveryId) => {
     navigate(`/dashboard/deliveries/edit/${deliveryId}`);
@@ -326,11 +407,6 @@ const Deliveries = () => {
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-500 dark:text-dark-text-tertiary">Loading deliveries...</div>
         </div>
-      ) : filteredDeliveries.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-lg">No deliveries found</p>
-          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
-        </div>
       ) : viewMode === 'map' ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 overflow-hidden">
           <DeliveryMap
@@ -339,8 +415,14 @@ const Deliveries = () => {
             zoom={10}
             farmers={[]}
             deliveries={filteredDeliveries}
+            trucks={trucks}
             height="600px"
           />
+        </div>
+      ) : filteredDeliveries.length === 0 ? (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No deliveries found</p>
+          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -354,6 +436,7 @@ const Deliveries = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold">Weight (kg)</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Region</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Driver</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Trip</th>
                   {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
                     <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
                   )}
@@ -390,6 +473,53 @@ const Deliveries = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {delivery.driver}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          delivery.trackingStatus === 'in_transit'
+                            ? 'bg-green-100 text-green-800'
+                            : delivery.trackingStatus === 'arrived'
+                              ? 'bg-gray-200 text-gray-700'
+                              : 'bg-amber-50 text-amber-800'
+                        }`}>
+                          {delivery.trackingStatus === 'in_transit' ? 'In transit' : delivery.trackingStatus === 'arrived' ? 'Arrived' : 'Idle'}
+                        </span>
+                        {canCreate(authState?.role, 'deliveries') && delivery.trackingStatus !== 'arrived' && (
+                          <>
+                            <button
+                              type="button"
+                              disabled={tripBusyId === delivery._id}
+                              onClick={() => handleStartTrip(delivery._id)}
+                              className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg"
+                              title="Start trip and copy driver link"
+                            >
+                              <Navigation size={16} />
+                            </button>
+                            {delivery.trackingStatus === 'in_transit' && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopyStoredLink(delivery._id)}
+                                  className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg"
+                                  title="Copy last trip link from this browser"
+                                >
+                                  <Link2 size={16} />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={tripBusyId === delivery._id}
+                                  onClick={() => handleEndTrip(delivery._id)}
+                                  className="p-2 text-[#D93025] hover:bg-[#D93025] hover:text-white rounded-lg"
+                                  title="Mark arrived"
+                                >
+                                  <Square size={16} />
+                                </button>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </td>
                     {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
                       <td className="px-6 py-4">

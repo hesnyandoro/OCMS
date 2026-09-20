@@ -33,6 +33,9 @@ const ensureCriticalIndexes = async () => {
   try {
     const Session = require('../models/Session');
     const PasswordReset = require('../models/PasswordReset');
+    const Trip = require('../models/Trip');
+    const TripPing = require('../models/TripPing');
+    const Delivery = require('../models/Delivery');
 
     await Session.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
     await Session.collection.createIndex({ userId: 1 }).catch(() => {});
@@ -41,6 +44,15 @@ const ensureCriticalIndexes = async () => {
     await PasswordReset.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
     await PasswordReset.collection.createIndex({ token: 1 }, { unique: true }).catch(() => {});
     await PasswordReset.collection.createIndex({ userId: 1 }).catch(() => {});
+
+    await Trip.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
+    await Trip.collection.createIndex({ tokenHash: 1 }, { unique: true }).catch(() => {});
+    await Trip.collection.createIndex({ delivery: 1, status: 1 }).catch(() => {});
+
+    await TripPing.collection.createIndex({ trip: 1, recordedAt: -1 }).catch(() => {});
+    await TripPing.collection.createIndex({ recordedAt: 1 }, { expireAfterSeconds: 48 * 60 * 60 }).catch(() => {});
+
+    await Delivery.collection.createIndex({ trackingStatus: 1, region: 1 }).catch(() => {});
 
     cached.indexesCreated = true;
   } catch (err) {
