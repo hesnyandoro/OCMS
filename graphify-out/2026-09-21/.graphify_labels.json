@@ -7,7 +7,7 @@
   "5": "frontend/package.json",
   "6": "dependencies",
   "7": "devDependencies",
-  "8": "payments.js",
+  "8": "ref_mongoose",
   "9": "deliveries.js",
   "10": "optimize-db-indexes.js",
   "11": "backend/package.json",
@@ -46,10 +46,11 @@
   "44": "Security",
   "45": "extraction-spec.md",
   "46": "frontend/README.md",
-  "47": "ref_mongoose",
+  "47": "Payment.js",
   "48": "vite.config.js",
   "49": "daisyui",
   "50": "@testing-library/jest-dom",
-  "51": "User.js",
-  "54": "Reports"
+  "52": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+  "54": "Reports",
+  "56": "permissions.js"
 }
