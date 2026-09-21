@@ -36,13 +36,18 @@ const NewDelivery = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [_selectedFarmer, setSelectedFarmer] = useState(null);
   const [pickupLocation, setPickupLocation] = useState(null);
+  const [drivers, setDrivers] = useState([]);
   const dropdownRef = useRef(null);
   
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get('/farmers');
-        setFarmers(res.data || []);
+        const [farmersRes, driversRes] = await Promise.all([
+          api.get('/farmers'),
+          api.get('/drivers').catch(() => ({ data: [] }))
+        ]);
+        setFarmers(farmersRes.data || []);
+        setDrivers(driversRes.data || []);
       } catch (err) {
         console.error('Failed loading farmers', err);
       }
@@ -193,7 +198,12 @@ const NewDelivery = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="form-label">Driver</label>
-              <input className="form-control" {...register('driver')} />
+              <input className="form-control" list="driver-directory" {...register('driver')} />
+              <datalist id="driver-directory">
+                {drivers.map((d) => (
+                  <option key={d._id} value={d.name}>{d.phone}</option>
+                ))}
+              </datalist>
               {errors.driver && <p className="text-danger">{errors.driver.message}</p>}
             </div>
             <div>

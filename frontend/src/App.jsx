@@ -16,6 +16,7 @@ const NewFarmer = lazy(() => import('./pages/NewFarmer.jsx'));
 const Deliveries = lazy(() => import('./pages/Deliveries.jsx'));
 const NewDelivery = lazy(() => import('./pages/NewDelivery.jsx'));
 const EditDelivery = lazy(() => import('./pages/EditDelivery.jsx'));
+const DeliveryTrack = lazy(() => import('./pages/DeliveryTrack.jsx'));
 const Payments = lazy(() => import('./pages/Payments.jsx'));
 const NewPayment = lazy(() => import('./pages/NewPayment.jsx'));
 const Reports = lazy(() => import('./pages/Reports.jsx'));
@@ -57,6 +58,7 @@ const App = () => {
                     <Route path="deliveries" element={<Deliveries />} />
                     <Route path="deliveries/new" element={<NewDelivery />} />
                     <Route path="deliveries/edit/:id" element={<EditDelivery />} />
+                    <Route path="deliveries/:id" element={<DeliveryTrack />} />
                     <Route path="payments" element={<Payments />} />
                     <Route path="payments/new" element={<NewPayment />} />
                     <Route path="reports" element={<Reports />} />

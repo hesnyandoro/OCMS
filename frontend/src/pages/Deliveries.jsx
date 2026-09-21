@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, Calendar, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Link2, Navigation, Square } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { Plus, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Radio } from 'lucide-react';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
-import { canCreate, canUpdate, canDelete } from '../utils/permissions';
+import { canCreate, canUpdate, canDelete, canRead } from '../utils/permissions';
 import DeliveryMap from '../components/DeliveryMap';
+import MonitorDeliveriesModal from '../components/MonitorDeliveriesModal';
 
 const Deliveries = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Deliveries = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
   const [trucks, setTrucks] = useState([]);
-  const [tripBusyId, setTripBusyId] = useState(null);
+  const [monitorOpen, setMonitorOpen] = useState(false);
 
   const fetchDeliveries = async () => {
     setLoading(true);
@@ -100,56 +100,10 @@ const Deliveries = () => {
   const cherryKgs = filteredDeliveries.filter(d => d.type === 'Cherry').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
   const parchmentKgs = filteredDeliveries.filter(d => d.type === 'Parchment').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
 
-  const copyTripLink = async (url) => {
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success('Trip link copied. Send it to the driver’s phone.');
-    } catch {
-      toast.error(`Copy this link: ${url}`);
-    }
-  };
-
-  const handleStartTrip = async (deliveryId) => {
-    setTripBusyId(deliveryId);
-    try {
-      const { data } = await api.post(`/deliveries/${deliveryId}/start-trip`);
-      sessionStorage.setItem(`tripUrl:${deliveryId}`, data.url);
-      setDeliveries((prev) => prev.map((d) => (
-        d._id === deliveryId ? { ...d, trackingStatus: data.trackingStatus || 'in_transit' } : d
-      )));
-      await copyTripLink(data.url);
-      if (viewMode === 'map') fetchInTransit();
-    } catch (err) {
-      toast.error(err.response?.data?.msg || 'Could not start trip');
-    } finally {
-      setTripBusyId(null);
-    }
-  };
-
-  const handleCopyStoredLink = async (deliveryId) => {
-    const stored = sessionStorage.getItem(`tripUrl:${deliveryId}`);
-    if (stored) {
-      await copyTripLink(stored);
-      return;
-    }
-    await handleStartTrip(deliveryId);
-  };
-
-  const handleEndTrip = async (deliveryId) => {
-    setTripBusyId(deliveryId);
-    try {
-      await api.post(`/deliveries/${deliveryId}/end-trip`);
-      sessionStorage.removeItem(`tripUrl:${deliveryId}`);
-      setDeliveries((prev) => prev.map((d) => (
-        d._id === deliveryId ? { ...d, trackingStatus: 'arrived' } : d
-      )));
-      toast.success('Trip marked arrived');
-      fetchInTransit();
-    } catch (err) {
-      toast.error(err.response?.data?.msg || 'Could not end trip');
-    } finally {
-      setTripBusyId(null);
-    }
+  const tripLabel = (status) => {
+    if (status === 'in_transit') return 'In transit';
+    if (status === 'arrived') return 'Arrived';
+    return 'Recorded';
   };
 
   const handleEdit = (deliveryId) => {
@@ -240,15 +194,27 @@ const Deliveries = () => {
             <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Deliveries</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">Track and manage coffee deliveries</p>
           </div>
-          {canCreate(authState?.role, 'deliveries') && (
-            <button
-              onClick={() => navigate('/dashboard/deliveries/new')}
-              className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
-            >
-              <Plus size={20} />
-              <span>Record Delivery</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-3">
+            {canRead(authState?.role, 'deliveries') && (
+              <button
+                type="button"
+                onClick={() => setMonitorOpen(true)}
+                className="flex items-center gap-2 border-2 border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary px-6 py-3 rounded-lg hover:bg-[#1B4332] hover:text-white dark:hover:bg-dark-green-primary transition-all"
+              >
+                <Radio size={20} />
+                <span>Monitor deliveries</span>
+              </button>
+            )}
+            {canCreate(authState?.role, 'deliveries') && (
+              <button
+                onClick={() => navigate('/dashboard/deliveries/new')}
+                className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
+              >
+                <Plus size={20} />
+                <span>Record Delivery</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -444,7 +410,11 @@ const Deliveries = () => {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredDeliveries.map((delivery, index) => (
-                  <tr key={delivery._id} className={index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}>
+                  <tr
+                    key={delivery._id}
+                    onClick={() => navigate(`/dashboard/deliveries/${delivery._id}`)}
+                    className={`${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'} cursor-pointer hover:bg-[#1B4332]/5 dark:hover:bg-gray-600`}
+                  >
                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                       {new Date(delivery.date).toLocaleDateString()}
                     </td>
@@ -478,51 +448,27 @@ const Deliveries = () => {
                       <div className="flex flex-wrap items-center gap-2">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${
                           delivery.trackingStatus === 'in_transit'
-                            ? 'bg-green-100 text-green-800'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
                             : delivery.trackingStatus === 'arrived'
-                              ? 'bg-gray-200 text-gray-700'
-                              : 'bg-amber-50 text-amber-800'
+                              ? 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-200'
+                              : 'bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
                         }`}>
-                          {delivery.trackingStatus === 'in_transit' ? 'In transit' : delivery.trackingStatus === 'arrived' ? 'Arrived' : 'Idle'}
+                          {tripLabel(delivery.trackingStatus)}
                         </span>
-                        {canCreate(authState?.role, 'deliveries') && delivery.trackingStatus !== 'arrived' && (
-                          <>
-                            <button
-                              type="button"
-                              disabled={tripBusyId === delivery._id}
-                              onClick={() => handleStartTrip(delivery._id)}
-                              className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg"
-                              title="Start trip and copy driver link"
-                            >
-                              <Navigation size={16} />
-                            </button>
-                            {delivery.trackingStatus === 'in_transit' && (
-                              <>
-                                <button
-                                  type="button"
-                                  onClick={() => handleCopyStoredLink(delivery._id)}
-                                  className="p-2 text-[#1B4332] hover:bg-[#1B4332] hover:text-white rounded-lg"
-                                  title="Copy last trip link from this browser"
-                                >
-                                  <Link2 size={16} />
-                                </button>
-                                <button
-                                  type="button"
-                                  disabled={tripBusyId === delivery._id}
-                                  onClick={() => handleEndTrip(delivery._id)}
-                                  className="p-2 text-[#D93025] hover:bg-[#D93025] hover:text-white rounded-lg"
-                                  title="Mark arrived"
-                                >
-                                  <Square size={16} />
-                                </button>
-                              </>
-                            )}
-                          </>
-                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/dashboard/deliveries/${delivery._id}`);
+                          }}
+                          className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#1B4332] dark:bg-dark-green-primary text-white hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover"
+                        >
+                          Track
+                        </button>
                       </div>
                     </td>
                     {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center gap-2">
                           {canUpdate(authState?.role, 'deliveries') && (
                             <button
@@ -552,6 +498,7 @@ const Deliveries = () => {
           </div>
         </div>
       )}
+      <MonitorDeliveriesModal open={monitorOpen} onClose={() => setMonitorOpen(false)} />
     </div>
   );
 };

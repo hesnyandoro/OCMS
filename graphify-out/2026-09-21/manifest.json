@@ -210,9 +210,15 @@
     "semantic_hash": "5b84f4567208c7c747079c0477373231"
   },
   "frontend/src/App.jsx": {
+<<<<<<< HEAD
     "mtime": 1789942354.8357086,
     "seen": 1789944220.246688,
     "ast_hash": "389080d3917e106d2651161935f83814",
+=======
+    "mtime": 1789947093.669799,
+    "seen": 1789947116.2389686,
+    "ast_hash": "8e52d569286b135abca4fe01e601d457",
+>>>>>>> admin
     "semantic_hash": ""
   },
   "frontend/src/components/DeliveryMap.jsx": {
@@ -312,9 +318,15 @@
     "semantic_hash": "c726b21e73c98545e7446b39cbf118ae"
   },
   "frontend/src/pages/Deliveries.jsx": {
+<<<<<<< HEAD
     "mtime": 1789942418.1595461,
     "seen": 1789944220.2467163,
     "ast_hash": "e4362ebc1eb79c3749ea2d28307a04ec",
+=======
+    "mtime": 1789947102.7831733,
+    "seen": 1789947116.2389975,
+    "ast_hash": "6769051fcb79af9d8fe947f81cd41ac8",
+>>>>>>> admin
     "semantic_hash": ""
   },
   "frontend/src/pages/EditDelivery.jsx": {
@@ -592,5 +604,14 @@
     "seen": 1789944220.2467341,
     "ast_hash": "2eac647f22afc78897f034a7812ad78c",
     "semantic_hash": ""
+<<<<<<< HEAD
+=======
+  },
+  "frontend/src/pages/DeliveryTrack.jsx": {
+    "mtime": 1789947092.8930495,
+    "seen": 1789947116.2389994,
+    "ast_hash": "7bbff10187b9e017708fec893aa1a11f",
+    "semantic_hash": ""
+>>>>>>> admin
   }
 }
