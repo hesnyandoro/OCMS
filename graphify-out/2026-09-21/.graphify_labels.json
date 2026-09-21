@@ -7,12 +7,8 @@
   "5": "frontend/package.json",
   "6": "dependencies",
   "7": "devDependencies",
-  "8": "payments.js",
-<<<<<<< HEAD
-  "9": "deliveries.js",
-=======
+  "8": "ref_mongoose",
   "9": "tripController.js",
->>>>>>> admin
   "10": "optimize-db-indexes.js",
   "11": "backend/package.json",
   "12": "What You Must Do When Invoked",
@@ -21,15 +17,15 @@
   "15": "deliveries.js",
   "16": "🌿 OCMS - Organic Coffee Management System",
   "17": "farmers.js",
-  "18": "APICache",
+  "18": "apiCache",
   "19": "reports.js",
   "20": "db.js",
   "21": "vercel.json",
-  "22": "utils/geolocation.js",
+  "22": "payments.js",
   "23": "graphify reference: extra exports and benchmark",
   "24": "Install and run Graphify on OCMS",
   "25": "API Documentation",
-  "26": "DeliveryTrack.jsx",
+  "26": "User.js",
   "27": "Key Functionalities",
   "28": "Screenshots",
   "29": "graphify reference: query, path, explain",
@@ -50,22 +46,12 @@
   "44": "Security",
   "45": "extraction-spec.md",
   "46": "frontend/README.md",
-<<<<<<< HEAD
-  "47": "ref_mongoose",
-  "48": "vite.config.js",
-  "49": "daisyui",
-  "50": "@testing-library/jest-dom",
-  "51": "User.js",
-  "54": "Reports"
-=======
-  "47": "dashboard.js",
-  "48": "ref_mongoose",
-  "49": "tracking.js",
-  "50": "middleware/auth.js",
-  "51": "TripPing.js",
-  "52": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
-  "53": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
+  "47": "scripts",
+  "48": "eslint.config.js",
+  "49": "DeliveryMap.jsx",
+  "50": "vite.config.js",
+  "51": "daisyui",
+  "52": "@testing-library/jest-dom",
   "54": "Reports",
   "55": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_utils_sendauthemail_issuepasswordresetlink"
->>>>>>> admin
 }

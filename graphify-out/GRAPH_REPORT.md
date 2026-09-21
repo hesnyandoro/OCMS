@@ -6,12 +6,12 @@
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
 
 ## Summary
-- 781 nodes · 1244 edges · 55 communities (45 shown, 10 thin omitted)
+- 782 nodes · 1254 edges · 56 communities (44 shown, 12 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2c1e5df9`
+- Built from commit: `8f7dca33`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,25 +24,25 @@
 - frontend/package.json
 - dependencies
 - devDependencies
-- ref_mongoose
-- tripController.js
+- payments.js
+- deliveries.js
 - optimize-db-indexes.js
 - backend/package.json
 - What You Must Do When Invoked
 - package.json
 - geolocationService.js
-- deliveries.js
+- dashboard.js
 - 🌿 OCMS - Organic Coffee Management System
-- farmers.js
-- apiCache
 - reports.js
+- apiCache
+- ref_mongoose
 - db.js
 - vercel.json
-- payments.js
+- Session.js
 - graphify reference: extra exports and benchmark
 - Install and run Graphify on OCMS
 - API Documentation
-- User.js
+- c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize
 - Key Functionalities
 - Screenshots
 - graphify reference: query, path, explain
@@ -65,8 +65,9 @@
 - eslint.config.js
 - DeliveryMap.jsx
 - vite.config.js
-- daisyui
+- tailwind.config.js
 - @testing-library/jest-dom
+- c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken
 - Reports
 - c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_utils_sendauthemail_issuepasswordresetlink
 
@@ -75,7 +76,7 @@
 2. `react-router-dom` - 22 edges
 3. `lucide-react` - 21 edges
 4. `🌿 OCMS - Organic Coffee Management System` - 21 edges
-5. `api` - 15 edges
+5. `api` - 19 edges
 6. `react-hot-toast` - 15 edges
 7. `AuthContext` - 13 edges
 8. `What You Must Do When Invoked` - 12 edges
@@ -83,25 +84,25 @@
 10. `canCreate()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `useAuth()` --calls--> `Users()`  [EXTRACTED]
-  frontend/src/context/AuthContext.jsx → frontend/src/pages/Users.jsx
-- `useSmartRefresh()` --calls--> `Reports()`  [EXTRACTED]
-  frontend/src/hooks/useSmartRefresh.js → frontend/src/pages/Reports.jsx
 - `forgotPassword()` --calls--> `issuePasswordResetLink()`  [EXTRACTED]
   backend/controllers/authController.js → backend/utils/sendAuthEmail.js
-- `GeolocationCapture()` --calls--> `useGeolocation()`  [EXTRACTED]
-  frontend/src/components/GeolocationCapture.jsx → frontend/src/hooks/useGeolocation.js
 - `NearbyFarmers()` --calls--> `useGeolocation()`  [EXTRACTED]
   frontend/src/components/NearbyFarmers.jsx → frontend/src/hooks/useGeolocation.js
+- `Users()` --calls--> `useAuth()`  [EXTRACTED]
+  frontend/src/pages/Users.jsx → frontend/src/context/AuthContext.jsx
+- `Reports()` --calls--> `useSmartRefresh()`  [EXTRACTED]
+  frontend/src/pages/Reports.jsx → frontend/src/hooks/useSmartRefresh.js
+- `sendInvite()` --calls--> `issuePasswordResetLink()`  [EXTRACTED]
+  backend/controllers/userController.js → backend/utils/sendAuthEmail.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (55 total, 10 thin omitted)
+## Communities (56 total, 12 thin omitted)
 
 ### Community 0 - "App.jsx"
 Cohesion: 0.05
-Nodes (68): App(), AuthTogglePage, Dashboard, Deliveries, DeliveryTrack, EditDelivery, Farmers, ForgotPassword (+60 more)
+Nodes (70): App(), AuthTogglePage, Dashboard, Deliveries, DeliveryTrack, EditDelivery, Farmers, ForgotPassword (+62 more)
 
 ### Community 1 - "authController.js"
 Cohesion: 0.06
@@ -112,8 +113,8 @@ Cohesion: 0.11
 Nodes (32): bcrypt, createFieldAgent(), crypto, deleteUser(), getUsers(), { issuePasswordResetLink }, publicUser(), resendInvite() (+24 more)
 
 ### Community 3 - "app.js"
-Cohesion: 0.05
-Nodes (37): app, bootstrapAdmin, connectDB, allowedOrigins, app, compression, cors, dashboardRoutes (+29 more)
+Cohesion: 0.06
+Nodes (30): app, bootstrapAdmin, connectDB, allowedOrigins, app, compression, cors, dashboardRoutes (+22 more)
 
 ### Community 4 - "geolocationController.js"
 Cohesion: 0.13
@@ -131,17 +132,17 @@ Nodes (23): dependencies, axios, bootstrap, chart.js, date-fns, @hookform/resolv
 Cohesion: 0.11
 Nodes (19): devDependencies, autoprefixer, daisyui, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+11 more)
 
-### Community 8 - "ref_mongoose"
-Cohesion: 0.22
-Nodes (12): getUnpaidDeliveriesByFarmer(), createPayment(), Farmer, Payment, retryPayment(), updatePayment(), User, deliverySchema (+4 more)
+### Community 8 - "payments.js"
+Cohesion: 0.18
+Nodes (14): createPayment(), deletePayment(), Farmer, getPayments(), Payment, retryPayment(), updatePayment(), User (+6 more)
 
-### Community 9 - "tripController.js"
-Cohesion: 0.13
-Nodes (21): assertDeliveryAccess(), crypto, Delivery, endActiveTrips(), endTrip(), frontendBase(), getInTransit(), getPublicTrip() (+13 more)
+### Community 9 - "deliveries.js"
+Cohesion: 0.08
+Nodes (36): createDelivery(), deleteDelivery(), Delivery, getDeliveries(), getDelivery(), getDeliveryTypesByFarmer(), getTotalKgsByType(), Trip (+28 more)
 
 ### Community 10 - "optimize-db-indexes.js"
-Cohesion: 0.12
-Nodes (12): farmerSchema, mongoose, mongoose, sessionSchema, Delivery, dotenv, Farmer, mongoose (+4 more)
+Cohesion: 0.15
+Nodes (10): mongoose, passwordResetSchema, Delivery, dotenv, Farmer, mongoose, PasswordReset, Payment (+2 more)
 
 ### Community 11 - "backend/package.json"
 Cohesion: 0.05
@@ -159,37 +160,33 @@ Nodes (42): author, dependencies, bcryptjs, compression, cors, dotenv, express, 
 Cohesion: 0.19
 Nodes (3): GeolocationCapture(), NearbyFarmers(), useGeolocation()
 
-### Community 15 - "deliveries.js"
-Cohesion: 0.18
-Nodes (15): createDelivery(), deleteDelivery(), Delivery, getDeliveries(), getDelivery(), getDeliveryTypesByFarmer(), getTotalKgsByType(), Trip (+7 more)
+### Community 15 - "dashboard.js"
+Cohesion: 0.15
+Nodes (11): farmerSchema, mongoose, dashboardReadLimiter, Delivery, Farmer, Payment, PENDING_STATUS, rateLimit (+3 more)
 
 ### Community 16 - "🌿 OCMS - Organic Coffee Management System"
 Cohesion: 0.15
 Nodes (12): Acknowledgments, Author, Environment Variables, License, 🌿 OCMS - Organic Coffee Management System, Prerequisites, Required Backend Variables, Required Frontend Variables (+4 more)
 
-### Community 17 - "farmers.js"
-Cohesion: 0.08
-Nodes (27): createDriver(), Driver, getDrivers(), { validationResult }, createFarmer(), deleteFarmer(), Farmer, getFarmer() (+19 more)
+### Community 17 - "reports.js"
+Cohesion: 0.06
+Nodes (46): createDriver(), Driver, getDrivers(), { validationResult }, createFarmer(), deleteFarmer(), Farmer, getFarmer() (+38 more)
 
 ### Community 18 - "apiCache"
 Cohesion: 0.22
 Nodes (3): apiCache, cachedFetch(), invalidateCache()
 
-### Community 19 - "reports.js"
-Cohesion: 0.16
-Nodes (17): Delivery, Farmer, generateReport(), getCashflowForecast(), getComparativeAnalytics(), getDeliveriesReport(), getDeliveryTypeAnalytics(), getFarmerPerformance() (+9 more)
+### Community 19 - "ref_mongoose"
+Cohesion: 0.29
+Nodes (6): getUnpaidDeliveriesByFarmer(), mongoose, paymentSchema, mongoose, tripPingSchema, ref_mongoose
 
 ### Community 20 - "db.js"
-Cohesion: 0.16
-Nodes (11): connectDB(), ensureCriticalIndexes(), mongoose, sanitizeUri(), withTimeout(), mongoose, passwordResetSchema, mongoose (+3 more)
+Cohesion: 0.31
+Nodes (7): connectDB(), ensureCriticalIndexes(), mongoose, sanitizeUri(), withTimeout(), mongoose, tripSchema
 
 ### Community 21 - "vercel.json"
 Cohesion: 0.22
 Nodes (8): maxDuration, buildCommand, functions, api/index.js, installCommand, outputDirectory, rewrites, $schema
-
-### Community 22 - "payments.js"
-Cohesion: 0.20
-Nodes (10): deletePayment(), getPayments(), authorize(), jwt, verifyToken(), express, { getPayments, createPayment, updatePayment, deletePayment, retryPayment }, router (+2 more)
 
 ### Community 23 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -273,30 +270,30 @@ Nodes (5): ref_eslint_config, @eslint/js, eslint-plugin-react-hooks, eslint-plug
 
 ### Community 49 - "DeliveryMap.jsx"
 Cohesion: 0.33
-Nodes (4): DefaultIcon, TruckIcon, leaflet, ref_leaflet_dist_leaflet_css
+Nodes (5): DefaultIcon, DeliveryMap(), TruckIcon, leaflet, ref_leaflet_dist_leaflet_css
 
 ### Community 54 - "Reports"
 Cohesion: 0.40
 Nodes (3): Reports(), fetchAllData(), processData()
 
 ## Knowledge Gaps
-- **400 isolated node(s):** `express`, `cors`, `dotenv`, `compression`, `dashboardRoutes` (+395 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 467 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **400 isolated node(s):** `app`, `connectDB`, `bootstrapAdmin`, `express`, `cors` (+395 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 464 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `react` connect `App.jsx` to `DeliveryMap.jsx`, `frontend/package.json`, `geolocationService.js`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `frontend/package.json`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **What connects `express`, `cors`, `dotenv` to the rest of the system?**
+- **What connects `app`, `connectDB`, `bootstrapAdmin` to the rest of the system?**
   _400 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05305039787798409 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.053934571175950484 - nodes in this community are weakly interconnected._
 - **Should `authController.js` be split into smaller, more focused modules?**
   _Cohesion score 0.06363636363636363 - nodes in this community are weakly interconnected._
 - **Should `sendAuthEmail.js` be split into smaller, more focused modules?**
