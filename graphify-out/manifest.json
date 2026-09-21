@@ -1,37 +1,37 @@
 {
   "api/index.js": {
-    "mtime": 1789823597.0765963,
-    "seen": 1789823601.8559284,
+    "mtime": 1789948367.9796677,
+    "seen": 1789948392.2949986,
     "ast_hash": "bf20fb1bbad33f810091440eafae04ae",
     "semantic_hash": ""
   },
   "backend/app.js": {
-    "mtime": 1789942331.233771,
-    "seen": 1789944220.2466156,
+    "mtime": 1789948367.9821794,
+    "seen": 1789948392.295005,
     "ast_hash": "40c40c898c35cec601459c6fdde7e81c",
     "semantic_hash": ""
   },
   "backend/config/db.js": {
-    "mtime": 1789942334.0762317,
-    "seen": 1789944220.2466185,
+    "mtime": 1789948367.9831924,
+    "seen": 1789948392.2950084,
     "ast_hash": "2b2dcf570ce251f4fe8787d195de7a45",
     "semantic_hash": ""
   },
   "backend/config/seed.js": {
-    "mtime": 1789823597.0785985,
-    "seen": 1789823601.8559427,
+    "mtime": 1789948367.9852037,
+    "seen": 1789948392.2950103,
     "ast_hash": "819093bf0f536ca5769a44fe8cd416bc",
     "semantic_hash": ""
   },
   "backend/controllers/authController.js": {
-    "mtime": 1789842147.6172347,
-    "seen": 1789842704.4790218,
+    "mtime": 1789948367.9872117,
+    "seen": 1789948392.295012,
     "ast_hash": "dbbcb51a9708b540cbb71a7798927d6a",
     "semantic_hash": ""
   },
   "backend/controllers/deliveryController.js": {
-    "mtime": 1789942345.6572206,
-    "seen": 1789944220.2466252,
+    "mtime": 1789948367.9882026,
+    "seen": 1789948392.2950137,
     "ast_hash": "984bb2a33ce3bc7905aa10699119f816",
     "semantic_hash": ""
   },
@@ -60,8 +60,8 @@
     "semantic_hash": "03b773b739743347b230f29da63078ca"
   },
   "backend/controllers/userController.js": {
-    "mtime": 1789825696.1407826,
-    "seen": 1789837181.7701998,
+    "mtime": 1789948367.991832,
+    "seen": 1789948392.2950275,
     "ast_hash": "2e366f0fda7cf4e5431cf2b485b26e11",
     "semantic_hash": ""
   },
@@ -72,8 +72,8 @@
     "semantic_hash": "cc42dc67bea72f8d93d5a259e3ff81d7"
   },
   "backend/models/Delivery.js": {
-    "mtime": 1789942312.6049948,
-    "seen": 1789944220.2466402,
+    "mtime": 1789948367.9938307,
+    "seen": 1789948392.295031,
     "ast_hash": "5c9df616c067621a9ce88c7b4a870e5c",
     "semantic_hash": ""
   },
@@ -126,8 +126,8 @@
     "semantic_hash": "dbafcf9f979d32dff002ba2bae7f0227"
   },
   "backend/routes/auth.js": {
-    "mtime": 1789842147.6187742,
-    "seen": 1789842704.479076,
+    "mtime": 1789948368.0023544,
+    "seen": 1789948392.2950494,
     "ast_hash": "9129906858a36501ca3619a1c3b6a867",
     "semantic_hash": ""
   },
@@ -138,8 +138,8 @@
     "semantic_hash": "223823b8e3f0b8f0041c01b5d7a519dd"
   },
   "backend/routes/deliveries.js": {
-    "mtime": 1789942330.9845521,
-    "seen": 1789944220.2466629,
+    "mtime": 1789948368.0033498,
+    "seen": 1789948392.2950528,
     "ast_hash": "1a39fd5dc4e21b6e66978997c78e33bc",
     "semantic_hash": ""
   },
@@ -168,14 +168,14 @@
     "semantic_hash": "5a630c24125794f7c4e5d6518c9a38e8"
   },
   "backend/routes/users.js": {
-    "mtime": 1789823597.085594,
-    "seen": 1789823601.8559856,
+    "mtime": 1789948368.006353,
+    "seen": 1789948392.2950625,
     "ast_hash": "d00ab07b12a656bfcd0dda21433b3ed4",
     "semantic_hash": ""
   },
   "backend/server.js": {
-    "mtime": 1789823597.086597,
-    "seen": 1789823601.8559873,
+    "mtime": 1789948368.0103567,
+    "seen": 1789948392.295064,
     "ast_hash": "46b7e3da6901d096550089466972dc35",
     "semantic_hash": ""
   },
@@ -210,14 +210,14 @@
     "semantic_hash": "5b84f4567208c7c747079c0477373231"
   },
   "frontend/src/App.jsx": {
-    "mtime": 1789942354.8357086,
-    "seen": 1789944220.246688,
-    "ast_hash": "389080d3917e106d2651161935f83814",
+    "mtime": 1789948726.1174426,
+    "seen": 1789948730.5474274,
+    "ast_hash": "8e52d569286b135abca4fe01e601d457",
     "semantic_hash": ""
   },
   "frontend/src/components/DeliveryMap.jsx": {
-    "mtime": 1789942418.1601555,
-    "seen": 1789944220.2466893,
+    "mtime": 1789948368.0183542,
+    "seen": 1789948392.2950788,
     "ast_hash": "631ae0bc2f00bf6c69b003b1239734d1",
     "semantic_hash": ""
   },
@@ -246,8 +246,8 @@
     "semantic_hash": "c69d8602db73e42443b3cacc46fb515a"
   },
   "frontend/src/components/Login.jsx": {
-    "mtime": 1789842147.6136017,
-    "seen": 1789842704.4791396,
+    "mtime": 1789948368.0213528,
+    "seen": 1789948392.2950864,
     "ast_hash": "da194b3915cfebc0c58ed177ff096e47",
     "semantic_hash": ""
   },
@@ -270,8 +270,8 @@
     "semantic_hash": "003c5ac48ec88d51feeb50b4c2d8cf8d"
   },
   "frontend/src/context/AuthContext.jsx": {
-    "mtime": 1789842147.6156032,
-    "seen": 1789842704.4791505,
+    "mtime": 1789948368.024354,
+    "seen": 1789948392.2950933,
     "ast_hash": "2915ef6f9749d665f712dc913616ed41",
     "semantic_hash": ""
   },
@@ -300,8 +300,8 @@
     "semantic_hash": ""
   },
   "frontend/src/pages/AuthTogglePage.jsx": {
-    "mtime": 1789842147.6146038,
-    "seen": 1789842704.4791658,
+    "mtime": 1789948368.0273514,
+    "seen": 1789948392.2951021,
     "ast_hash": "cc5d74e3103fe11dda211064fc2cb52d",
     "semantic_hash": ""
   },
@@ -312,9 +312,9 @@
     "semantic_hash": "c726b21e73c98545e7446b39cbf118ae"
   },
   "frontend/src/pages/Deliveries.jsx": {
-    "mtime": 1789942418.1595461,
-    "seen": 1789944220.2467163,
-    "ast_hash": "e4362ebc1eb79c3749ea2d28307a04ec",
+    "mtime": 1789948726.1194427,
+    "seen": 1789948730.5474658,
+    "ast_hash": "6769051fcb79af9d8fe947f81cd41ac8",
     "semantic_hash": ""
   },
   "frontend/src/pages/EditDelivery.jsx": {
@@ -372,8 +372,8 @@
     "semantic_hash": "e592e5ac82658f3162f76cf3789725ac"
   },
   "frontend/src/pages/ResetPassword.jsx": {
-    "mtime": 1789842147.6156032,
-    "seen": 1789842704.4792016,
+    "mtime": 1789948368.0323548,
+    "seen": 1789948392.2951283,
     "ast_hash": "046549bb10f5380e26507c9e921aaa6b",
     "semantic_hash": ""
   },
@@ -384,8 +384,8 @@
     "semantic_hash": "7f8a47008e4bd61e2c965f3c9d12dea4"
   },
   "frontend/src/pages/Users.jsx": {
-    "mtime": 1789825787.734327,
-    "seen": 1789837181.7702951,
+    "mtime": 1789948368.0363536,
+    "seen": 1789948392.2951329,
     "ast_hash": "a1ed9289a47b20b459376f29330ad950",
     "semantic_hash": ""
   },
@@ -510,8 +510,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789942418.158549,
-    "seen": 1789944220.2467735,
+    "mtime": 1789948367.978671,
+    "seen": 1789948392.2951708,
     "ast_hash": "d2ea2c375e7022a1582743007e85b7ef",
     "semantic_hash": ""
   },
@@ -552,45 +552,51 @@
     "semantic_hash": ""
   },
   "backend/utils/bootstrapAdmin.js": {
-    "mtime": 1789823597.0875936,
-    "seen": 1789823601.8559902,
+    "mtime": 1789948368.011353,
+    "seen": 1789948392.295067,
     "ast_hash": "16b042cd97ab0d74fb54c5d16cc612ea",
     "semantic_hash": ""
   },
   "backend/utils/sendAuthEmail.js": {
-    "mtime": 1789825687.6776543,
-    "seen": 1789837181.7702403,
+    "mtime": 1789948368.012352,
+    "seen": 1789948392.2950702,
     "ast_hash": "5a4355f18db40af1a5d2730153ab9b4f",
     "semantic_hash": ""
   },
   "backend/controllers/tripController.js": {
-    "mtime": 1789942326.791178,
-    "seen": 1789944220.2466345,
+    "mtime": 1789948367.9898217,
+    "seen": 1789948392.2950258,
     "ast_hash": "0e0db07f21a44df5848745833a63cfc4",
     "semantic_hash": ""
   },
   "backend/models/Trip.js": {
-    "mtime": 1789942313.7380078,
-    "seen": 1789944220.2466488,
+    "mtime": 1789948367.9958358,
+    "seen": 1789948392.2950394,
     "ast_hash": "45922afa4cdc7b082d6f69f80c617f7d",
     "semantic_hash": ""
   },
   "backend/models/TripPing.js": {
-    "mtime": 1789942314.3019447,
-    "seen": 1789944220.2466507,
+    "mtime": 1789948367.9968324,
+    "seen": 1789948392.295041,
     "ast_hash": "1767fa33179573187d37bdf717d40a46",
     "semantic_hash": ""
   },
   "backend/routes/tracking.js": {
-    "mtime": 1789942327.7802038,
-    "seen": 1789944220.2466712,
+    "mtime": 1789948368.0053546,
+    "seen": 1789948392.2950609,
     "ast_hash": "2c4a3f1b3e6f4fc6e57eba1aa63acf1c",
     "semantic_hash": ""
   },
   "frontend/src/pages/TrackTrip.jsx": {
-    "mtime": 1789942353.8203268,
-    "seen": 1789944220.2467341,
+    "mtime": 1789948368.034351,
+    "seen": 1789948392.2951295,
     "ast_hash": "2eac647f22afc78897f034a7812ad78c",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/DeliveryTrack.jsx": {
+    "mtime": 1789948726.1204422,
+    "seen": 1789948730.5474672,
+    "ast_hash": "7bbff10187b9e017708fec893aa1a11f",
     "semantic_hash": ""
   }
 }

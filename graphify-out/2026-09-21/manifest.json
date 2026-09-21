@@ -6,16 +6,16 @@
     "semantic_hash": ""
   },
   "backend/app.js": {
-    "mtime": 1789601975.5993319,
-    "seen": 1789738245.9817507,
-    "ast_hash": "b297dea838e33f7cee41043e87e7c726",
-    "semantic_hash": "b297dea838e33f7cee41043e87e7c726"
+    "mtime": 1789942331.233771,
+    "seen": 1789944220.2466156,
+    "ast_hash": "40c40c898c35cec601459c6fdde7e81c",
+    "semantic_hash": ""
   },
   "backend/config/db.js": {
-    "mtime": 1789742407.1524382,
-    "seen": 1789770026.51753,
-    "ast_hash": "df99945a718897c991693ef0992a3519",
-    "semantic_hash": "df99945a718897c991693ef0992a3519"
+    "mtime": 1789942334.0762317,
+    "seen": 1789944220.2466185,
+    "ast_hash": "2b2dcf570ce251f4fe8787d195de7a45",
+    "semantic_hash": ""
   },
   "backend/config/seed.js": {
     "mtime": 1789823597.0785985,
@@ -30,10 +30,10 @@
     "semantic_hash": ""
   },
   "backend/controllers/deliveryController.js": {
-    "mtime": 1788972753.0889535,
-    "seen": 1789738245.9817572,
-    "ast_hash": "597dd80d54b3497d475ff1ca155888bd",
-    "semantic_hash": "597dd80d54b3497d475ff1ca155888bd"
+    "mtime": 1789942345.6572206,
+    "seen": 1789944220.2466252,
+    "ast_hash": "984bb2a33ce3bc7905aa10699119f816",
+    "semantic_hash": ""
   },
   "backend/controllers/farmerController.js": {
     "mtime": 1788972753.089953,
@@ -72,10 +72,10 @@
     "semantic_hash": "cc42dc67bea72f8d93d5a259e3ff81d7"
   },
   "backend/models/Delivery.js": {
-    "mtime": 1789603390.3522606,
-    "seen": 1789738245.9817672,
-    "ast_hash": "ad0351d386604fd61f0d2563d2a5162d",
-    "semantic_hash": "ad0351d386604fd61f0d2563d2a5162d"
+    "mtime": 1789942312.6049948,
+    "seen": 1789944220.2466402,
+    "ast_hash": "5c9df616c067621a9ce88c7b4a870e5c",
+    "semantic_hash": ""
   },
   "backend/models/Farmer.js": {
     "mtime": 1788972753.0990553,
@@ -138,10 +138,10 @@
     "semantic_hash": "223823b8e3f0b8f0041c01b5d7a519dd"
   },
   "backend/routes/deliveries.js": {
-    "mtime": 1789603390.3613248,
-    "seen": 1789738245.981782,
-    "ast_hash": "8a3653bcb84f820a0b0415b23a900aa6",
-    "semantic_hash": "8a3653bcb84f820a0b0415b23a900aa6"
+    "mtime": 1789942330.9845521,
+    "seen": 1789944220.2466629,
+    "ast_hash": "1a39fd5dc4e21b6e66978997c78e33bc",
+    "semantic_hash": ""
   },
   "backend/routes/farmers.js": {
     "mtime": 1789603390.3640146,
@@ -210,16 +210,16 @@
     "semantic_hash": "5b84f4567208c7c747079c0477373231"
   },
   "frontend/src/App.jsx": {
-    "mtime": 1789769309.211758,
-    "seen": 1789770026.5175872,
-    "ast_hash": "40c7c5bf5a6708062a38e52260a82bd5",
+    "mtime": 1789947093.669799,
+    "seen": 1789947116.2389686,
+    "ast_hash": "8e52d569286b135abca4fe01e601d457",
     "semantic_hash": ""
   },
   "frontend/src/components/DeliveryMap.jsx": {
-    "mtime": 1789603390.3916504,
-    "seen": 1789738245.981799,
-    "ast_hash": "948f435370cb5ffdf98121405c0919d4",
-    "semantic_hash": "948f435370cb5ffdf98121405c0919d4"
+    "mtime": 1789942418.1601555,
+    "seen": 1789944220.2466893,
+    "ast_hash": "631ae0bc2f00bf6c69b003b1239734d1",
+    "semantic_hash": ""
   },
   "frontend/src/components/FarmerForm.jsx": {
     "mtime": 1788972753.1369226,
@@ -312,10 +312,10 @@
     "semantic_hash": "c726b21e73c98545e7446b39cbf118ae"
   },
   "frontend/src/pages/Deliveries.jsx": {
-    "mtime": 1789603390.40827,
-    "seen": 1789738245.9818215,
-    "ast_hash": "2e178aae342a3f4afd7bdf713418ff2a",
-    "semantic_hash": "2e178aae342a3f4afd7bdf713418ff2a"
+    "mtime": 1789947102.7831733,
+    "seen": 1789947116.2389975,
+    "ast_hash": "6769051fcb79af9d8fe947f81cd41ac8",
+    "semantic_hash": ""
   },
   "frontend/src/pages/EditDelivery.jsx": {
     "mtime": 1788972753.1584256,
@@ -510,9 +510,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789838106.347454,
-    "seen": 1789838859.9526827,
-    "ast_hash": "a67dde24cca5bafd961260fde4e17055",
+    "mtime": 1789942418.158549,
+    "seen": 1789944220.2467735,
+    "ast_hash": "d2ea2c375e7022a1582743007e85b7ef",
     "semantic_hash": ""
   },
   "docker-compose.prod.yml": {
@@ -561,6 +561,42 @@
     "mtime": 1789825687.6776543,
     "seen": 1789837181.7702403,
     "ast_hash": "5a4355f18db40af1a5d2730153ab9b4f",
+    "semantic_hash": ""
+  },
+  "backend/controllers/tripController.js": {
+    "mtime": 1789942326.791178,
+    "seen": 1789944220.2466345,
+    "ast_hash": "0e0db07f21a44df5848745833a63cfc4",
+    "semantic_hash": ""
+  },
+  "backend/models/Trip.js": {
+    "mtime": 1789942313.7380078,
+    "seen": 1789944220.2466488,
+    "ast_hash": "45922afa4cdc7b082d6f69f80c617f7d",
+    "semantic_hash": ""
+  },
+  "backend/models/TripPing.js": {
+    "mtime": 1789942314.3019447,
+    "seen": 1789944220.2466507,
+    "ast_hash": "1767fa33179573187d37bdf717d40a46",
+    "semantic_hash": ""
+  },
+  "backend/routes/tracking.js": {
+    "mtime": 1789942327.7802038,
+    "seen": 1789944220.2466712,
+    "ast_hash": "2c4a3f1b3e6f4fc6e57eba1aa63acf1c",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/TrackTrip.jsx": {
+    "mtime": 1789942353.8203268,
+    "seen": 1789944220.2467341,
+    "ast_hash": "2eac647f22afc78897f034a7812ad78c",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/DeliveryTrack.jsx": {
+    "mtime": 1789947092.8930495,
+    "seen": 1789947116.2389994,
+    "ast_hash": "7bbff10187b9e017708fec893aa1a11f",
     "semantic_hash": ""
   }
 }
