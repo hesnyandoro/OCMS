@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map } from 'lucide-react';
+import { Plus, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Radio } from 'lucide-react';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
-import { canCreate, canUpdate, canDelete } from '../utils/permissions';
+import { canCreate, canUpdate, canDelete, canRead } from '../utils/permissions';
 import DeliveryMap from '../components/DeliveryMap';
+import MonitorDeliveriesModal from '../components/MonitorDeliveriesModal';
 
 const Deliveries = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Deliveries = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
   const [trucks, setTrucks] = useState([]);
+  const [monitorOpen, setMonitorOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState('');
   const [tripBusy, setTripBusy] = useState(false);
 
@@ -257,15 +259,27 @@ const Deliveries = () => {
             <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Deliveries</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">Track and manage coffee deliveries</p>
           </div>
-          {canCreate(authState?.role, 'deliveries') && (
-            <button
-              onClick={() => navigate('/dashboard/deliveries/new')}
-              className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
-            >
-              <Plus size={20} />
-              <span>Record Delivery</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-3">
+            {canRead(authState?.role, 'deliveries') && (
+              <button
+                type="button"
+                onClick={() => setMonitorOpen(true)}
+                className="flex items-center gap-2 border-2 border-[#1B4332] dark:border-dark-green-primary text-[#1B4332] dark:text-dark-green-primary px-6 py-3 rounded-lg hover:bg-[#1B4332] hover:text-white dark:hover:bg-dark-green-primary transition-all"
+              >
+                <Radio size={20} />
+                <span>Monitor deliveries</span>
+              </button>
+            )}
+            {canCreate(authState?.role, 'deliveries') && (
+              <button
+                onClick={() => navigate('/dashboard/deliveries/new')}
+                className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
+              >
+                <Plus size={20} />
+                <span>Record Delivery</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -604,6 +618,7 @@ const Deliveries = () => {
           </div>
         </div>
       )}
+      <MonitorDeliveriesModal open={monitorOpen} onClose={() => setMonitorOpen(false)} />
     </div>
   );
 };
