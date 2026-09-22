@@ -160,10 +160,10 @@ export const DeliveryMap = ({
           .bindPopup(
             `
             <div style="font-size: 12px;">
-              <strong>In transit</strong><br />
+              <strong>${truck.kind === 'driver' ? 'Driver' : 'In transit'}</strong><br />
               Driver: ${truck.driver || 'N/A'}<br />
-              Type: ${truck.type || ''}<br />
-              Farmer: ${truck.farmer?.name || 'N/A'}<br />
+              ${truck.type ? `Type: ${truck.type}<br />` : ''}
+              ${truck.farmer?.name ? `Farmer: ${truck.farmer.name}<br />` : ''}
               Updated: ${last.recordedAt ? new Date(last.recordedAt).toLocaleTimeString() : 'waiting'}
             </div>
           `,

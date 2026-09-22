@@ -64,6 +64,85 @@ exports.startTrip = async (req, res) => {
   }
 };
 
+const endDriverTrips = async (driverName) => {
+  await Trip.updateMany(
+    { driverName, status: { $in: ['pending', 'live'] } },
+    { $set: { status: 'ended' } }
+  );
+};
+
+exports.startDriverTrip = async (req, res) => {
+  try {
+    const driverName = String(req.body.driver || '').trim();
+    if (!driverName) {
+      return res.status(400).json({ msg: 'Driver name is required' });
+    }
+
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user?.assignedRegion) {
+        const known = await Delivery.exists({
+          driver: driverName,
+          region: user.assignedRegion
+        });
+        if (!known) {
+          return res.status(403).json({ msg: 'You can only track drivers in your assigned region' });
+        }
+      }
+    }
+
+    await endDriverTrips(driverName);
+
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + TRIP_HOURS * 60 * 60 * 1000);
+
+    const trip = await Trip.create({
+      driverName,
+      tokenHash: hashToken(rawToken),
+      status: 'pending',
+      expiresAt
+    });
+
+    res.status(201).json({
+      tripId: trip._id,
+      driver: driverName,
+      url: `${frontendBase()}/track/${rawToken}`,
+      expiresAt
+    });
+  } catch (err) {
+    console.error('Start driver trip error:', err);
+    res.status(500).json({ msg: 'Server error starting trip' });
+  }
+};
+
+exports.endDriverTrip = async (req, res) => {
+  try {
+    const driverName = String(req.body.driver || '').trim();
+    if (!driverName) {
+      return res.status(400).json({ msg: 'Driver name is required' });
+    }
+
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user?.assignedRegion) {
+        const known = await Delivery.exists({
+          driver: driverName,
+          region: user.assignedRegion
+        });
+        if (!known) {
+          return res.status(403).json({ msg: 'You can only track drivers in your assigned region' });
+        }
+      }
+    }
+
+    await endDriverTrips(driverName);
+    res.json({ msg: 'Trip ended', driver: driverName });
+  } catch (err) {
+    console.error('End driver trip error:', err);
+    res.status(500).json({ msg: 'Server error ending trip' });
+  }
+};
+
 exports.endTrip = async (req, res) => {
   try {
     const delivery = await Delivery.findById(req.params.id);
@@ -130,7 +209,47 @@ exports.getInTransit = async (req, res) => {
       };
     }));
 
-    res.json(payload);
+    const driverQuery = {
+      driverName: { $exists: true, $nin: [null, ''] },
+      status: { $in: ['pending', 'live'] },
+      expiresAt: { $gt: new Date() }
+    };
+    if (req.user.role === 'fieldagent') {
+      const user = await User.findById(req.user.id);
+      if (user?.assignedRegion) {
+        const names = await Delivery.distinct('driver', { region: user.assignedRegion });
+        driverQuery.driverName = { $in: names.filter(Boolean) };
+      }
+    }
+
+    const driverTrips = await Trip.find(driverQuery).sort({ updatedAt: -1 }).lean();
+    const driverPayload = await Promise.all(driverTrips.map(async (trip) => {
+      const trail = await TripPing.find({ trip: trip._id })
+        .sort({ recordedAt: -1 })
+        .limit(MAX_TRAIL)
+        .select('lat lng recordedAt accuracy')
+        .lean();
+      trail.reverse();
+      return {
+        _id: trip._id,
+        driver: trip.driverName,
+        type: '',
+        farmer: null,
+        lastPosition: trip.last || null,
+        trail,
+        tripStatus: trip.status,
+        tripExpiresAt: trip.expiresAt,
+        kind: 'driver'
+      };
+    }));
+
+    const seenDrivers = new Set(driverPayload.map((item) => item.driver));
+    const merged = [
+      ...driverPayload,
+      ...payload.filter((item) => !seenDrivers.has(item.driver))
+    ];
+
+    res.json(merged);
   } catch (err) {
     console.error('Get in-transit error:', err);
     res.status(500).json({ msg: 'Server error fetching in-transit deliveries' });
@@ -146,7 +265,7 @@ exports.getPublicTrip = async (req, res) => {
     }
     res.json({
       status: trip.status,
-      driver: trip.delivery?.driver,
+      driver: trip.driverName || trip.delivery?.driver,
       type: trip.delivery?.type,
       region: trip.delivery?.region,
       expiresAt: trip.expiresAt
@@ -199,10 +318,12 @@ exports.pingTrip = async (req, res) => {
       recordedAt: now
     });
 
-    await Delivery.updateOne(
-      { _id: trip.delivery },
-      { $set: { trackingStatus: 'in_transit' } }
-    );
+    if (trip.delivery) {
+      await Delivery.updateOne(
+        { _id: trip.delivery },
+        { $set: { trackingStatus: 'in_transit' } }
+      );
+    }
 
     res.json({ ok: true });
   } catch (err) {
