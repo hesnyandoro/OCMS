@@ -3,8 +3,11 @@ const mongoose = require('mongoose');
 const tripSchema = new mongoose.Schema({
   delivery: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Delivery',
-    required: true
+    ref: 'Delivery'
+  },
+  driverName: {
+    type: String,
+    trim: true
   },
   tokenHash: {
     type: String,
@@ -30,5 +33,6 @@ const tripSchema = new mongoose.Schema({
 
 tripSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 tripSchema.index({ delivery: 1, status: 1 });
+tripSchema.index({ driverName: 1, status: 1 });
 
 module.exports = mongoose.model('Trip', tripSchema);

@@ -1,7 +1,7 @@
 const express = require('express');
 const { verifyToken, authorize } = require('../middleware/auth');
 const { getDeliveries, getDelivery, createDelivery, deleteDelivery, updateDelivery, getUnpaidDeliveriesByFarmer, getDeliveryTypesByFarmer, getTotalKgsByType } = require('../controllers/deliveryController');
-const { startTrip, endTrip, getInTransit } = require('../controllers/tripController');
+const { startTrip, endTrip, getInTransit, startDriverTrip, endDriverTrip } = require('../controllers/tripController');
 const router = express.Router();
 
 // Payment-related endpoints
@@ -10,6 +10,8 @@ router.get('/types/:farmerId', verifyToken, authorize('admin', 'fieldagent'), ge
 router.get('/total/:farmerId/:type', verifyToken, authorize('admin', 'fieldagent'), getTotalKgsByType);
 
 router.get('/in-transit', verifyToken, authorize('admin', 'fieldagent'), getInTransit);
+router.post('/trips/start', verifyToken, authorize('admin', 'fieldagent'), startDriverTrip);
+router.post('/trips/end', verifyToken, authorize('admin', 'fieldagent'), endDriverTrip);
 router.post('/:id/start-trip', verifyToken, authorize('admin', 'fieldagent'), startTrip);
 router.post('/:id/end-trip', verifyToken, authorize('admin', 'fieldagent'), endTrip);
 
