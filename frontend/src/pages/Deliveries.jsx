@@ -27,12 +27,9 @@ const Deliveries = () => {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
   const [trucks, setTrucks] = useState([]);
-<<<<<<< HEAD
   const [monitorOpen, setMonitorOpen] = useState(false);
-=======
   const [selectedDriver, setSelectedDriver] = useState('');
   const [tripBusy, setTripBusy] = useState(false);
->>>>>>> 752db4d342940e2643768b2bc4f35773f0b0aefa
 
   const fetchDeliveries = async () => {
     setLoading(true);
