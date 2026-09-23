@@ -48,10 +48,19 @@
   "46": "frontend/README.md",
   "47": "eslint.config.js",
   "48": "DeliveryMap.jsx",
-  "49": "deliveryController.js",
-  "50": "daisyui",
+  "49": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_createdelivery",
+  "50": "tailwind.config.js",
   "51": "vite.config.js",
+  "52": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_deletedelivery",
+  "53": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getdeliveries",
   "54": "Reports",
   "55": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_utils_sendauthemail_issuepasswordresetlink",
-  "56": "@testing-library/jest-dom"
+  "56": "@testing-library/jest-dom",
+  "57": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getdelivery",
+  "58": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getdeliverytypesbyfarmer",
+  "59": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_gettotalkgsbytype",
+  "60": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getunpaiddeliveriesbyfarmer",
+  "61": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_updatedelivery",
+  "62": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
+  "63": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken"
 }
