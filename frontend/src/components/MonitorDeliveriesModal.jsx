@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
+import { useDismissibleOverlay } from '../hooks/useDismissibleOverlay';
 
 const tripBadge = (status) => {
   if (status === 'live') return { label: 'Live', className: 'bg-green-100 text-green-800' };
@@ -54,6 +55,8 @@ const MonitorDeliveriesModal = ({ open, onClose }) => {
     };
   }, [open]);
 
+  const { onBackdropClick } = useDismissibleOverlay(open, onClose);
+
   if (!open) return null;
 
   const tripByDriver = new Map(
@@ -82,7 +85,12 @@ const MonitorDeliveriesModal = ({ open, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      onClick={onBackdropClick}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-bold text-[#1B4332] dark:text-gray-100">Monitor deliveries</h2>

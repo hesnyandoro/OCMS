@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
+import { useDismissibleOverlay } from '../hooks/useDismissibleOverlay';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
@@ -59,6 +60,23 @@ const Payments = () => {
   const [retryPricePerKg, setRetryPricePerKg] = useState('');
   const [useOriginalPrice, setUseOriginalPrice] = useState(true);
   const [isRetrying, setIsRetrying] = useState(false);
+
+  const closeVoidModal = useCallback(() => {
+    setShowVoidModal(false);
+    setVoidReason('');
+    setSelectedPayment(null);
+  }, []);
+
+  const closeRetryModal = useCallback(() => {
+    setShowRetryModal(false);
+    setRetryReason('');
+    setRetryPricePerKg('');
+    setUseOriginalPrice(true);
+    setSelectedPayment(null);
+  }, []);
+
+  const { onBackdropClick: onVoidBackdropClick } = useDismissibleOverlay(showVoidModal, closeVoidModal);
+  const { onBackdropClick: onRetryBackdropClick } = useDismissibleOverlay(showRetryModal, closeRetryModal);
 
   const handleVoidPayment = async () => {
     if (!voidReason.trim()) {
@@ -470,7 +488,12 @@ const Payments = () => {
 
       {/* Retry Payment Modal */}
       {showRetryModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto"
+          onClick={onRetryBackdropClick}
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full p-4 sm:p-6 my-8">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Retry Failed Payment
@@ -588,13 +611,7 @@ const Payments = () => {
 
             <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
               <button
-                onClick={() => {
-                  setShowRetryModal(false);
-                  setRetryReason('');
-                  setRetryPricePerKg('');
-                  setUseOriginalPrice(true);
-                  setSelectedPayment(null);
-                }}
+                onClick={closeRetryModal}
                 className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-sm sm:text-base"
                 disabled={isRetrying}
               >
@@ -624,7 +641,12 @@ const Payments = () => {
 
       {/* Void Payment Modal */}
       {showVoidModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={onVoidBackdropClick}
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Void Payment
@@ -683,11 +705,7 @@ const Payments = () => {
 
             <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowVoidModal(false);
-                  setVoidReason('');
-                  setSelectedPayment(null);
-                }}
+                onClick={closeVoidModal}
                 className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
                 disabled={isVoiding}
               >

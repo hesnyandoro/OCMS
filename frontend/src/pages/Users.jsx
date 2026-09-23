@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users as UsersIcon, UserPlus, Trash2, Mail, Shield, MapPin, Search, Loader2, Send } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useDismissibleOverlay } from '../hooks/useDismissibleOverlay';
 
 const Users = () => {
     const navigate = useNavigate();
@@ -23,6 +24,13 @@ const Users = () => {
     const [formData, setFormData] = useState(emptyForm);
     const [formErrors, setFormErrors] = useState({});
     const [resendingId, setResendingId] = useState(null);
+
+    const closeCreateModal = useCallback(() => {
+        setShowCreateModal(false);
+        setFormData(emptyForm);
+        setFormErrors({});
+    }, []);
+    const { onBackdropClick: onCreateBackdropClick } = useDismissibleOverlay(showCreateModal, closeCreateModal);
 
     // Check if user is admin
     useEffect(() => {
@@ -335,7 +343,12 @@ const Users = () => {
 
             {/* Create Field Agent Modal */}
             {showCreateModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50 p-4">
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50 p-4"
+                    onClick={onCreateBackdropClick}
+                    role="dialog"
+                    aria-modal="true"
+                >
                     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                             <h2 className="text-2xl font-bold text-[#1B4332] dark:text-dark-green-primary">Invite User</h2>
@@ -445,11 +458,7 @@ const Users = () => {
                             <div className="flex gap-3 pt-4">
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        setShowCreateModal(false);
-                                        setFormData(emptyForm);
-                                        setFormErrors({});
-                                    }}
+                                    onClick={closeCreateModal}
                                     className="flex-1 px-4 py-2.5 border border-gray-400 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-500 transition-all"
                                 >
                                     Cancel
