@@ -110,7 +110,7 @@
       "file_type": "code",
       "norm_label": "monitordeliveriesmodal()",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L14"
+      "source_location": "L17"
     },
     {
       "id": "frontend_src_components_monitordeliveriesmodal_tripbadge",
@@ -122,7 +122,7 @@
       "file_type": "code",
       "norm_label": "tripbadge()",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L7"
+      "source_location": "L10"
     },
     {
       "id": "frontend_src_components_nearbyfarmers_nearbyfarmers",
@@ -9793,7 +9793,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L122",
+      "source_location": "L132",
       "weight": 1.0
     },
     {
@@ -9805,7 +9805,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L58",
+      "source_location": "L62",
       "weight": 1.0
     },
     {
@@ -12054,7 +12054,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -14898,7 +14898,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -21282,24 +21282,24 @@
     },
     {
       "source": "frontend_src_components_monitordeliveriesmodal",
-      "target": "frontend_src_components_monitordeliveriesmodal_monitordeliveriesmodal",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_components_monitordeliveriesmodal",
       "target": "frontend_src_components_monitordeliveriesmodal_tripbadge",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L7",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_components_monitordeliveriesmodal",
+      "target": "frontend_src_components_monitordeliveriesmodal_monitordeliveriesmodal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -23538,5 +23538,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "587b2f482eedd9396b88011e36dfa27f3823951d"
+  "built_at_commit": "661bc2dee474cc38e059dfb685b1762f579a260b"
 }

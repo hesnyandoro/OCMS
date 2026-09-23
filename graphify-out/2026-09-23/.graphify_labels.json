@@ -25,7 +25,7 @@
   "23": "graphify reference: extra exports and benchmark",
   "24": "Install and run Graphify on OCMS",
   "25": "API Documentation",
-  "26": "User.js",
+  "26": "seed.js",
   "27": "Key Functionalities",
   "28": "Screenshots",
   "29": "graphify reference: query, path, explain",
@@ -49,7 +49,7 @@
   "47": "eslint.config.js",
   "48": "DeliveryMap.jsx",
   "49": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_createdelivery",
-  "50": "tailwind.config.js",
+  "50": "daisyui",
   "51": "vite.config.js",
   "52": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_deletedelivery",
   "53": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getdeliveries",
@@ -62,5 +62,7 @@
   "60": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getunpaiddeliveriesbyfarmer",
   "61": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_updatedelivery",
   "62": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_authorize",
-  "63": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken"
+  "63": "c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_middleware_auth_verifytoken",
+  "64": "routes/auth.js",
+  "65": "User.js"
 }

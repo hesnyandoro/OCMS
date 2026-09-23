@@ -1,7 +1,7 @@
 # Graph Report - OCMS  (2026-09-23)
 
 ## Corpus Check
-- 99 files · ~62,954 words
+- 99 files · ~62,978 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `587b2f48`
+- Built from commit: `661bc2de`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -93,14 +93,14 @@
 10. `/graphify` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `NearbyFarmers()` --calls--> `useGeolocation()`  [EXTRACTED]
+  frontend/src/components/NearbyFarmers.jsx → frontend/src/hooks/useGeolocation.js
 - `Reports()` --calls--> `useSmartRefresh()`  [EXTRACTED]
   frontend/src/pages/Reports.jsx → frontend/src/hooks/useSmartRefresh.js
 - `DeliveryTrack()` --calls--> `canUpdate()`  [EXTRACTED]
   frontend/src/pages/DeliveryTrack.jsx → frontend/src/utils/permissions.js
 - `forgotPassword()` --calls--> `issuePasswordResetLink()`  [EXTRACTED]
   backend/controllers/authController.js → backend/utils/sendAuthEmail.js
-- `NearbyFarmers()` --calls--> `useGeolocation()`  [EXTRACTED]
-  frontend/src/components/NearbyFarmers.jsx → frontend/src/hooks/useGeolocation.js
 - `MonitorDeliveriesModal()` --calls--> `useDismissibleOverlay()`  [EXTRACTED]
   frontend/src/components/MonitorDeliveriesModal.jsx → frontend/src/hooks/useDismissibleOverlay.js
 
