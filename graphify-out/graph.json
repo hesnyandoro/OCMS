@@ -7697,22 +7697,11 @@
       "source_location": "L57"
     },
     {
-      "id": "tailwindcss",
-      "label": "tailwindcss",
-      "_origin": "ast",
-      "community": 50,
-      "community_name": "tailwind.config.js",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "tailwindcss",
-      "source_file": "tailwindcss"
-    },
-    {
       "id": "frontend_tailwind_config",
       "label": "tailwind.config.js",
       "_origin": "ast",
       "community": 50,
-      "community_name": "tailwind.config.js",
+      "community_name": "daisyui",
       "file_type": "code",
       "norm_label": "tailwind.config.js",
       "source_file": "frontend/tailwind.config.js",
@@ -7723,7 +7712,7 @@
       "label": "daisyui",
       "_origin": "ast",
       "community": 50,
-      "community_name": "tailwind.config.js",
+      "community_name": "daisyui",
       "file_type": "concept",
       "norm_label": "daisyui",
       "source_file": "frontend/package.json",
@@ -12054,18 +12043,6 @@
       "context": "import",
       "source_file": "frontend/src/components/Login.jsx",
       "source_location": "L2",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_components_monitordeliveriesmodal",
-      "target": "frontend_src_services_api_api",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "frontend/src/components/MonitorDeliveriesModal.jsx",
-      "source_location": "L4",
       "weight": 1.0
     },
     {
@@ -23219,15 +23196,6 @@
       "source_file": "frontend/src/App.jsx"
     },
     {
-      "source": "frontend_tailwind_config",
-      "target": "tailwindcss",
-      "relation": "dynamic_import",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/tailwind.config.js"
-    },
-    {
       "source": "frontend_src_utils_apicache_apicache",
       "target": "frontend_src_utils_apicache_apicache_get",
       "relation": "method",
@@ -23594,5 +23562,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b83d19c6fe9372af3273ba11fa4df8da894e74f9"
+  "built_at_commit": "9e86c124a02601856b203c09b0a587a8d8a0ce49"
 }
