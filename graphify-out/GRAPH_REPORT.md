@@ -6,12 +6,12 @@
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
 
 ## Summary
-- 789 nodes · 1260 edges · 64 communities (45 shown, 19 thin omitted)
+- 790 nodes · 1262 edges · 64 communities (45 shown, 19 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9e86c124`
+- Built from commit: `50582914`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -64,7 +64,7 @@
 - eslint.config.js
 - DeliveryMap.jsx
 - c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_createdelivery
-- daisyui
+- tailwind.config.js
 - vite.config.js
 - c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_deletedelivery
 - c_users_nyandoro_desktop_portfolio_autoscale_ocms_backend_controllers_deliverycontroller_getdeliveries
@@ -84,7 +84,7 @@
 2. `react-router-dom` - 22 edges
 3. `lucide-react` - 21 edges
 4. `🌿 OCMS - Organic Coffee Management System` - 21 edges
-5. `api` - 18 edges
+5. `api` - 19 edges
 6. `react-hot-toast` - 16 edges
 7. `AuthContext` - 13 edges
 8. `What You Must Do When Invoked` - 12 edges
@@ -92,16 +92,16 @@
 10. `/graphify` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Reports()` --calls--> `useSmartRefresh()`  [EXTRACTED]
-  frontend/src/pages/Reports.jsx → frontend/src/hooks/useSmartRefresh.js
-- `DeliveryTrack()` --calls--> `canUpdate()`  [EXTRACTED]
-  frontend/src/pages/DeliveryTrack.jsx → frontend/src/utils/permissions.js
 - `forgotPassword()` --calls--> `issuePasswordResetLink()`  [EXTRACTED]
   backend/controllers/authController.js → backend/utils/sendAuthEmail.js
 - `NearbyFarmers()` --calls--> `useGeolocation()`  [EXTRACTED]
   frontend/src/components/NearbyFarmers.jsx → frontend/src/hooks/useGeolocation.js
-- `MonitorDeliveriesModal()` --calls--> `useDismissibleOverlay()`  [EXTRACTED]
-  frontend/src/components/MonitorDeliveriesModal.jsx → frontend/src/hooks/useDismissibleOverlay.js
+- `Reports()` --calls--> `useSmartRefresh()`  [EXTRACTED]
+  frontend/src/pages/Reports.jsx → frontend/src/hooks/useSmartRefresh.js
+- `DeliveryTrack()` --calls--> `canUpdate()`  [EXTRACTED]
+  frontend/src/pages/DeliveryTrack.jsx → frontend/src/utils/permissions.js
+- `sendInvite()` --calls--> `issuePasswordResetLink()`  [EXTRACTED]
+  backend/controllers/userController.js → backend/utils/sendAuthEmail.js
 
 ## Import Cycles
 - None detected.
@@ -289,7 +289,7 @@ Cohesion: 0.40
 Nodes (3): Reports(), fetchAllData(), processData()
 
 ## Knowledge Gaps
-- **399 isolated node(s):** `allNavItems`, `allQuickActions`, `ThemeContext`, `PERMISSIONS`, `bcrypt` (+394 more)
+- **399 isolated node(s):** `app`, `connectDB`, `bootstrapAdmin`, `express`, `cors` (+394 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 471 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -302,10 +302,10 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **What connects `allNavItems`, `allQuickActions`, `ThemeContext` to the rest of the system?**
+- **What connects `app`, `connectDB`, `bootstrapAdmin` to the rest of the system?**
   _399 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0568234746157429 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.056978730010867874 - nodes in this community are weakly interconnected._
 - **Should `authController.js` be split into smaller, more focused modules?**
   _Cohesion score 0.06363636363636363 - nodes in this community are weakly interconnected._
 - **Should `sendAuthEmail.js` be split into smaller, more focused modules?**
