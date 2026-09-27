@@ -131,13 +131,11 @@ const Header = ({ toggleSidebar, userName }) => {
         return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
     };
 
-    // Fetch notifications on component mount and when dropdown opens
     useEffect(() => {
+        if (!showNotifications) return undefined;
         fetchNotifications();
-        // Refresh notifications every 2 minutes
-        const interval = setInterval(fetchNotifications, 120000);
-        return () => clearInterval(interval);
-    }, []);
+        return undefined;
+    }, [showNotifications]);
 
     // Handle notification click
     const handleNotificationClick = (notification) => {

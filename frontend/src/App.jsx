@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
 import Layout from './components/Layout.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 
@@ -36,7 +35,6 @@ const LoadingFallback = () => (
 
 const App = () => {
   return (
-    <AuthProvider>
       <Router>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
@@ -78,6 +76,7 @@ const App = () => {
           </Routes>
         </Suspense>
       </Router>
-    </AuthProvider>
   );
-};export default App;
+};
+
+export default App;

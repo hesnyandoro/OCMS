@@ -19,8 +19,6 @@ router.get('/summary', dashboardReadLimiter, async (req, res) => {
     try {
         const { region, driver, type, date } = req.query;
 
-        const totalFarmers = await Farmer.countDocuments({});
-
         // Build match filters for deliveries based on provided query params
         const deliveryMatch = {};
         if (region) deliveryMatch.region = region;
@@ -35,23 +33,99 @@ router.get('/summary', dashboardReadLimiter, async (req, res) => {
             deliveryMatch.date = { $gte: startOfDay, $lte: endOfDay };
         }
 
-        const kgsDeliveredResult = await Delivery.aggregate([
-            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
-            { $group: { _id: null, totalKgs: { $sum: "$kgsDelivered" } } }
-        ]);
-        const totalKgs = kgsDeliveredResult.length > 0 ? kgsDeliveredResult[0].totalKgs : 0;
+        const deliveryMatchStages = Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : [];
 
         // Monthly kgs trend (last 6 months)
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
         const monthMatch = { date: { $gte: new Date(new Date(sixMonthsAgo).setHours(0,0,0,0)) } };
-        // merge deliveryMatch into monthMatch
         if (Object.keys(deliveryMatch).length) Object.assign(monthMatch, deliveryMatch);
-        const kgsByMonthAgg = await Delivery.aggregate([
-            { $match: monthMatch },
-            { $group: { _id: { year: { $year: "$date" }, month: { $month: "$date" } }, totalKgs: { $sum: "$kgsDelivered" } } },
-            { $sort: { "_id.year": 1, "_id.month": 1 } }
+
+        const [
+            totalFarmers,
+            kgsDeliveredResult,
+            kgsByMonthAgg,
+            pendingPaymentsResult,
+            pendingDeliveriesAgg,
+            deliveryStatusAgg,
+            recentDeliveries,
+            recentPayments
+        ] = await Promise.all([
+            Farmer.countDocuments({}),
+            Delivery.aggregate([
+                ...deliveryMatchStages,
+                { $group: { _id: null, totalKgs: { $sum: "$kgsDelivered" } } }
+            ]),
+            Delivery.aggregate([
+                { $match: monthMatch },
+                { $group: { _id: { year: { $year: "$date" }, month: { $month: "$date" } }, totalKgs: { $sum: "$kgsDelivered" } } },
+                { $sort: { "_id.year": 1, "_id.month": 1 } }
+            ]),
+            Payment.aggregate([
+                { $match: { status: { $in: SUCCESS_STATUS } } },
+                { $group: { _id: null, totalAmount: { $sum: "$amountPaid" } } }
+            ]),
+            Delivery.aggregate([
+                ...deliveryMatchStages,
+                {
+                    $lookup: {
+                        from: 'payments',
+                        localField: 'payment',
+                        foreignField: '_id',
+                        as: 'paymentInfo'
+                    }
+                },
+                {
+                    $match: {
+                        $or: [
+                            { paymentInfo: { $size: 0 } },
+                            { 'paymentInfo.status': { $in: PENDING_STATUS } }
+                        ]
+                    }
+                },
+                { $count: 'total' }
+            ]),
+            Delivery.aggregate([
+                ...deliveryMatchStages,
+                {
+                    $lookup: {
+                        from: 'payments',
+                        localField: 'payment',
+                        foreignField: '_id',
+                        as: 'paymentInfo'
+                    }
+                },
+                {
+                    $addFields: {
+                        effectiveStatus: {
+                            $cond: {
+                                if: { $gt: [{ $size: '$paymentInfo' }, 0] },
+                                then: { $arrayElemAt: ['$paymentInfo.status', 0] },
+                                else: 'Pending'
+                            }
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$effectiveStatus',
+                        count: { $sum: 1 }
+                    }
+                }
+            ]),
+            Delivery.find(Object.keys(deliveryMatch).length ? deliveryMatch : {})
+                .sort({ date: -1 })
+                .limit(5)
+                .populate('farmer', 'name')
+                .lean(),
+            Payment.find({})
+                .sort({ date: -1 })
+                .limit(5)
+                .populate('farmer', 'name')
+                .lean()
         ]);
+
+        const totalKgs = kgsDeliveredResult.length > 0 ? kgsDeliveredResult[0].totalKgs : 0;
 
         // Build a map for quick lookup
         const kgsByMonthMap = {};
@@ -72,93 +146,16 @@ router.get('/summary', dashboardReadLimiter, async (req, res) => {
             monthLabels.push(label);
             monthValues.push(kgsByMonthMap[key] || 0);
         }
-        const pendingPaymentsResult = await Payment.aggregate([
-            {$match: { status: { $in: SUCCESS_STATUS } }},
-            { $group: { _id: null, totalAmount: { $sum: "$amountPaid" } } }
-        ]);
         const totalPaid = pendingPaymentsResult.length > 0 ? pendingPaymentsResult[0].totalAmount : 0;
-        
-        // Count deliveries without payment records (truly pending)
-        const pendingDeliveriesAgg = await Delivery.aggregate([
-            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
-            {
-                $lookup: {
-                    from: 'payments',
-                    localField: 'payment',
-                    foreignField: '_id',
-                    as: 'paymentInfo'
-                }
-            },
-            {
-                $match: {
-                    $or: [
-                        { paymentInfo: { $size: 0 } }, // No payment record
-                        { 'paymentInfo.status': { $in: PENDING_STATUS } } // Payment exists but pending/failed
-                    ]
-                }
-            },
-            {
-                $count: 'total'
-            }
-        ]);
-        
         const totalPendingReports = pendingDeliveriesAgg.length > 0 ? pendingDeliveriesAgg[0].total : 0;
 
-        // Payment status distribution - SINGLE SOURCE OF TRUTH
-        // Use LEFT JOIN to get delivery status from Payment records
-        const deliveryStatusAgg = await Delivery.aggregate([
-            ...(Object.keys(deliveryMatch).length ? [{ $match: deliveryMatch }] : []),
-            {
-                $lookup: {
-                    from: 'payments',
-                    localField: 'payment',
-                    foreignField: '_id',
-                    as: 'paymentInfo'
-                }
-            },
-            {
-                $addFields: {
-                    effectiveStatus: {
-                        $cond: {
-                            if: { $gt: [{ $size: '$paymentInfo' }, 0] },
-                            then: { $arrayElemAt: ['$paymentInfo.status', 0] },
-                            else: 'Pending'
-                        }
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: '$effectiveStatus',
-                    count: { $sum: 1 }
-                }
-            }
-        ]);
-        
-        // Initialize status object
         const paymentsStatus = { Pending: 0, Completed: 0, Failed: 0 };
-        
-        // Populate from aggregation results
         deliveryStatusAgg.forEach(item => {
             const status = item._id;
             if (status && paymentsStatus.hasOwnProperty(status)) {
                 paymentsStatus[status] = item.count || 0;
             }
         });
-        
-        // Build a recentActivities feed by combining recent deliveries and payments
-        // Apply same delivery filters to recent deliveries
-        const recentDeliveries = await Delivery.find(Object.keys(deliveryMatch).length ? deliveryMatch : {})
-            .sort({ date: -1 })
-            .limit(5)
-            .populate('farmer', 'name')
-            .lean();
-
-        const recentPayments = await Payment.find({})
-            .sort({ date: -1 })
-            .limit(5)
-            .populate('farmer', 'name')
-            .lean();
 
         const mappedDeliveries = recentDeliveries.map(d => ({
             date: d.date,

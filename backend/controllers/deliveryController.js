@@ -16,10 +16,15 @@ exports.getDeliveries = async (req, res) => {
       // If no region assigned, they can see all deliveries
     }
 
-    const deliveries = await Delivery.find(query)
+    const requestedLimit = parseInt(req.query.limit, 10);
+    let deliveriesQuery = Delivery.find(query)
       .sort({ date: -1 })
       .populate('farmer', 'name cellNumber')
       .populate('createdBy', 'username name');
+    if (Number.isFinite(requestedLimit) && requestedLimit > 0) {
+      deliveriesQuery = deliveriesQuery.limit(Math.min(requestedLimit, 20));
+    }
+    const deliveries = await deliveriesQuery;
     res.json(deliveries);
   } catch (err) {
     console.error("DELIVERY FETCH FAILED", err);

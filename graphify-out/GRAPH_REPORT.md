@@ -1,17 +1,17 @@
 # Graph Report - OCMS  (2026-09-27)
 
 ## Corpus Check
-- 101 files · ~64,635 words
+- 101 files · ~64,579 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
 
 ## Summary
-- 796 nodes · 1268 edges · 66 communities (45 shown, 21 thin omitted)
+- 796 nodes · 1266 edges · 66 communities (45 shown, 21 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `914aaa59`
+- Built from commit: `4671d892`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -307,7 +307,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `app`, `connectDB`, `bootstrapAdmin` to the rest of the system?**
   _398 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05644546147978642 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.056140350877192984 - nodes in this community are weakly interconnected._
 - **Should `authController.js` be split into smaller, more focused modules?**
   _Cohesion score 0.06363636363636363 - nodes in this community are weakly interconnected._
 - **Should `sendAuthEmail.js` be split into smaller, more focused modules?**

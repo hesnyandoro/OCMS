@@ -21,12 +21,17 @@ exports.getPayments = async (req, res) => {
       // If no region assigned, they can see all payments
     }
 
-    const payments = await Payment.find(query)
+    const requestedLimit = parseInt(req.query.limit, 10);
+    let paymentsQuery = Payment.find(query)
       .populate('farmer', 'name cellNumber weighStation')
       .populate('deliveries', 'date kgsDelivered type paymentStatus')
       .populate('recordedBy', 'username name')
       .populate('voidedBy', 'username name')
       .sort({ date: -1 });
+    if (Number.isFinite(requestedLimit) && requestedLimit > 0) {
+      paymentsQuery = paymentsQuery.limit(Math.min(requestedLimit, 20));
+    }
+    const payments = await paymentsQuery;
     
     res.json(payments);
   } catch (err) {

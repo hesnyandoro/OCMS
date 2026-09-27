@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
 
             try {
                 const response = await api.get('/auth/me');
-                console.log('User data from /auth/me:', response.data);
                 setAuthState({
                     token,
                     user: response.data,

@@ -2,14 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark Mode Theme Transitions */
 @layer base {
-  * {
-    transition-property: background-color, border-color, color, fill, stroke;
-    transition-duration: 200ms;
-    transition-timing-function: ease-in-out;
-  }
-  
   /* Custom scrollbar for dark mode */
   ::-webkit-scrollbar {
     width: 0.5rem;

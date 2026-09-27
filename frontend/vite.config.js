@@ -15,18 +15,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
-            return 'react-vendor'
-          }
-          if (id.includes('chart.js') || id.includes('react-chartjs-2')) {
-            return 'chart-vendor'
-          }
-          if (id.includes('react-hook-form') || id.includes('@hookform') || id.includes('yup')) {
+          if (!id.includes('node_modules')) return
+          if (id.includes('chart.js') || id.includes('react-chartjs-2')) return 'chart-vendor'
+          if (id.includes('jspdf') || id.includes('papaparse')) return 'export-vendor'
+          if (id.includes('leaflet')) return 'map-vendor'
+          if (id.includes('react-datepicker') || id.includes('react-select') || id.includes('react-hook-form') || id.includes('@hookform') || id.includes('/yup/')) {
             return 'form-vendor'
           }
-          if (id.includes('lucide-react') || id.includes('react-icons') || id.includes('react-datepicker') || id.includes('react-select')) {
-            return 'ui-vendor'
-          }
+          if (id.includes('lucide-react') || id.includes('react-icons')) return 'ui-vendor'
+          if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('react-router')) return 'react-vendor'
         },
       },
     },

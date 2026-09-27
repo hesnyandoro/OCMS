@@ -17,9 +17,14 @@ exports.getFarmers = async (req, res) => {
       // If no region assigned, they can see all farmers
     }
 
-    const farmers = await Farmer.find(query)
+    const requestedLimit = parseInt(req.query.limit, 10);
+    let farmersQuery = Farmer.find(query)
       .populate('createdBy', 'username name')
       .sort({ createdAt: -1 });
+    if (Number.isFinite(requestedLimit) && requestedLimit > 0) {
+      farmersQuery = farmersQuery.limit(Math.min(requestedLimit, 20));
+    }
+    const farmers = await farmersQuery;
     res.json(farmers);
   } catch (err) {
     console.error('Get farmers error:', err);
