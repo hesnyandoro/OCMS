@@ -18,4 +18,5 @@ Only use Read/Grep/Glob directly when:
 
 - If `graphify-out/wiki/index.md` exists, navigate it instead of reading raw files
 - Read `graphify-out/GRAPH_REPORT.md` only for broad architecture review when query/path/explain do not surface enough context
-- After modifying code files, run `graphify update .` to keep the graph current (AST-only, no API cost)
+- After modifying code files, run `graphify update .` if you will query again before commit (AST-only, no API cost)
+- Commits use `.githooks/pre-commit`: it runs `graphify update .` and stages `graphify-out/` in the same commit. There is no post-commit rebuild. This clone must use `git config core.hooksPath .githooks`. Skip once with `GRAPHIFY_SKIP_HOOK=1`. Do not run `graphify hook install` (that restores post-commit and dirties the tree).

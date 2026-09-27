@@ -324,9 +324,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Sidebar.jsx": {
-    "mtime": 1790522279.5399153,
-    "seen": 1790522285.9127512,
-    "ast_hash": "cdc469ab5da1ed71eee55f4be3994dda",
+    "mtime": 1790525282.1459763,
+    "seen": 1790525430.5314527,
+    "ast_hash": "0341a3ebf3af74508c62f71658b5e87d",
     "semantic_hash": ""
   },
   "frontend/src/context/AuthContext.jsx": {
@@ -627,6 +627,18 @@
     "mtime": 1790269302.1007712,
     "seen": 1790269306.7162833,
     "ast_hash": "404682ac5f4ec66b7497c8cbaf181e51",
+    "semantic_hash": ""
+  },
+  ".githooks/post-checkout": {
+    "mtime": 1789754764.104811,
+    "seen": 1790525267.5052724,
+    "ast_hash": "7b760dbba013d8f5a26c680f7358ea27",
+    "semantic_hash": ""
+  },
+  ".githooks/pre-commit": {
+    "mtime": 1790524001.5391257,
+    "seen": 1790525267.5052783,
+    "ast_hash": "3a0cc996ffbad054dc5a44355e268bc1",
     "semantic_hash": ""
   }
 }
