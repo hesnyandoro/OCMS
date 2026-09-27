@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Truck, DollarSign, FileText, Plus, Package, Wallet, UserPlus, Coffee, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, Truck, DollarSign, FileText, UserPlus, Coffee, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Define navigation items with role restrictions
@@ -13,23 +13,12 @@ const allNavItems = [
     { name: "Users", icon: UserPlus, path: "/dashboard/users", roles: ['admin'] },
 ];
 
-// Quick Actions with role restrictions
-const allQuickActions = [
-    { name: "New Farmer", icon: Plus, path: "/dashboard/farmers/new", roles: ['admin', 'fieldagent'] },
-    { name: "Record Delivery", icon: Package, path: "/dashboard/deliveries/new", roles: ['admin', 'fieldagent'] },
-    { name: "Record Payment", icon: Wallet, path: "/dashboard/payments/new", roles: ['admin'] },
-];
-
-
-
 const Sidebar = ({ isCollapsed, onToggle }) => {
     const { authState } = useAuth();
     const location = useLocation();
     const userRole = authState?.role;
 
-    // Filter navigation items and quick actions based on user role
     const navItems = userRole ? allNavItems.filter(item => item.roles?.includes(userRole)) : [];
-    const quickActions = userRole ? allQuickActions.filter(action => action.roles?.includes(userRole)) : [];
 
     const sidebarWidth = isCollapsed ? 'w-20' : 'w-64';
 
@@ -74,7 +63,7 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
                 )}
             </div>
 
-            {/* Navigation & Quick Actions Container - Scrollable area */}
+            {/* Navigation - Scrollable area */}
             <div className="flex-1 overflow-y-auto py-4">
                 
                 {/* Primary Navigation Links */}
@@ -109,55 +98,6 @@ const Sidebar = ({ isCollapsed, onToggle }) => {
                         );
                     })}
                 </nav>
-
-                {/* Quick Actions Section */}
-                {quickActions.length > 0 && (
-                    <>
-                        {!isCollapsed && (
-                            <div className="mx-6 my-6 border-t border-[#2D6A4F] dark:border-gray-700" />
-                        )}
-
-                        <div className="px-3">
-                            {!isCollapsed && (
-                                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 px-4">
-                                    Quick Actions
-                                </h3>
-                            )}
-                            
-                            <div className="space-y-1">
-                                {quickActions.map((action) => {
-                                    const ActionIcon = action.icon;
-                                    const isActive = location.pathname === action.path;
-                                    return (
-                                        <Link
-                                            key={action.name}
-                                            to={action.path}
-                                            title={action.name}
-                                            className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 group relative ${
-                                                isActive 
-                                                    ? 'bg-[#2D6A4F] dark:bg-dark-green-secondary text-white shadow-md' 
-                                                    : 'text-gray-300 dark:text-gray-400 hover:bg-[#2D6A4F] dark:hover:bg-gray-700 hover:text-white dark:hover:text-dark-text-primary'
-                                            } ${isCollapsed ? 'justify-center' : ''}`}
-                                        >
-                                            {isActive && !isCollapsed && (
-                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#F59E0B] dark:bg-dark-gold-primary rounded-r-full" />
-                                            )}
-                                            <ActionIcon 
-                                                size={20} 
-                                                className={`shrink-0 ${isActive ? 'text-[#F59E0B] dark:text-dark-gold-primary' : 'group-hover:text-[#F59E0B] dark:group-hover:text-dark-gold-primary'} transition-colors`}
-                                            />
-                                            {!isCollapsed && (
-                                                <span className={`ml-3 font-medium text-sm ${isActive ? 'font-semibold' : ''}`}>
-                                                    {action.name}
-                                                </span>
-                                            )}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </>
-                )}
 
                 {/* Settings Button */}
                 {!isCollapsed && (

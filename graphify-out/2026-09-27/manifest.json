@@ -324,9 +324,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Sidebar.jsx": {
-    "mtime": 1790522279.5399153,
-    "seen": 1790522285.9127512,
-    "ast_hash": "cdc469ab5da1ed71eee55f4be3994dda",
+    "mtime": 1788972753.1413326,
+    "seen": 1790108115.3789241,
+    "ast_hash": "003c5ac48ec88d51feeb50b4c2d8cf8d",
     "semantic_hash": ""
   },
   "frontend/src/context/AuthContext.jsx": {

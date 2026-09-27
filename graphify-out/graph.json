@@ -134,7 +134,7 @@
       "file_type": "code",
       "norm_label": "sidebar()",
       "source_file": "frontend/src/components/Sidebar.jsx",
-      "source_location": "L25"
+      "source_location": "L16"
     },
     {
       "id": "frontend_src_context_authcontext_authprovider",
@@ -2329,17 +2329,6 @@
       "norm_label": "allnavitems",
       "source_file": "frontend/src/components/Sidebar.jsx",
       "source_location": "L7"
-    },
-    {
-      "id": "frontend_src_components_sidebar_allquickactions",
-      "label": "allQuickActions",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "App.jsx",
-      "file_type": "code",
-      "norm_label": "allquickactions",
-      "source_file": "frontend/src/components/Sidebar.jsx",
-      "source_location": "L17"
     },
     {
       "id": "frontend_src_context_authcontext",
@@ -9840,7 +9829,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/components/Sidebar.jsx",
-      "source_location": "L26",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -21373,24 +21362,13 @@
     },
     {
       "source": "frontend_src_components_sidebar",
-      "target": "frontend_src_components_sidebar_allquickactions",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/Sidebar.jsx",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_components_sidebar",
       "target": "frontend_src_components_sidebar_sidebar",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/Sidebar.jsx",
-      "source_location": "L25",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -23594,5 +23572,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5058291492c0ea59ae1d3bc717478d074bf756e2"
+  "built_at_commit": "572ddeb3c1af8e765b436133ed326dad5fc280fe"
 }
