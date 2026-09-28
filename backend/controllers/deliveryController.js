@@ -19,7 +19,8 @@ exports.getDeliveries = async (req, res) => {
     const requestedLimit = parseInt(req.query.limit, 10);
     let deliveriesQuery = Delivery.find(query)
       .sort({ date: -1 })
-      .populate('farmer', 'name cellNumber')
+      .populate('farmer', 'name cellNumber farmLocation weighStation')
+      .populate('payment', 'status')
       .populate('createdBy', 'username name');
     if (Number.isFinite(requestedLimit) && requestedLimit > 0) {
       deliveriesQuery = deliveriesQuery.limit(Math.min(requestedLimit, 20));
@@ -35,7 +36,8 @@ exports.getDeliveries = async (req, res) => {
 exports.getDelivery = async (req, res) => {
   try {
     const delivery = await Delivery.findById(req.params.id)
-      .populate('farmer', 'name cellNumber weighStation')
+      .populate('farmer', 'name cellNumber farmLocation weighStation')
+      .populate('payment', 'status')
       .populate('createdBy', 'username name');
     
     if (!delivery) {

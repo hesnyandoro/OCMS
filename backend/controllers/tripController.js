@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const Delivery = require('../models/Delivery');
+const Driver = require('../models/Driver');
 const Trip = require('../models/Trip');
 const TripPing = require('../models/TripPing');
 const User = require('../models/User');
@@ -21,9 +22,72 @@ const assertDeliveryAccess = async (req, delivery) => {
   return { ok: true };
 };
 
+const assertCanTrackDriver = async (req, driverName) => {
+  if (req.user.role !== 'fieldagent') return { ok: true };
+  const user = await User.findById(req.user.id);
+  if (!user?.assignedRegion) return { ok: true };
+  const inDirectory = await Driver.exists({ name: driverName });
+  if (inDirectory) return { ok: true };
+  const known = await Delivery.exists({
+    driver: driverName,
+    region: user.assignedRegion
+  });
+  if (known) return { ok: true };
+  return { ok: false, status: 403, msg: 'You can only track drivers in your assigned region' };
+};
+
+const issueDriverTripLink = async (driverName, { reuseActive = false } = {}) => {
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  const expiresAt = new Date(Date.now() + TRIP_HOURS * 60 * 60 * 1000);
+
+  if (reuseActive) {
+    const existing = await Trip.findOne({
+      driverName,
+      status: { $in: ['pending', 'live'] },
+      expiresAt: { $gt: new Date() }
+    });
+    if (existing) {
+      existing.tokenHash = hashToken(rawToken);
+      existing.expiresAt = expiresAt;
+      await existing.save();
+      return {
+        tripId: existing._id,
+        driver: driverName,
+        url: `${frontendBase()}/track/${rawToken}`,
+        expiresAt,
+        reused: true
+      };
+    }
+  } else {
+    await endDriverTrips(driverName);
+  }
+
+  const trip = await Trip.create({
+    driverName,
+    tokenHash: hashToken(rawToken),
+    status: 'pending',
+    expiresAt
+  });
+
+  return {
+    tripId: trip._id,
+    driver: driverName,
+    url: `${frontendBase()}/track/${rawToken}`,
+    expiresAt,
+    reused: false
+  };
+};
+
 const endActiveTrips = async (deliveryId) => {
   await Trip.updateMany(
     { delivery: deliveryId, status: { $in: ['pending', 'live'] } },
+    { $set: { status: 'ended' } }
+  );
+};
+
+const endDriverTrips = async (driverName) => {
+  await Trip.updateMany(
+    { driverName, status: { $in: ['pending', 'live'] } },
     { $set: { status: 'ended' } }
   );
 };
@@ -64,13 +128,6 @@ exports.startTrip = async (req, res) => {
   }
 };
 
-const endDriverTrips = async (driverName) => {
-  await Trip.updateMany(
-    { driverName, status: { $in: ['pending', 'live'] } },
-    { $set: { status: 'ended' } }
-  );
-};
-
 exports.startDriverTrip = async (req, res) => {
   try {
     const driverName = String(req.body.driver || '').trim();
@@ -78,40 +135,32 @@ exports.startDriverTrip = async (req, res) => {
       return res.status(400).json({ msg: 'Driver name is required' });
     }
 
-    if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      if (user?.assignedRegion) {
-        const known = await Delivery.exists({
-          driver: driverName,
-          region: user.assignedRegion
-        });
-        if (!known) {
-          return res.status(403).json({ msg: 'You can only track drivers in your assigned region' });
-        }
-      }
-    }
+    const access = await assertCanTrackDriver(req, driverName);
+    if (!access.ok) return res.status(access.status).json({ msg: access.msg });
 
-    await endDriverTrips(driverName);
-
-    const rawToken = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + TRIP_HOURS * 60 * 60 * 1000);
-
-    const trip = await Trip.create({
-      driverName,
-      tokenHash: hashToken(rawToken),
-      status: 'pending',
-      expiresAt
-    });
-
-    res.status(201).json({
-      tripId: trip._id,
-      driver: driverName,
-      url: `${frontendBase()}/track/${rawToken}`,
-      expiresAt
-    });
+    const issued = await issueDriverTripLink(driverName, { reuseActive: false });
+    res.status(201).json(issued);
   } catch (err) {
     console.error('Start driver trip error:', err);
     res.status(500).json({ msg: 'Server error starting trip' });
+  }
+};
+
+exports.refreshDriverTripLink = async (req, res) => {
+  try {
+    const driverName = String(req.body.driver || '').trim();
+    if (!driverName) {
+      return res.status(400).json({ msg: 'Driver name is required' });
+    }
+
+    const access = await assertCanTrackDriver(req, driverName);
+    if (!access.ok) return res.status(access.status).json({ msg: access.msg });
+
+    const issued = await issueDriverTripLink(driverName, { reuseActive: true });
+    res.status(issued.reused ? 200 : 201).json(issued);
+  } catch (err) {
+    console.error('Refresh driver trip link error:', err);
+    res.status(500).json({ msg: 'Server error refreshing trip link' });
   }
 };
 
@@ -122,18 +171,8 @@ exports.endDriverTrip = async (req, res) => {
       return res.status(400).json({ msg: 'Driver name is required' });
     }
 
-    if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      if (user?.assignedRegion) {
-        const known = await Delivery.exists({
-          driver: driverName,
-          region: user.assignedRegion
-        });
-        if (!known) {
-          return res.status(403).json({ msg: 'You can only track drivers in your assigned region' });
-        }
-      }
-    }
+    const access = await assertCanTrackDriver(req, driverName);
+    if (!access.ok) return res.status(access.status).json({ msg: access.msg });
 
     await endDriverTrips(driverName);
     res.json({ msg: 'Trip ended', driver: driverName });

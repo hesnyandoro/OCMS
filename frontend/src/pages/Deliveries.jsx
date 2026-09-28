@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactDatePicker from 'react-datepicker';
+import { startOfDay, endOfDay } from 'date-fns';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Plus, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Radio } from 'lucide-react';
+import { Plus, TrendingUp, Package, User, Edit2, Trash2, Download, FileText, Map, Radio, Search } from 'lucide-react';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -14,39 +15,85 @@ import { canCreate, canUpdate, canDelete, canRead } from '../utils/permissions';
 import DeliveryMap from '../components/DeliveryMap';
 import MonitorDeliveriesModal from '../components/MonitorDeliveriesModal';
 
+const tripUrlKey = (driver) => `driverTripUrl:${driver}`;
+
+const trackingLabel = (status) => {
+  if (status === 'in_transit') return 'In transit';
+  if (status === 'arrived') return 'Arrived';
+  return 'Recorded';
+};
+
+const trackingBadgeClass = (status) => {
+  if (status === 'in_transit') return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+  if (status === 'arrived') return 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
+  return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
+};
+
+const paymentLabel = (delivery) => {
+  if (!delivery.payment) return 'Unpaid';
+  if (typeof delivery.payment === 'object' && delivery.payment.status) return delivery.payment.status;
+  return 'Linked';
+};
+
+const paymentBadgeClass = (label) => {
+  if (label === 'Completed') return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+  if (label === 'Failed') return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
+  if (label === 'Pending' || label === 'Linked') return 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300';
+  return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
+};
+
+const typeBadgeClass = (type) => {
+  if (type === 'Cherry') return 'bg-[#D93025] text-white';
+  if (type === 'Parchment') return 'bg-[#F59E0B] text-white';
+  return 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-100';
+};
+
 const Deliveries = () => {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const [deliveries, setDeliveries] = useState([]);
-  const [filteredDeliveries, setFilteredDeliveries] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [typeFilter, setTypeFilter] = useState('All');
   const [regionFilter, setRegionFilter] = useState('All');
   const [driverFilter, setDriverFilter] = useState('All');
+  const [trackingFilter, setTrackingFilter] = useState('All');
+  const [paymentFilter, setPaymentFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'map'
+  const [viewMode, setViewMode] = useState('table');
   const [trucks, setTrucks] = useState([]);
   const [monitorOpen, setMonitorOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState('');
   const [tripBusy, setTripBusy] = useState(false);
+  const [directoryDrivers, setDirectoryDrivers] = useState([]);
 
-  const fetchDeliveries = async () => {
-    setLoading(true);
+  const fetchDeliveries = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
     try {
       const { data } = await api.get('/deliveries');
-      setDeliveries(data);
-      setFilteredDeliveries(data);
+      setDeliveries(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.msg || 'Failed to load deliveries');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
-  };
+  }, []);
+
+  const fetchDrivers = useCallback(async () => {
+    try {
+      const { data } = await api.get('/drivers');
+      setDirectoryDrivers(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   useEffect(() => {
     fetchDeliveries();
-  }, []);
+    fetchDrivers();
+  }, [fetchDeliveries, fetchDrivers]);
 
   const fetchInTransit = async () => {
     try {
@@ -57,11 +104,12 @@ const Deliveries = () => {
     }
   };
 
-  // Smart auto-refresh: 2 minutes, pauses on inactive tab
-  useSmartRefresh(fetchDeliveries, 120000);
+  const silentRefresh = useCallback(() => fetchDeliveries({ silent: true }), [fetchDeliveries]);
+  useSmartRefresh(silentRefresh, 120000);
 
   useEffect(() => {
     if (viewMode !== 'map') return undefined;
+    fetchDrivers();
     fetchInTransit();
     const tick = () => {
       if (!document.hidden) fetchInTransit();
@@ -75,35 +123,104 @@ const Deliveries = () => {
       clearInterval(id);
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [viewMode]);
+  }, [viewMode, fetchDrivers]);
 
-  useEffect(() => {
+  const filteredDeliveries = useMemo(() => {
     let filtered = [...deliveries];
-    
+    const query = searchTerm.trim().toLowerCase();
+
+    if (query) {
+      filtered = filtered.filter((d) => {
+        const farmerName = d.farmer?.name?.toLowerCase() || '';
+        const phone = d.farmer?.cellNumber || '';
+        const driver = d.driver?.toLowerCase() || '';
+        const region = d.region?.toLowerCase() || '';
+        return farmerName.includes(query) || phone.includes(searchTerm.trim()) || driver.includes(query) || region.includes(query);
+      });
+    }
     if (startDate) {
-      filtered = filtered.filter(d => new Date(d.date) >= startDate);
+      const from = startOfDay(startDate);
+      filtered = filtered.filter((d) => d.date && new Date(d.date) >= from);
     }
     if (endDate) {
-      filtered = filtered.filter(d => new Date(d.date) <= endDate);
+      const to = endOfDay(endDate);
+      filtered = filtered.filter((d) => d.date && new Date(d.date) <= to);
     }
     if (typeFilter !== 'All') {
-      filtered = filtered.filter(d => d.type === typeFilter);
+      filtered = filtered.filter((d) => d.type === typeFilter);
     }
     if (regionFilter !== 'All') {
-      filtered = filtered.filter(d => d.region === regionFilter);
+      filtered = filtered.filter((d) => d.region === regionFilter);
     }
     if (driverFilter !== 'All') {
-      filtered = filtered.filter(d => d.driver === driverFilter);
+      filtered = filtered.filter((d) => d.driver === driverFilter);
     }
-    
-    setFilteredDeliveries(filtered);
-  }, [startDate, endDate, typeFilter, regionFilter, driverFilter, deliveries]);
+    if (trackingFilter !== 'All') {
+      filtered = filtered.filter((d) => (d.trackingStatus || 'idle') === trackingFilter);
+    }
+    if (paymentFilter !== 'All') {
+      filtered = filtered.filter((d) => paymentLabel(d) === paymentFilter);
+    }
+
+    return filtered;
+  }, [startDate, endDate, typeFilter, regionFilter, driverFilter, trackingFilter, paymentFilter, searchTerm, deliveries]);
+
+  const hasActiveFilters = Boolean(
+    searchTerm ||
+    startDate ||
+    endDate ||
+    typeFilter !== 'All' ||
+    regionFilter !== 'All' ||
+    driverFilter !== 'All' ||
+    trackingFilter !== 'All' ||
+    paymentFilter !== 'All'
+  );
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setStartDate(null);
+    setEndDate(null);
+    setTypeFilter('All');
+    setRegionFilter('All');
+    setDriverFilter('All');
+    setTrackingFilter('All');
+    setPaymentFilter('All');
+  };
 
   const totalKgs = filteredDeliveries.reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
-  const cherryKgs = filteredDeliveries.filter(d => d.type === 'Cherry').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
-  const parchmentKgs = filteredDeliveries.filter(d => d.type === 'Parchment').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
+  const cherryKgs = filteredDeliveries.filter((d) => d.type === 'Cherry').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
+  const parchmentKgs = filteredDeliveries.filter((d) => d.type === 'Parchment').reduce((sum, d) => sum + (Number(d.kgsDelivered) || 0), 0);
 
-  const driverNames = [...new Set(deliveries.map((d) => d.driver).filter(Boolean))].sort();
+  const driverNames = useMemo(() => {
+    const fromDirectory = directoryDrivers.map((d) => d.name).filter(Boolean);
+    const fromDeliveries = deliveries.map((d) => d.driver).filter(Boolean);
+    return [...new Set([...fromDirectory, ...fromDeliveries])].sort((a, b) => a.localeCompare(b));
+  }, [directoryDrivers, deliveries]);
+
+  const mapFarmers = useMemo(() => {
+    const seen = new Set();
+    const list = [];
+    filteredDeliveries.forEach((d) => {
+      const farmer = d.farmer;
+      const id = farmer?._id;
+      const loc = farmer?.farmLocation;
+      if (!id || seen.has(String(id))) return;
+      if (loc?.lat && loc?.lng && !(Number(loc.lat) === 0 && Number(loc.lng) === 0)) {
+        seen.add(String(id));
+        list.push({
+          _id: id,
+          name: farmer.name,
+          lat: loc.lat,
+          lng: loc.lng,
+          address: loc.address,
+          weighStation: farmer.weighStation,
+          cellNumber: farmer.cellNumber,
+        });
+      }
+    });
+    return list;
+  }, [filteredDeliveries]);
+
   const canTrackDrivers = canCreate(authState?.role, 'deliveries');
 
   const driverLinkFromStart = (data) => {
@@ -115,9 +232,31 @@ const Deliveries = () => {
     }
   };
 
+  const persistTripUrl = (driver, url) => {
+    try {
+      localStorage.setItem(tripUrlKey(driver), url);
+    } catch {
+      // ignore quota / private mode
+    }
+  };
+
+  const readTripUrl = (driver) => {
+    try {
+      return localStorage.getItem(tripUrlKey(driver));
+    } catch {
+      return null;
+    }
+  };
+
   const copyDriverLink = async (url) => {
     try {
-      await navigator.clipboard.writeText(url);
+      if (!navigator.clipboard?.writeText) {
+        throw new Error('clipboard unavailable');
+      }
+      await Promise.race([
+        navigator.clipboard.writeText(url),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('clipboard timeout')), 1500)),
+      ]);
       toast.success('Trip link copied. Send it to the driver’s phone.');
     } catch {
       toast.error(`Copy this link: ${url}`);
@@ -133,9 +272,9 @@ const Deliveries = () => {
     try {
       const { data } = await api.post('/deliveries/trips/start', { driver: selectedDriver });
       const url = driverLinkFromStart(data);
-      sessionStorage.setItem(`driverTripUrl:${selectedDriver}`, url);
-      await copyDriverLink(url);
+      persistTripUrl(selectedDriver, url);
       await fetchInTransit();
+      await copyDriverLink(url);
     } catch (err) {
       toast.error(err.response?.data?.msg || 'Could not start trip');
     } finally {
@@ -144,12 +283,36 @@ const Deliveries = () => {
   };
 
   const handleCopyDriverLink = async (driver) => {
-    const stored = sessionStorage.getItem(`driverTripUrl:${driver}`);
-    if (!stored) {
-      toast.error('Start the trip again to get a new phone link.');
+    const stored = readTripUrl(driver);
+    if (stored) {
+      await copyDriverLink(stored);
       return;
     }
-    await copyDriverLink(stored);
+    setTripBusy(true);
+    try {
+      const { data } = await api.post('/deliveries/trips/link', { driver });
+      const url = driverLinkFromStart(data);
+      persistTripUrl(driver, url);
+      await fetchInTransit();
+      if (data.reused) {
+        toast.success('New trip link copied. The previous phone link will stop working.');
+        try {
+          if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+          await Promise.race([
+            navigator.clipboard.writeText(url),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('clipboard timeout')), 1500)),
+          ]);
+        } catch {
+          toast.error(`Copy this link: ${url}`);
+        }
+      } else {
+        await copyDriverLink(url);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.msg || 'Could not get a trip link');
+    } finally {
+      setTripBusy(false);
+    }
   };
 
   const handleEndDriverTrip = async (truck) => {
@@ -161,7 +324,11 @@ const Deliveries = () => {
       } else {
         await api.post(`/deliveries/${truck._id}/end-trip`);
       }
-      sessionStorage.removeItem(`driverTripUrl:${driver}`);
+      try {
+        localStorage.removeItem(tripUrlKey(driver));
+      } catch {
+        // ignore
+      }
       toast.success('Trip ended');
       await fetchInTransit();
     } catch (err) {
@@ -179,18 +346,19 @@ const Deliveries = () => {
     if (!window.confirm('Are you sure you want to delete this delivery? This action cannot be undone.')) {
       return;
     }
-    
+
     try {
       await api.delete(`/deliveries/${deliveryId}`);
-      setDeliveries(deliveries.filter(d => d._id !== deliveryId));
+      setDeliveries((prev) => prev.filter((d) => d._id !== deliveryId));
+      toast.success('Delivery deleted');
     } catch (err) {
       console.error('Error deleting delivery:', err);
-      alert(err.response?.data?.msg || 'Failed to delete delivery');
+      toast.error(err.response?.data?.msg || 'Failed to delete delivery');
     }
   };
 
   const exportToCSV = () => {
-    const rows = filteredDeliveries.map(d => ({
+    const rows = filteredDeliveries.map((d) => ({
       Date: d.date ? new Date(d.date).toLocaleDateString() : '',
       Farmer: d.farmer?.name || 'N/A',
       'Farmer Phone': d.farmer?.cellNumber || '',
@@ -198,11 +366,13 @@ const Deliveries = () => {
       'Weight (kg)': d.kgsDelivered || 0,
       Region: d.region || '',
       Driver: d.driver || '',
+      Tracking: trackingLabel(d.trackingStatus),
+      Payment: paymentLabel(d),
       Season: d.season || '',
       'Vehicle Reg': d.vehicleReg || '',
       'Weigh Station': d.weighStation || ''
     }));
-    
+
     const csv = Papa.unparse(rows);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -215,44 +385,45 @@ const Deliveries = () => {
 
   const exportToPDF = () => {
     const doc = new jsPDF();
-    
-    // Title
+
     doc.setFontSize(16);
-    doc.setTextColor(27, 67, 50); // Estate Green
+    doc.setTextColor(27, 67, 50);
     doc.text('Coffee Deliveries Report', 14, 20);
-    
-    // Metadata
+
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
     doc.text(`Total Deliveries: ${filteredDeliveries.length}`, 14, 34);
     doc.text(`Total Weight: ${totalKgs.toFixed(2)} kg`, 14, 40);
-    
-    // Table
-    const headers = [['Date', 'Farmer', 'Type', 'Weight (kg)', 'Region', 'Driver']];
-    const body = filteredDeliveries.map(d => [
+
+    const headers = [['Date', 'Farmer', 'Type', 'Weight', 'Region', 'Tracking', 'Payment']];
+    const body = filteredDeliveries.map((d) => [
       d.date ? new Date(d.date).toLocaleDateString() : '',
       d.farmer?.name || 'N/A',
       d.type || '',
       String(d.kgsDelivered || 0),
       d.region || '',
-      d.driver || ''
+      trackingLabel(d.trackingStatus),
+      paymentLabel(d)
     ]);
-    
+
     autoTable(doc, {
       head: headers,
-      body: body,
+      body,
       startY: 46,
-      styles: { fontSize: 9 },
-      headStyles: { fillColor: [27, 67, 50] } // Estate Green
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [27, 67, 50] }
     });
-    
+
     doc.save(`deliveries_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
+  const showInitialLoader = loading && deliveries.length === 0;
+  const filterSelectClass =
+    'w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent';
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-      {/* Header */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -283,7 +454,6 @@ const Deliveries = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#1B4332] dark:border-dark-green-primary">
           <div className="flex items-center justify-between">
@@ -294,7 +464,7 @@ const Deliveries = () => {
             <Package size={40} className="text-[#1B4332] dark:text-dark-green-primary opacity-20" />
           </div>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#D93025] dark:border-red-600">
           <div className="flex items-center justify-between">
             <div>
@@ -304,7 +474,7 @@ const Deliveries = () => {
             <TrendingUp size={40} className="text-[#D93025] dark:text-red-400 opacity-20" />
           </div>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#F59E0B] dark:border-dark-gold-primary">
           <div className="flex items-center justify-between">
             <div>
@@ -316,78 +486,114 @@ const Deliveries = () => {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2" htmlFor="delivery-search">
+              Search
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+              <input
+                id="delivery-search"
+                type="text"
+                placeholder="Farmer, phone, driver, or region..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Start Date</label>
             <ReactDatePicker
               selected={startDate}
-              onChange={date => setStartDate(date)}
+              onChange={(date) => setStartDate(date)}
               isClearable
               placeholderText="Select start date"
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+              className={filterSelectClass}
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">End Date</label>
             <ReactDatePicker
               selected={endDate}
-              onChange={date => setEndDate(date)}
+              onChange={(date) => setEndDate(date)}
               isClearable
               placeholderText="Select end date"
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+              className={filterSelectClass}
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Type</label>
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
-            >
+            <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={filterSelectClass}>
               <option value="All">All Types</option>
               <option value="Cherry">Cherry</option>
               <option value="Parchment">Parchment</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Region</label>
-            <select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
-            >
+            <select value={regionFilter} onChange={(e) => setRegionFilter(e.target.value)} className={filterSelectClass}>
               <option value="All">All Regions</option>
-              {[...new Set(deliveries.map(d => d.region).filter(Boolean))].sort().map(region => (
+              {[...new Set(deliveries.map((d) => d.region).filter(Boolean))].sort().map((region) => (
                 <option key={region} value={region}>{region}</option>
               ))}
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Driver</label>
-            <select
-              value={driverFilter}
-              onChange={(e) => setDriverFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
-            >
+            <select value={driverFilter} onChange={(e) => setDriverFilter(e.target.value)} className={filterSelectClass}>
               <option value="All">All Drivers</option>
-              {[...new Set(deliveries.map(d => d.driver).filter(Boolean))].sort().map(driver => (
+              {[...new Set(deliveries.map((d) => d.driver).filter(Boolean))].sort().map((driver) => (
                 <option key={driver} value={driver}>{driver}</option>
               ))}
             </select>
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Tracking</label>
+            <select value={trackingFilter} onChange={(e) => setTrackingFilter(e.target.value)} className={filterSelectClass}>
+              <option value="All">All statuses</option>
+              <option value="idle">Recorded</option>
+              <option value="in_transit">In transit</option>
+              <option value="arrived">Arrived</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Payment</label>
+            <select value={paymentFilter} onChange={(e) => setPaymentFilter(e.target.value)} className={filterSelectClass}>
+              <option value="All">All payments</option>
+              <option value="Unpaid">Unpaid</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+              <option value="Failed">Failed</option>
+            </select>
+          </div>
         </div>
-        
+
         <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
+            Showing <span className="font-semibold text-[#1B4332] dark:text-dark-green-primary">{filteredDeliveries.length}</span> of {deliveries.length}
+            {' · '}
             Total Weight: <span className="font-bold text-[#1B4332] dark:text-gray-100">{totalKgs.toFixed(2)} kg</span>
           </p>
           <div className="flex flex-col sm:flex-row gap-2">
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                Clear filters
+              </button>
+            )}
             <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
               <button
                 onClick={() => setViewMode('table')}
@@ -433,8 +639,7 @@ const Deliveries = () => {
         </div>
       </div>
 
-      {/* Deliveries List / Map */}
-      {loading ? (
+      {showInitialLoader ? (
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-500 dark:text-dark-text-tertiary">Loading deliveries...</div>
         </div>
@@ -522,7 +727,7 @@ const Deliveries = () => {
               centerLat={-1.2}
               centerLng={34.75}
               zoom={10}
-              farmers={[]}
+              farmers={mapFarmers}
               deliveries={filteredDeliveries}
               trucks={trucks}
               height="600px"
@@ -532,7 +737,18 @@ const Deliveries = () => {
       ) : filteredDeliveries.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400 text-lg">No deliveries found</p>
-          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
+          <p className="text-gray-400 dark:text-dark-text-muted mt-2">
+            {hasActiveFilters ? 'Try adjusting your filters' : 'Record a delivery to get started'}
+          </p>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-4 px-4 py-2 text-sm font-medium text-[#1B4332] dark:text-dark-green-primary border border-[#1B4332] dark:border-dark-green-primary rounded-lg"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -546,79 +762,96 @@ const Deliveries = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold">Weight (kg)</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Region</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Driver</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Tracking</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">Payment</th>
                   {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
                     <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
                   )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredDeliveries.map((delivery, index) => (
-                  <tr
-                    key={delivery._id}
-                    onClick={() => navigate(`/dashboard/deliveries/${delivery._id}`)}
-                    className={`${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'} cursor-pointer hover:bg-[#1B4332]/5 dark:hover:bg-gray-600`}
-                  >
-                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                      {new Date(delivery.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <User size={16} className="text-gray-400 dark:text-dark-text-muted" />
-                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {delivery.farmer?.name || 'N/A'}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        delivery.type === 'Cherry' 
-                          ? 'bg-[#D93025] text-white' 
-                          : 'bg-[#F59E0B] text-white'
-                      }`}>
-                        {delivery.type}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[#1B4332] dark:text-dark-green-primary">
-                      {delivery.kgsDelivered} kg
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                      {delivery.region}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                      {delivery.driver}
-                    </td>
-                    {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
-                      <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                {filteredDeliveries.map((delivery, index) => {
+                  const pay = paymentLabel(delivery);
+                  return (
+                    <tr
+                      key={delivery._id}
+                      onClick={() => navigate(`/dashboard/deliveries/${delivery._id}`)}
+                      className={`${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'} cursor-pointer hover:bg-[#1B4332]/5 dark:hover:bg-gray-600`}
+                    >
+                      <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                        {delivery.date ? new Date(delivery.date).toLocaleDateString() : '—'}
+                      </td>
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          {canUpdate(authState?.role, 'deliveries') && (
-                            <button
-                              onClick={() => handleEdit(delivery._id)}
-                              className="p-2 text-[#1B4332] dark:text-dark-green-primary hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white rounded-lg transition-all"
-                              title="Edit delivery"
-                            >
-                              <Edit2 size={16} />
-                            </button>
-                          )}
-                          {canDelete(authState?.role, 'deliveries') && (
-                            <button
-                              onClick={() => handleDelete(delivery._id)}
-                              className="p-2 text-[#D93025] dark:text-red-400 hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white rounded-lg transition-all"
-                              title="Delete delivery"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          )}
+                          <User size={16} className="text-gray-400 dark:text-dark-text-muted" />
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {delivery.farmer?.name || 'N/A'}
+                          </span>
                         </div>
                       </td>
-                    )}
-                  </tr>
-                ))}
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${typeBadgeClass(delivery.type)}`}>
+                          {delivery.type || '—'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-[#1B4332] dark:text-dark-green-primary">
+                        {delivery.kgsDelivered ?? 0} kg
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        {delivery.region || '—'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        {delivery.driver || '—'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${trackingBadgeClass(delivery.trackingStatus)}`}>
+                          {trackingLabel(delivery.trackingStatus)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${paymentBadgeClass(pay)}`}>
+                          {pay}
+                        </span>
+                      </td>
+                      {(canUpdate(authState?.role, 'deliveries') || canDelete(authState?.role, 'deliveries')) && (
+                        <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center gap-2">
+                            {canUpdate(authState?.role, 'deliveries') && (
+                              <button
+                                onClick={() => handleEdit(delivery._id)}
+                                className="p-2 text-[#1B4332] dark:text-dark-green-primary hover:bg-[#1B4332] dark:hover:bg-dark-green-primary hover:text-white rounded-lg transition-all"
+                                title="Edit delivery"
+                              >
+                                <Edit2 size={16} />
+                              </button>
+                            )}
+                            {canDelete(authState?.role, 'deliveries') && (
+                              <button
+                                onClick={() => handleDelete(delivery._id)}
+                                className="p-2 text-[#D93025] dark:text-red-400 hover:bg-[#D93025] dark:hover:bg-red-600 hover:text-white rounded-lg transition-all"
+                                title="Delete delivery"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
       )}
-      <MonitorDeliveriesModal open={monitorOpen} onClose={() => setMonitorOpen(false)} />
+      <MonitorDeliveriesModal
+        open={monitorOpen}
+        onClose={() => {
+          setMonitorOpen(false);
+          fetchDrivers();
+        }}
+      />
     </div>
   );
 };

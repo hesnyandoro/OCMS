@@ -47,6 +47,7 @@ export const DeliveryMap = ({
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
   const trailsRef = useRef([]);
+  const lastFitKeyRef = useRef('');
 
   useEffect(() => {
     // Initialize map only once
@@ -77,7 +78,7 @@ export const DeliveryMap = ({
 
     // Add farmer markers (blue)
     farmers.forEach((farmer) => {
-      if (farmer.lat && farmer.lng) {
+      if (farmer.lat && farmer.lng && !(Number(farmer.lat) === 0 && Number(farmer.lng) === 0)) {
         const marker = L.marker([farmer.lat, farmer.lng], {
           icon: DefaultIcon,
           title: `Farmer: ${farmer.name}`,
@@ -103,51 +104,75 @@ export const DeliveryMap = ({
       }
     });
 
-    // Add delivery location markers if available (red)
-    deliveries.forEach((delivery) => {
-      if (
-        delivery.farmer?.farmLocation?.lat &&
-        delivery.farmer?.farmLocation?.lng
-      ) {
-        const redIcon = L.icon({
-          iconUrl:
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-          shadowUrl:
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
-          className: 'red-marker',
-        });
+    const hasCoords = (lat, lng) => {
+      const a = Number(lat);
+      const b = Number(lng);
+      return Number.isFinite(a) && Number.isFinite(b) && !(a === 0 && b === 0);
+    };
 
-        const marker = L.marker(
-          [delivery.farmer.farmLocation.lat, delivery.farmer.farmLocation.lng],
-          {
-            icon: redIcon,
-            title: `Delivery: ${delivery.farmer.name}`,
-          }
-        )
-          .bindPopup(
-            `
+    const bounds = [];
+    farmers.forEach((farmer) => {
+      if (hasCoords(farmer.lat, farmer.lng)) bounds.push([farmer.lat, farmer.lng]);
+    });
+
+    const farmerIds = new Set(farmers.map((f) => String(f._id)).filter(Boolean));
+    const redIcon = L.icon({
+      iconUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      shadowUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+      className: 'red-marker',
+    });
+
+    deliveries.forEach((delivery) => {
+      const farm = delivery.farmer?.farmLocation;
+      const pickup = delivery.pickupLocation;
+      const alreadyShownAsFarmer = delivery.farmer?._id && farmerIds.has(String(delivery.farmer._id));
+      const coords =
+        hasCoords(pickup?.lat, pickup?.lng)
+          ? pickup
+          : !alreadyShownAsFarmer && hasCoords(farm?.lat, farm?.lng)
+            ? farm
+            : null;
+
+      if (!coords) return;
+
+      const sameAsFarm =
+        alreadyShownAsFarmer &&
+        farm?.lat &&
+        farm?.lng &&
+        Math.abs(Number(coords.lat) - Number(farm.lat)) < 1e-5 &&
+        Math.abs(Number(coords.lng) - Number(farm.lng)) < 1e-5;
+      if (sameAsFarm) return;
+
+      const marker = L.marker([coords.lat, coords.lng], {
+        icon: redIcon,
+        title: `Delivery: ${delivery.farmer?.name || 'Pickup'}`,
+      })
+        .bindPopup(
+          `
             <div style="font-size: 12px;">
               <strong>Delivery</strong><br />
-              Farmer: ${delivery.farmer.name}<br />
+              Farmer: ${delivery.farmer?.name || 'N/A'}<br />
               Kgs: ${delivery.kgsDelivered}<br />
               Type: ${delivery.type}<br />
-              Date: ${new Date(delivery.date).toLocaleDateString()}
+              Date: ${delivery.date ? new Date(delivery.date).toLocaleDateString() : 'N/A'}
             </div>
           `,
-            { maxWidth: 250 }
-          )
-          .addTo(mapInstanceRef.current);
+          { maxWidth: 250 }
+        )
+        .addTo(mapInstanceRef.current);
 
-        if (onMarkerClick) {
-          marker.on('click', () => onMarkerClick(delivery));
-        }
-
-        markersRef.current.push(marker);
+      if (onMarkerClick) {
+        marker.on('click', () => onMarkerClick(delivery));
       }
+
+      markersRef.current.push(marker);
+      bounds.push([coords.lat, coords.lng]);
     });
 
     trucks.forEach((truck) => {
@@ -172,6 +197,7 @@ export const DeliveryMap = ({
           .addTo(mapInstanceRef.current);
 
         markersRef.current.push(marker);
+        bounds.push([last.lat, last.lng]);
       }
 
       const path = (truck.trail || [])
@@ -213,7 +239,27 @@ export const DeliveryMap = ({
       }).addTo(mapInstanceRef.current);
 
       markersRef.current.push(userMarker);
+      bounds.push([userLocation.lat, userLocation.lng]);
     }
+
+    const locKey = [
+      farmers.map((f) => f._id).join(','),
+      deliveries.map((d) => d._id).join(','),
+      trucks.some((t) => t.lastPosition?.lat && t.lastPosition?.lng) ? 't' : '',
+    ].join('|');
+
+    if (bounds.length && lastFitKeyRef.current !== locKey) {
+      lastFitKeyRef.current = locKey;
+      if (bounds.length === 1) {
+        mapInstanceRef.current.setView(bounds[0], 13);
+      } else {
+        mapInstanceRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+      }
+    }
+
+    requestAnimationFrame(() => {
+      mapInstanceRef.current?.invalidateSize();
+    });
   }, [farmers, deliveries, trucks, userLocation, onMarkerClick]);
 
   return (
