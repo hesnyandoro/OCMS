@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
 import { useDismissibleOverlay } from '../hooks/useDismissibleOverlay';
 import ReactDatePicker from 'react-datepicker';
+import { startOfDay, endOfDay } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { Plus, Download, FileText, DollarSign, CheckCircle, Clock, XCircle, User } from 'lucide-react';
+import { Plus, Download, FileText, DollarSign, CheckCircle, Clock, XCircle, User, Search } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { canCreate } from '../utils/permissions';
 
@@ -17,10 +18,12 @@ const Payments = () => {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const [payments, setPayments] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [regionFilter, setRegionFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   const [loading, setLoading] = useState(false);
 
   const fetchPayments = async () => {
@@ -42,13 +45,55 @@ const Payments = () => {
   // Smart auto-refresh: 2 minutes, pauses on inactive tab
   useSmartRefresh(fetchPayments, 120000);
 
-  useEffect(() => {
+  const filtered = useMemo(() => {
     let list = [...payments];
-    if (startDate) list = list.filter(p => new Date(p.date) >= startDate);
-    if (endDate) list = list.filter(p => new Date(p.date) <= endDate);
-    if (statusFilter !== 'All') list = list.filter(p => p.status === statusFilter);
-    setFiltered(list);
-  }, [payments, startDate, endDate, statusFilter]);
+    const query = searchTerm.trim().toLowerCase();
+
+    if (query) {
+      list = list.filter((p) => {
+        const name = p.farmer?.name?.toLowerCase() || '';
+        const phone = p.farmer?.cellNumber || '';
+        const recorder = (p.recordedBy?.name || p.recordedBy?.username || '').toLowerCase();
+        return name.includes(query) || phone.includes(searchTerm.trim()) || recorder.includes(query);
+      });
+    }
+    if (startDate) {
+      const from = startOfDay(startDate);
+      list = list.filter((p) => p.date && new Date(p.date) >= from);
+    }
+    if (endDate) {
+      const to = endOfDay(endDate);
+      list = list.filter((p) => p.date && new Date(p.date) <= to);
+    }
+    if (statusFilter !== 'All') list = list.filter((p) => p.status === statusFilter);
+    if (regionFilter !== 'All') list = list.filter((p) => p.farmer?.weighStation === regionFilter);
+    if (typeFilter !== 'All') list = list.filter((p) => p.deliveryType === typeFilter);
+
+    return list;
+  }, [payments, searchTerm, startDate, endDate, statusFilter, regionFilter, typeFilter]);
+
+  const regions = useMemo(
+    () => [...new Set(payments.map((p) => p.farmer?.weighStation).filter(Boolean))].sort((a, b) => a.localeCompare(b)),
+    [payments]
+  );
+
+  const hasActiveFilters = Boolean(
+    searchTerm ||
+    startDate ||
+    endDate ||
+    statusFilter !== 'All' ||
+    regionFilter !== 'All' ||
+    typeFilter !== 'All'
+  );
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setStartDate(null);
+    setEndDate(null);
+    setStatusFilter('All');
+    setRegionFilter('All');
+    setTypeFilter('All');
+  };
 
   const [showVoidModal, setShowVoidModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -307,7 +352,24 @@ const Payments = () => {
 
       {/* Filters & Export */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2" htmlFor="payment-search">
+              Search
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+              <input
+                id="payment-search"
+                type="text"
+                placeholder="Farmer, phone, or recorded by..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Start Date</label>
             <ReactDatePicker
@@ -318,7 +380,7 @@ const Payments = () => {
               className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">End Date</label>
             <ReactDatePicker
@@ -329,7 +391,7 @@ const Payments = () => {
               className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Status</label>
             <select
@@ -337,13 +399,40 @@ const Payments = () => {
               onChange={e => setStatusFilter(e.target.value)}
               className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
             >
-              <option>All</option>
-              <option>Pending</option>
-              <option>Completed</option>
-              <option>Failed</option>
+              <option value="All">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Completed">Completed</option>
+              <option value="Failed">Failed</option>
             </select>
           </div>
-          
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Region</label>
+            <select
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+            >
+              <option value="All">All Regions</option>
+              {regions.map((region) => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Delivery Type</label>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+            >
+              <option value="All">All Types</option>
+              <option value="Cherry">Cherry</option>
+              <option value="Parchment">Parchment</option>
+            </select>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">Export</label>
             <div className="flex gap-2">
@@ -364,11 +453,20 @@ const Payments = () => {
             </div>
           </div>
         </div>
-        
-        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Showing <span className="font-bold text-[#1B4332] dark:text-gray-100">{filtered.length}</span> of {payments.length} payments
           </p>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       </div>
 

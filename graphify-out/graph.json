@@ -386,7 +386,7 @@
       "file_type": "code",
       "norm_label": "payments()",
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L16"
+      "source_location": "L18"
     },
     {
       "id": "frontend_src_pages_resetpassword_resetpassword",
@@ -10352,6 +10352,30 @@
     },
     {
       "source": "frontend_src_pages_payments_payments",
+      "target": "frontend_src_hooks_usedismissibleoverlay_usedismissibleoverlay",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/Payments.jsx",
+      "source_location": "L125",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_payments_payments",
+      "target": "frontend_src_utils_permissions_canupdate",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "frontend/src/pages/Payments.jsx",
+      "source_location": "L271",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_payments_payments",
       "target": "frontend_src_utils_permissions_cancreate",
       "relation": "calls",
       "_origin": "ast",
@@ -10359,7 +10383,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L252",
+      "source_location": "L302",
       "weight": 1.0
     },
     {
@@ -10371,19 +10395,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L43",
-      "weight": 1.0
-    },
-    {
-      "source": "frontend_src_pages_payments_payments",
-      "target": "frontend_src_hooks_usedismissibleoverlay_usedismissibleoverlay",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L78",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -12920,7 +12932,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L12",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -12932,7 +12944,19 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L13",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_payments",
+      "target": "frontend_src_utils_permissions_canupdate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/Payments.jsx",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -16693,7 +16717,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "ref_jspdf_autotable",
+      "target": "ref_jspdf",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16705,7 +16729,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "ref_lucide_react",
+      "target": "ref_jspdf_autotable",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16717,7 +16741,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "frontend_src_context_authcontext",
+      "target": "ref_lucide_react",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16729,7 +16753,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "frontend_src_utils_permissions",
+      "target": "ref_react_hot_toast",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16737,6 +16761,30 @@
       "context": "import",
       "source_file": "frontend/src/pages/Payments.jsx",
       "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_payments",
+      "target": "frontend_src_context_authcontext",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/Payments.jsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_pages_payments",
+      "target": "frontend_src_utils_permissions",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/pages/Payments.jsx",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -16801,7 +16849,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "ref_react_datepicker_dist_react_datepicker_css",
+      "target": "ref_date_fns",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16813,7 +16861,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "ref_papaparse",
+      "target": "ref_react_datepicker_dist_react_datepicker_css",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -16825,7 +16873,7 @@
     },
     {
       "source": "frontend_src_pages_payments",
-      "target": "ref_jspdf",
+      "target": "ref_papaparse",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -22139,7 +22187,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/pages/Payments.jsx",
-      "source_location": "L16",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -24123,5 +24171,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "61a968bf99cecb0fe7df4d05fcf5ddfcb7b453ac"
+  "built_at_commit": "c464b38fdd14562cdb08c361ce54caeb7ddf618c"
 }

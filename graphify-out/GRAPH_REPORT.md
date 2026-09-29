@@ -1,17 +1,17 @@
-# Graph Report - OCMS  (2026-09-28)
+# Graph Report - OCMS  (2026-09-29)
 
 ## Corpus Check
-- 101 files · ~65,686 words
+- 101 files · ~66,094 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 11 file(s) not represented in the graph (top: (none) 8, .mdc 1, .conf 1)
+- Unclassified: 13 file(s) not represented in the graph (top: (none) 10, .mdc 1, .conf 1)
 
 ## Summary
-- 806 nodes · 1290 edges · 62 communities (42 shown, 20 thin omitted)
+- 806 nodes · 1294 edges · 62 communities (42 shown, 20 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `61a968bf`
+- Built from commit: `c464b38f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -82,7 +82,7 @@
 3. `lucide-react` - 21 edges
 4. `🌿 OCMS - Organic Coffee Management System` - 21 edges
 5. `api` - 19 edges
-6. `react-hot-toast` - 16 edges
+6. `react-hot-toast` - 17 edges
 7. `AuthContext` - 13 edges
 8. `Deliveries()` - 12 edges
 9. `What You Must Do When Invoked` - 12 edges
@@ -282,7 +282,7 @@ Nodes (3): Reports(), fetchAllData(), processData()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `react` connect `App.jsx` to `Deliveries.jsx`, `frontend/package.json`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `frontend/package.json`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`?**
@@ -290,7 +290,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `app`, `connectDB`, `bootstrapAdmin` to the rest of the system?**
   _398 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.jsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.058580413297394426 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05876010781671159 - nodes in this community are weakly interconnected._
 - **Should `authController.js` be split into smaller, more focused modules?**
   _Cohesion score 0.06363636363636363 - nodes in this community are weakly interconnected._
 - **Should `sendAuthEmail.js` be split into smaller, more focused modules?**
