@@ -10,8 +10,9 @@ import Papa from 'papaparse';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Plus, Download, FileText, DollarSign, CheckCircle, Clock, XCircle, User, Search } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
-import { canCreate } from '../utils/permissions';
+import { canCreate, canUpdate } from '../utils/permissions';
 
 
 const Payments = () => {
@@ -24,26 +25,27 @@ const Payments = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [regionFilter, setRegionFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchPayments = async () => {
-    setLoading(true);
+  const fetchPayments = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
     try {
       const { data } = await api.get('/payments');
       setPayments(data || []);
     } catch (err) {
       console.error('Failed loading payments', err);
+      toast.error(err.response?.data?.msg || 'Failed to load payments');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchPayments();
-  }, []);
+  }, [fetchPayments]);
 
-  // Smart auto-refresh: 2 minutes, pauses on inactive tab
-  useSmartRefresh(fetchPayments, 120000);
+  const silentRefresh = useCallback(() => fetchPayments({ silent: true }), [fetchPayments]);
+  useSmartRefresh(silentRefresh, 120000);
 
   const filtered = useMemo(() => {
     let list = [...payments];
@@ -125,7 +127,7 @@ const Payments = () => {
 
   const handleVoidPayment = async () => {
     if (!voidReason.trim()) {
-      alert('Please provide a reason for voiding this payment');
+      toast.error('Please provide a reason for voiding this payment');
       return;
     }
 
@@ -145,13 +147,13 @@ const Payments = () => {
           : p
       ));
       
-      alert('Payment has been voided successfully');
+      toast.success('Payment has been voided');
       setShowVoidModal(false);
       setVoidReason('');
       setSelectedPayment(null);
     } catch (err) {
       console.error('Void payment failed', err);
-      alert(err?.response?.data?.msg || 'Failed to void payment');
+      toast.error(err?.response?.data?.msg || 'Failed to void payment');
     } finally {
       setIsVoiding(false);
     }
@@ -159,12 +161,12 @@ const Payments = () => {
 
   const handleRetryPayment = async () => {
     if (!retryReason.trim()) {
-      alert('Please provide a reason for retrying this payment');
+      toast.error('Please provide a reason for retrying this payment');
       return;
     }
 
     if (!useOriginalPrice && (!retryPricePerKg || parseFloat(retryPricePerKg) <= 0)) {
-      alert('Please enter a valid price per kg');
+      toast.error('Please enter a valid price per kg');
       return;
     }
 
@@ -185,7 +187,7 @@ const Payments = () => {
       const { data } = await api.get('/payments');
       setPayments(data || []);
       
-      alert(`Payment retried successfully! New payment record created.`);
+      toast.success('Payment retried. A new payment record was created.');
       setShowRetryModal(false);
       setRetryReason('');
       setRetryPricePerKg('');
@@ -193,7 +195,7 @@ const Payments = () => {
       setSelectedPayment(null);
     } catch (err) {
       console.error('Retry payment failed', err);
-      alert(err?.response?.data?.msg || 'Failed to retry payment');
+      toast.error(err?.response?.data?.msg || 'Failed to retry payment');
     } finally {
       setIsRetrying(false);
     }
@@ -237,7 +239,7 @@ const Payments = () => {
     doc.setTextColor(100);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
     doc.text(`Total Payments: ${filtered.length}`, 14, 34);
-    doc.text(`Total Amount: KES ${totalAmount.toLocaleString()}`, 14, 40);
+    doc.text(`Paid out: KES ${paidOut.toLocaleString()}`, 14, 40);
     doc.text(`Completed: ${completedCount} | Pending: ${pendingCount} | Failed: ${failedCount}`, 14, 46);
     
     // Table
@@ -261,17 +263,20 @@ const Payments = () => {
     doc.save(`payments_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
-  const totalAmount = filtered.reduce((s, p) => s + (Number(p.amountPaid) || 0), 0);
-  const completedCount = filtered.filter(p => p.status === 'Completed').length;
+  const completedPayments = filtered.filter((p) => p.status === 'Completed');
+  const paidOut = completedPayments.reduce((s, p) => s + (Number(p.amountPaid) || 0), 0);
+  const completedCount = completedPayments.length;
   const pendingCount = filtered.filter(p => p.status === 'Pending').length;
   const failedCount = filtered.filter(p => p.status === 'Failed').length;
+  const canManagePayments = canUpdate(authState?.role, 'payments');
+  const showInitialLoader = loading && payments.length === 0;
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'Completed': return 'bg-green-100 text-green-800';
-      case 'Pending': return 'bg-yellow-100 text-yellow-800';
-      case 'Failed': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Completed': return 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300';
+      case 'Pending': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300';
+      case 'Failed': return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
+      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
     }
   };
 
@@ -312,8 +317,8 @@ const Payments = () => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border-l-4 border-[#1B4332] dark:border-dark-green-primary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Amount</p>
-              <p className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">KES {totalAmount.toLocaleString()}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Paid out</p>
+              <p className="text-2xl font-bold text-[#1B4332] dark:text-gray-100 mt-2">KES {paidOut.toLocaleString()}</p>
             </div>
             <DollarSign size={40} className="text-[#1B4332] dark:text-dark-green-primary opacity-20" />
           </div>
@@ -471,14 +476,25 @@ const Payments = () => {
       </div>
 
       {/* Payments Table */}
-      {loading ? (
+      {showInitialLoader ? (
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-500 dark:text-dark-text-tertiary">Loading payments...</div>
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400 text-lg">No payments found</p>
-          <p className="text-gray-400 dark:text-dark-text-muted mt-2">Try adjusting your filters</p>
+          <p className="text-gray-400 dark:text-dark-text-muted mt-2">
+            {hasActiveFilters ? 'Try adjusting your filters' : 'Record a payment to get started'}
+          </p>
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-4 px-4 py-2 text-sm font-medium text-[#1B4332] dark:text-dark-green-primary border border-[#1B4332] dark:border-dark-green-primary rounded-lg"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -492,7 +508,9 @@ const Payments = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold">Amount</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Recorded By</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+                  {canManagePayments && (
+                    <th className="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -549,33 +567,35 @@ const Payments = () => {
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       {payment.recordedBy?.name || payment.recordedBy?.username || 'N/A'}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        {payment.status === 'Completed' && canCreate(authState?.role, 'payments') && (
-                          <button
-                            onClick={() => {
-                              setSelectedPayment(payment);
-                              setShowVoidModal(true);
-                            }}
-                            className="px-3 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors text-sm font-medium"
-                          >
-                            Void
-                          </button>
-                        )}
-                        {payment.status === 'Failed' && canCreate(authState?.role, 'payments') && (
-                          <button
-                            onClick={() => {
-                              setSelectedPayment(payment);
-                              setRetryPricePerKg(payment.pricePerKg?.toString() || '');
-                              setShowRetryModal(true);
-                            }}
-                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors text-sm font-medium"
-                          >
-                            Retry
-                          </button>
-                        )}
-                      </div>
-                    </td>
+                    {canManagePayments && (
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          {payment.status === 'Completed' && (
+                            <button
+                              onClick={() => {
+                                setSelectedPayment(payment);
+                                setShowVoidModal(true);
+                              }}
+                              className="px-3 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/40 transition-colors text-sm font-medium"
+                            >
+                              Void
+                            </button>
+                          )}
+                          {payment.status === 'Failed' && (
+                            <button
+                              onClick={() => {
+                                setSelectedPayment(payment);
+                                setRetryPricePerKg(payment.pricePerKg?.toString() || '');
+                                setShowRetryModal(true);
+                              }}
+                              className="px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors text-sm font-medium"
+                            >
+                              Retry
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
