@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Plus, MapPin, Phone, IdCard, Calendar, Grid, List, Trash2 } from 'lucide-react';
+import { Search, Plus, MapPin, Phone, IdCard, Grid, List, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { canCreate, canDelete } from '../utils/permissions';
@@ -10,55 +11,52 @@ const Farmers = () => {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
   const [farmers, setFarmers] = useState([]);
-  const [filteredFarmers, setFilteredFarmers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [regionFilter, setRegionFilter] = useState('All');
+  const [seasonFilter, setSeasonFilter] = useState('All');
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
 
-  const fetchFarmers = async () => {
-    setLoading(true);
+  const fetchFarmers = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
     try {
       const { data } = await api.get('/farmers');
-      setFarmers(data);
-      setFilteredFarmers(data);
+      setFarmers(data || []);
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.msg || 'Failed to load farmers');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchFarmers();
-  }, []);
+  }, [fetchFarmers]);
 
-  // Smart auto-refresh: 2 minutes, pauses on inactive tab
-  useSmartRefresh(fetchFarmers, 120000);
+  const silentRefresh = useCallback(() => fetchFarmers({ silent: true }), [fetchFarmers]);
+  useSmartRefresh(silentRefresh, 120000);
 
-  useEffect(() => {
-    let filtered = [...farmers];
-    
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(f => 
-        f.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.cellNumber?.includes(searchTerm) ||
-        f.nationalId?.includes(searchTerm)
-      );
-    }
-    
-    // Region filter
-    if (regionFilter !== 'All') {
-      filtered = filtered.filter(f => f.weighStation === regionFilter);
-    }
-    
-    setFilteredFarmers(filtered);
-  }, [searchTerm, regionFilter, farmers]);
+  const filteredFarmers = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    return farmers.filter((farmer) => {
+      const matchesSearch = !term || [farmer.name, farmer.cellNumber, farmer.nationalId, farmer.weighStation]
+        .some((value) => String(value || '').toLowerCase().includes(term));
+      const matchesRegion = regionFilter === 'All' || farmer.weighStation === regionFilter;
+      const matchesSeason = seasonFilter === 'All' || farmer.season === seasonFilter;
+      return matchesSearch && matchesRegion && matchesSeason;
+    });
+  }, [farmers, searchTerm, regionFilter, seasonFilter]);
 
   const regions = [...new Set(farmers.map(f => f.weighStation).filter(Boolean))];
+  const hasActiveFilters = Boolean(searchTerm.trim()) || regionFilter !== 'All' || seasonFilter !== 'All';
 
-  // Delete farmer function
+  const clearFilters = () => {
+    setSearchTerm('');
+    setRegionFilter('All');
+    setSeasonFilter('All');
+  };
+
   const handleDeleteFarmer = async (farmerId, farmerName) => {
     if (!window.confirm(`Are you sure you want to delete farmer "${farmerName}"? This action cannot be undone.`)) {
       return;
@@ -66,13 +64,11 @@ const Farmers = () => {
 
     try {
       await api.delete(`/farmers/${farmerId}`);
-      // Refresh farmers list
-      const { data } = await api.get('/farmers');
-      setFarmers(data);
-      setFilteredFarmers(data);
+      setFarmers((current) => current.filter((farmer) => farmer._id !== farmerId));
+      toast.success(`Deleted ${farmerName}`);
     } catch (error) {
       console.error('Error deleting farmer:', error);
-      alert('Failed to delete farmer. Please try again.');
+      toast.error(error.response?.data?.msg || 'Failed to delete farmer');
     }
   };
 
@@ -99,13 +95,13 @@ const Farmers = () => {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-dark-text-tertiary" size={20} />
             <input
               type="text"
-              placeholder="Search by name, phone, or ID..."
+              placeholder="Search by name, phone, ID, or region..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
@@ -125,12 +121,35 @@ const Farmers = () => {
               ))}
             </select>
           </div>
+
+          <div>
+            <select
+              value={seasonFilter}
+              onChange={(e) => setSeasonFilter(e.target.value)}
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B4332] dark:focus:ring-dark-green-primary focus:border-transparent"
+            >
+              <option value="All">All Seasons</option>
+              <option value="Long">Long</option>
+              <option value="Short">Short</option>
+            </select>
+          </div>
         </div>
         
         {/* Results count and View Toggle */}
         <div className="mt-4 flex justify-between items-center">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Showing <span className="font-semibold text-[#1B4332] dark:text-dark-green-primary">{filteredFarmers.length}</span> of {farmers.length} farmers
+          <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+            <span>
+              Showing <span className="font-semibold text-[#1B4332] dark:text-dark-green-primary">{filteredFarmers.length}</span> of {farmers.length} farmers
+            </span>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-[#1B4332] dark:text-dark-green-primary font-medium hover:underline"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
           
           {/* View Mode Toggle */}
@@ -162,14 +181,39 @@ const Farmers = () => {
       </div>
 
       {/* Farmers Display */}
-      {loading ? (
+      {loading && farmers.length === 0 ? (
         <div className="flex justify-center items-center py-12">
           <div className="text-gray-500 dark:text-gray-400">Loading farmers...</div>
         </div>
       ) : filteredFarmers.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-lg">No farmers found</p>
-          <p className="text-gray-400 dark:text-dark-text-tertiary mt-2">Try adjusting your search or filters</p>
+          {farmers.length === 0 ? (
+            <>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">No farmers yet</p>
+              <p className="text-gray-400 dark:text-dark-text-tertiary mt-2">Add a farmer to get started</p>
+              {canCreate(authState?.role, 'farmers') && (
+                <button
+                  type="button"
+                  onClick={() => navigate('/dashboard/farmers/new')}
+                  className="mt-4 inline-flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-5 py-2.5 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover"
+                >
+                  <Plus size={18} />
+                  Add a farmer
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="text-gray-500 dark:text-gray-400 text-lg">No farmers match these filters</p>
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="mt-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm font-medium"
+              >
+                Clear filters
+              </button>
+            </>
+          )}
         </div>
       ) : viewMode === 'grid' ? (
         // Grid View

@@ -1,6 +1,16 @@
 const { validationResult } = require('express-validator');
 const Farmer = require('../models/Farmer');
 const User = require('../models/User');
+const Delivery = require('../models/Delivery');
+const Payment = require('../models/Payment');
+
+function duplicateFarmerMessage(err) {
+  if (err?.code !== 11000) return null;
+  const field = Object.keys(err.keyPattern || err.keyValue || {})[0];
+  if (field === 'cellNumber') return 'A farmer with this phone number already exists';
+  if (field === 'nationalId') return 'A farmer with this national ID already exists';
+  return 'A farmer with these details already exists';
+}
 
 exports.getFarmers = async (req, res) => {
   try {
@@ -87,6 +97,8 @@ exports.createFarmer = async (req, res) => {
     if (err.name === 'ValidationError') {
       return res.status(400).json({ msg: 'Validation failed on required fields', errors: err.errors });
     }
+    const duplicateMessage = duplicateFarmerMessage(err);
+    if (duplicateMessage) return res.status(400).json({ msg: duplicateMessage });
     res.status(500).send('Server error');
   }
 };
@@ -109,6 +121,8 @@ exports.updateFarmer = async (req, res) => {
     if (err.name === 'CastError' || err.name === 'ValidationError') {
       return res.status(400).json({ msg: 'Invalid ID or validation failed' });
     }
+    const duplicateMessage = duplicateFarmerMessage(err);
+    if (duplicateMessage) return res.status(400).json({ msg: duplicateMessage });
     res.status(500).send('Server error');
 
   }
@@ -118,6 +132,24 @@ exports.deleteFarmer = async (req, res) => {
   try {
     const farmer = await Farmer.findById(req.params.id);
     if (!farmer) return res.status(404).json({ msg: 'Farmer not found' });
+
+    const [deliveryCount, paymentCount] = await Promise.all([
+      Delivery.countDocuments({ farmer: farmer._id }),
+      Payment.countDocuments({ farmer: farmer._id })
+    ]);
+    if (deliveryCount > 0 || paymentCount > 0) {
+      const parts = [];
+      if (deliveryCount > 0) {
+        parts.push(`${deliveryCount} ${deliveryCount === 1 ? 'delivery' : 'deliveries'}`);
+      }
+      if (paymentCount > 0) {
+        parts.push(`${paymentCount} ${paymentCount === 1 ? 'payment' : 'payments'}`);
+      }
+      return res.status(400).json({
+        msg: `This farmer still has ${parts.join(' and ')}. Remove those records before deleting the farmer.`
+      });
+    }
+
     await Farmer.findByIdAndDelete(req.params.id);
     res.json({ msg: 'Farmer removed' });
   } catch (err) {
