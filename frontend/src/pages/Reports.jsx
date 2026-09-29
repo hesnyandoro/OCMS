@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import api from '../services/api';
 import { useSmartRefresh } from '../hooks/useSmartRefresh';
+import { startOfDay, endOfDay, differenceInCalendarDays } from 'date-fns';
+import { toast } from 'react-hot-toast';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -23,23 +25,48 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
 
+function localDateParam(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
 
+function recordDate(record) {
+  const value = record?.date || record?.createdAt;
+  if (!value) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function withinRange(date, range) {
+  if (!range?.startDate && !range?.endDate) return true;
+  if (!date) return false;
+  if (range.startDate && date < startOfDay(range.startDate)) return false;
+  if (range.endDate && date > endOfDay(range.endDate)) return false;
+  return true;
+}
+
+function paymentRefId(paymentRef) {
+  if (!paymentRef) return '';
+  if (typeof paymentRef === 'object') return String(paymentRef._id || '');
+  return String(paymentRef);
+}
+
+function deliveryPaymentStatus(delivery, paymentsData) {
+  const populatedStatus = delivery?.payment && typeof delivery.payment === 'object'
+    ? delivery.payment.status
+    : null;
+  const id = paymentRefId(delivery?.payment);
+  const payment = id ? paymentsData.find((row) => String(row._id) === id) : null;
+  return payment?.status || populatedStatus || 'Unpaid';
+}
 
 const Reports = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [deliveries, setDeliveries] = useState([]);
   const [payments, setPayments] = useState([]);
-  const [kpis, setKpis] = useState({ 
-    totalKgs: 0, 
-    dailyAvg: 0, 
-    totalPaid: 0, 
-    outstanding: 0,
-    outstandingCherry: 0,
-    outstandingParchment: 0,
-    avgCostPerKg: 0,
-    totalDeliveries: 0,
-    totalFarmers: 0
-  });
+  const [farmers, setFarmers] = useState([]);
 
   // New analytics states
   const [paymentAnalytics, setPaymentAnalytics] = useState(null);
@@ -49,115 +76,38 @@ const Reports = () => {
   const [operationalMetrics, setOperationalMetrics] = useState(null);
   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
 
-  // Memoize date values to prevent unnecessary re-renders
-  const dateRangeKey = useMemo(() => 
-    `${dateRange.startDate?.getTime() || ''}-${dateRange.endDate?.getTime() || ''}`,
-    [dateRange.startDate, dateRange.endDate]
-  );
-
-  useEffect(() => {
-    fetchAllData();
-    fetchAdvancedAnalytics();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRangeKey]);
-
-  // Smart auto-refresh: 2 minutes, pauses on inactive tab
-  useSmartRefresh(() => {
-    fetchAllData();
-    fetchAdvancedAnalytics();
-  }, 120000, [dateRangeKey]);
-
-  async function fetchAllData() {
-    setLoading(true);
+  const fetchAllData = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
     try {
-      // Fetch deliveries, payments, and farmers in parallel
       const [deliveriesRes, paymentsRes, farmersRes] = await Promise.all([
         api.get('/deliveries'),
         api.get('/payments'),
         api.get('/farmers')
       ]);
 
-      setDeliveries(deliveriesRes.data);
-      setPayments(paymentsRes.data);
-      
-      processData(deliveriesRes.data, paymentsRes.data, farmersRes.data);
+      setDeliveries(deliveriesRes.data || []);
+      setPayments(paymentsRes.data || []);
+      setFarmers(farmersRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error(error.response?.data?.msg || error.response?.data?.error || 'Failed to load reports');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
-  }
+  }, []);
 
-  function processData(deliveriesData, paymentsData, farmersData) {
-    // Calculate comprehensive KPIs
-    const totalKgs = deliveriesData.reduce((sum, d) => sum + (d.kgsDelivered || 0), 0);
-    const totalPaid = paymentsData.filter(p => p.status === 'Completed').reduce((sum, p) => sum + (p.amountPaid || 0), 0);
-    const totalDeliveries = deliveriesData.length;
-    const avgCostPerKg = totalKgs > 0 ? (totalPaid / totalKgs) : 0;
-    
-    // Calculate average price per kg for each delivery type
-    const cherryPayments = paymentsData.filter(p => p.status === 'Completed' && p.deliveryType === 'Cherry');
-    const parchmentPayments = paymentsData.filter(p => p.status === 'Completed' && p.deliveryType === 'Parchment');
-    
-    const cherryKgs = cherryPayments.reduce((sum, p) => sum + (p.kgsDelivered || 0), 0);
-    const parchmentKgs = parchmentPayments.reduce((sum, p) => sum + (p.kgsDelivered || 0), 0);
-    
-    const cherryTotalPaid = cherryPayments.reduce((sum, p) => sum + (p.amountPaid || 0), 0);
-    const parchmentTotalPaid = parchmentPayments.reduce((sum, p) => sum + (p.amountPaid || 0), 0);
-    
-    const avgCostPerKgCherry = cherryKgs > 0 ? (cherryTotalPaid / cherryKgs) : avgCostPerKg;
-    const avgCostPerKgParchment = parchmentKgs > 0 ? (parchmentTotalPaid / parchmentKgs) : avgCostPerKg;
-    
-    // Calculate outstanding by delivery type: deliveries without completed payment
-    // 1. Pending Cherry deliveries (no payment or failed/pending payment)
-    const pendingCherry = deliveriesData.filter(d => {
-      if (!d.payment) return d.type === 'Cherry'; // No payment record
-      const payment = paymentsData.find(p => p._id === d.payment);
-      return d.type === 'Cherry' && (!payment || payment.status !== 'Completed');
-    });
-    const outstandingCherry = pendingCherry.reduce((sum, d) => {
-      return sum + (d.kgsDelivered || 0) * avgCostPerKgCherry;
-    }, 0);
-    
-    // 2. Pending Parchment deliveries
-    const pendingParchment = deliveriesData.filter(d => {
-      if (!d.payment) return d.type === 'Parchment'; // No payment record
-      const payment = paymentsData.find(p => p._id === d.payment);
-      return d.type === 'Parchment' && (!payment || payment.status !== 'Completed');
-    });
-    const outstandingParchment = pendingParchment.reduce((sum, d) => {
-      return sum + (d.kgsDelivered || 0) * avgCostPerKgParchment;
-    }, 0);
-    
-    const outstanding = outstandingCherry + outstandingParchment;
-    
-    // Daily average (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const recentDeliveries = deliveriesData.filter(d => new Date(d.date || d.createdAt) >= thirtyDaysAgo);
-    const dailyAvg = Math.round(recentDeliveries.reduce((sum, d) => sum + (d.kgsDelivered || 0), 0) / 30);
-
-    setKpis({
-      totalKgs,
-      totalPaid,
-      outstanding,
-      outstandingCherry,
-      outstandingParchment,
-      avgCostPerKg,
-      dailyAvg,
-      totalDeliveries,
-      totalFarmers: farmersData.length
-    });
-  }
-
-  async function fetchAdvancedAnalytics() {
+  const fetchAdvancedAnalytics = useCallback(async () => {
     try {
       const params = new URLSearchParams();
-      if (dateRange.startDate) params.append('startDate', dateRange.startDate instanceof Date ? dateRange.startDate.toISOString().split('T')[0] : dateRange.startDate);
-      if (dateRange.endDate) params.append('endDate', dateRange.endDate instanceof Date ? dateRange.endDate.toISOString().split('T')[0] : dateRange.endDate);
-      
-      const queryString = params.toString();
-      
+      const startParam = localDateParam(dateRange.startDate);
+      const endParam = localDateParam(dateRange.endDate);
+      if (startParam) params.set('startDate', startParam);
+      if (endParam) params.set('endDate', endParam);
+      const rangeQuery = params.toString();
+      const rangeSuffix = rangeQuery ? `?${rangeQuery}` : '';
+      const farmerParams = new URLSearchParams(params);
+      farmerParams.set('limit', '20');
+
       const [
         paymentRes,
         farmerPerfRes,
@@ -165,11 +115,11 @@ const Reports = () => {
         deliveryTypeRes,
         operationalRes
       ] = await Promise.all([
-        api.get(`/reports/payment-analytics?${queryString}`),
-        api.get('/reports/farmer-performance?limit=20'),
+        api.get(`/reports/payment-analytics${rangeSuffix}`),
+        api.get(`/reports/farmer-performance?${farmerParams.toString()}`),
         api.get('/reports/comparative-analytics'),
-        api.get('/reports/delivery-type-analytics'),
-        api.get('/reports/operational-metrics')
+        api.get(`/reports/delivery-type-analytics${rangeSuffix}`),
+        api.get(`/reports/operational-metrics${rangeSuffix}`)
       ]);
 
       setPaymentAnalytics(paymentRes.data);
@@ -179,20 +129,108 @@ const Reports = () => {
       setOperationalMetrics(operationalRes.data);
     } catch (error) {
       console.error('Error fetching advanced analytics:', error);
+      toast.error(error.response?.data?.msg || error.response?.data?.error || 'Failed to load report analytics');
     }
-  }
+  }, [dateRange.startDate, dateRange.endDate]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  useEffect(() => {
+    fetchAdvancedAnalytics();
+  }, [fetchAdvancedAnalytics]);
+
+  const silentRefresh = useCallback(() => {
+    fetchAllData({ silent: true });
+    fetchAdvancedAnalytics();
+  }, [fetchAllData, fetchAdvancedAnalytics]);
+
+  useSmartRefresh(silentRefresh, 120000);
+
+  const filteredDeliveries = useMemo(
+    () => deliveries.filter((delivery) => withinRange(recordDate(delivery), dateRange)),
+    [deliveries, dateRange]
+  );
+
+  const filteredPayments = useMemo(
+    () => payments.filter((payment) => withinRange(recordDate(payment), dateRange)),
+    [payments, dateRange]
+  );
+
+  const kpis = useMemo(() => {
+    const totalKgs = filteredDeliveries.reduce((sum, delivery) => sum + (delivery.kgsDelivered || 0), 0);
+    const completedPayments = filteredPayments.filter((payment) => payment.status === 'Completed');
+    const totalPaid = completedPayments.reduce((sum, payment) => sum + (payment.amountPaid || 0), 0);
+    const avgCostPerKg = totalKgs > 0 ? (totalPaid / totalKgs) : 0;
+
+    const rateFor = (type) => {
+      const rows = completedPayments.filter((payment) => payment.deliveryType === type);
+      const kgs = rows.reduce((sum, payment) => sum + (payment.kgsDelivered || 0), 0);
+      const paid = rows.reduce((sum, payment) => sum + (payment.amountPaid || 0), 0);
+      if (kgs > 0) return paid / kgs;
+      const fallbackRows = payments.filter((payment) => payment.status === 'Completed' && payment.deliveryType === type);
+      const fallbackKgs = fallbackRows.reduce((sum, payment) => sum + (payment.kgsDelivered || 0), 0);
+      const fallbackPaid = fallbackRows.reduce((sum, payment) => sum + (payment.amountPaid || 0), 0);
+      return fallbackKgs > 0 ? fallbackPaid / fallbackKgs : avgCostPerKg;
+    };
+
+    const avgCostPerKgCherry = rateFor('Cherry');
+    const avgCostPerKgParchment = rateFor('Parchment');
+    const outstandingFor = (type, rate) => filteredDeliveries
+      .filter((delivery) => delivery.type === type && deliveryPaymentStatus(delivery, payments) !== 'Completed')
+      .reduce((sum, delivery) => sum + (delivery.kgsDelivered || 0) * rate, 0);
+
+    const outstandingCherry = outstandingFor('Cherry', avgCostPerKgCherry);
+    const outstandingParchment = outstandingFor('Parchment', avgCostPerKgParchment);
+
+    let dailyAvg;
+    if (dateRange.startDate || dateRange.endDate) {
+      const dated = filteredDeliveries.map(recordDate).filter(Boolean);
+      const from = dateRange.startDate
+        ? startOfDay(dateRange.startDate)
+        : (dated.length ? startOfDay(new Date(Math.min(...dated.map((date) => date.getTime())))) : startOfDay(new Date()));
+      const to = dateRange.endDate ? startOfDay(dateRange.endDate) : startOfDay(new Date());
+      const days = Math.max(1, differenceInCalendarDays(to, from) + 1);
+      dailyAvg = Math.round(totalKgs / days);
+    } else {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const recentKgs = filteredDeliveries
+        .filter((delivery) => {
+          const date = recordDate(delivery);
+          return date && date >= thirtyDaysAgo;
+        })
+        .reduce((sum, delivery) => sum + (delivery.kgsDelivered || 0), 0);
+      dailyAvg = Math.round(recentKgs / 30);
+    }
+
+    const rangedFarmers = new Set(filteredDeliveries.map((delivery) => delivery.farmer?._id || delivery.farmer)).size;
+
+    return {
+      totalKgs,
+      totalPaid,
+      outstanding: outstandingCherry + outstandingParchment,
+      outstandingCherry,
+      outstandingParchment,
+      avgCostPerKg,
+      dailyAvg,
+      totalDeliveries: filteredDeliveries.length,
+      totalFarmers: dateRange.startDate || dateRange.endDate ? rangedFarmers : farmers.length
+    };
+  }, [filteredDeliveries, filteredPayments, payments, farmers.length, dateRange]);
 
 
 
   // Season Analytics (Long: Oct-Mar, Short: Apr-Sep)
   const seasonAnalytics = useMemo(() => {
-    const longSeason = deliveries.filter(d => {
+    const longSeason = filteredDeliveries.filter(d => {
       const month = new Date(d.date || d.createdAt).getMonth();
       // Long season: October (9) to March (2)
       return month >= 9 || month <= 2;
     });
     
-    const shortSeason = deliveries.filter(d => {
+    const shortSeason = filteredDeliveries.filter(d => {
       const month = new Date(d.date || d.createdAt).getMonth();
       // Short season: April (3) to September (8)
       return month >= 3 && month <= 8;
@@ -210,12 +248,12 @@ const Reports = () => {
         farmers: new Set(shortSeason.map(d => d.farmer?._id || d.farmer)).size
       }
     };
-  }, [deliveries]);
+  }, [filteredDeliveries]);
 
   // Regional Distribution (for pie chart)
   const regionalData = useMemo(() => {
     const byRegion = {};
-    payments.filter(p => p.status === 'Completed').forEach(payment => {
+    filteredPayments.filter(p => p.status === 'Completed').forEach(payment => {
       const region = payment.farmer?.weighStation || payment.weighStation || 'Unknown';
       byRegion[region] = (byRegion[region] || 0) + (payment.amountPaid || 0);
     });
@@ -228,11 +266,11 @@ const Reports = () => {
         borderWidth: 0
       }]
     };
-  }, [payments]);
+  }, [filteredPayments]);
 
   // Payouts vs Deliveries Over Time (line chart)
   const timelineData = useMemo(() => {
-    if (!deliveries.length && !payments.length) {
+    if (!filteredDeliveries.length && !filteredPayments.length) {
       // Return empty chart data structure
       return {
         labels: [],
@@ -260,7 +298,7 @@ const Reports = () => {
     // Group by month with proper date handling
     const monthlyDataMap = new Map();
     
-    deliveries.forEach(d => {
+    filteredDeliveries.forEach(d => {
       if (!d.date && !d.createdAt) return;
       const date = new Date(d.date || d.createdAt);
       if (isNaN(date.getTime())) return; // Skip invalid dates
@@ -274,7 +312,7 @@ const Reports = () => {
       monthlyDataMap.get(yearMonth).kgs += d.kgsDelivered || 0;
     });
     
-    payments.filter(p => p.status === 'Completed').forEach(p => {
+    filteredPayments.filter(p => p.status === 'Completed').forEach(p => {
       if (!p.date && !p.createdAt) return;
       const date = new Date(p.date || p.createdAt);
       if (isNaN(date.getTime())) return; // Skip invalid dates
@@ -319,7 +357,7 @@ const Reports = () => {
         }
       ]
     };
-  }, [deliveries, payments]);
+  }, [filteredDeliveries, filteredPayments]);
 
   function downloadCSV() {
     const timestamp = new Date().toISOString().split('T')[0];
@@ -451,7 +489,7 @@ const Reports = () => {
       csvData.push(['Avg Payment Cycle Time', `${operationalMetrics.avgPaymentCycleTime} days`]);
       csvData.push(['Avg Transaction Size', `KES ${parseFloat(operationalMetrics.avgTransactionSize).toLocaleString()}`]);
       csvData.push([]);
-      csvData.push(['Last 30 Days Activity']);
+      csvData.push([operationalMetrics.systemUsage.activityLabel || 'Last 30 Days Activity']);
       csvData.push(['Deliveries', operationalMetrics.systemUsage.last30Days.deliveries]);
       csvData.push(['Payments', operationalMetrics.systemUsage.last30Days.payments]);
       csvData.push(['New Farmers', operationalMetrics.systemUsage.last30Days.newFarmers]);
@@ -460,17 +498,17 @@ const Reports = () => {
 
     // 8. Detailed Deliveries
     csvData.push(['DETAILED DELIVERIES DATA']);
-    csvData.push(['Date', 'Farmer', 'National ID', 'Region', 'Type', 'Kgs Delivered', 'Driver', 'Payment Status']);
-    deliveries.forEach(d => {
+    csvData.push(['Date', 'Farmer', 'Phone', 'Region', 'Type', 'Kgs Delivered', 'Driver', 'Payment Status']);
+    filteredDeliveries.forEach(d => {
       csvData.push([
         d.date ? new Date(d.date).toLocaleDateString() : '',
         d.farmer?.name || '',
-        d.farmer?.nationalId || '',
+        d.farmer?.cellNumber || '',
         d.region || '',
         d.type || '',
         d.kgsDelivered || 0,
         d.driver || '',
-        d.paymentStatus || 'Pending'
+        deliveryPaymentStatus(d, payments)
       ]);
     });
     csvData.push([]);
@@ -478,7 +516,7 @@ const Reports = () => {
     // 9. Detailed Payments
     csvData.push(['DETAILED PAYMENTS DATA']);
     csvData.push(['Date', 'Farmer', 'Amount Paid (KES)', 'Delivery Type', 'Kgs', 'Price/Kg', 'Status', 'Void Reason']);
-    payments.forEach(p => {
+    filteredPayments.forEach(p => {
       csvData.push([
         p.date ? new Date(p.date).toLocaleDateString() : '',
         p.farmer?.name || '',
@@ -640,13 +678,13 @@ const Reports = () => {
     doc.text('Detailed Deliveries', 14, yPosition);
     yPosition += 7;
     
-    const deliveryData = deliveries.map(d => [
+    const deliveryData = filteredDeliveries.map(d => [
       d.date ? new Date(d.date).toLocaleDateString() : '',
       d.farmer?.name || '',
       d.region || '',
       d.type || '',
       String(d.kgsDelivered || 0),
-      d.paymentStatus || 'Pending'
+      deliveryPaymentStatus(d, payments)
     ]);
     
     autoTable(doc, {
@@ -706,7 +744,7 @@ const Reports = () => {
         </div>
       </div>
 
-      {loading ? (
+      {loading && deliveries.length === 0 && payments.length === 0 ? (
         <div className="flex justify-center items-center py-20">
           <div className="text-gray-500 dark:text-dark-text-tertiary">Loading analytics...</div>
         </div>
@@ -1259,7 +1297,7 @@ const Reports = () => {
                   </div>
                   
                   <div className="border-t dark:border-gray-700 pt-3">
-                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Last 30 Days Activity</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">{operationalMetrics.systemUsage.activityLabel || 'Last 30 Days Activity'}</p>
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div>
                         <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{operationalMetrics.systemUsage.last30Days.deliveries}</p>

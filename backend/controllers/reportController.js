@@ -2,6 +2,33 @@ const Delivery = require('../models/Delivery');
 const Payment = require('../models/Payment');
 const Farmer = require('../models/Farmer');
 
+// Date-only query values are calendar days in the server's local zone.
+// new Date('YYYY-MM-DD') is UTC midnight, which drops same-day records.
+function parseReportDate(value, isEnd) {
+  if (!value) return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value).trim());
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]) - 1;
+    const day = Number(match[3]);
+    return isEnd
+      ? new Date(year, month, day, 23, 59, 59, 999)
+      : new Date(year, month, day, 0, 0, 0, 0);
+  }
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function dateQuery(startDate, endDate) {
+  const start = parseReportDate(startDate, false);
+  const end = parseReportDate(endDate, true);
+  if (!start && !end) return null;
+  const range = {};
+  if (start) range.$gte = start;
+  if (end) range.$lte = end;
+  return range;
+}
+
 exports.getSummary = async (req, res) => {
   try {
     const totalFarmers = await Farmer.countDocuments({});
@@ -27,9 +54,8 @@ exports.generateReport = async (req, res) => {
     const filter = {};
     if (region) filter.region = region;
     if (driver) filter.driver = driver;
-    if (startDate || endDate) filter.date = {};
-    if (startDate) filter.date.$gte = new Date(startDate);
-    if (endDate) filter.date.$lte = new Date(endDate);
+    const range = dateQuery(startDate, endDate);
+    if (range) filter.date = range;
     if (farmer) filter.farmer = farmer;
 
     const deliveries = await Delivery.find(filter).populate('farmer');
@@ -47,10 +73,8 @@ exports.getDeliveriesReport = async (req, res) => {
     const { groupBy = 'weighStation', startDate, endDate, region, driver, type } = req.query;
 
     const match = {};
-    // date range
-    if (startDate || endDate) match.date = {};
-    if (startDate) match.date.$gte = new Date(startDate);
-    if (endDate) match.date.$lte = new Date(endDate);
+    const range = dateQuery(startDate, endDate);
+    if (range) match.date = range;
     // optional filters
     if (region) match.region = region;
     if (driver) match.driver = driver;
@@ -132,12 +156,8 @@ exports.getPaymentAnalytics = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const match = {};
-    
-    if (startDate || endDate) {
-      match.date = {};
-      if (startDate) match.date.$gte = new Date(startDate);
-      if (endDate) match.date.$lte = new Date(endDate);
-    }
+    const range = dateQuery(startDate, endDate);
+    if (range) match.date = range;
 
     // Payment status breakdown
     const statusBreakdown = await Payment.aggregate([
@@ -320,9 +340,17 @@ exports.getCashflowForecast = async (req, res) => {
 exports.getFarmerPerformance = async (req, res) => {
   try {
     const { limit = 20, sortBy = 'totalValue' } = req.query;
+    const range = dateQuery(req.query.startDate, req.query.endDate);
+    const completedConds = [{ $eq: ['$$payment.status', 'Completed'] }];
+    if (range?.$gte) completedConds.push({ $gte: ['$$payment.date', range.$gte] });
+    if (range?.$lte) completedConds.push({ $lte: ['$$payment.date', range.$lte] });
+    const completedInRange = completedConds.length === 1 ? completedConds[0] : { $and: completedConds };
+
+    const pipeline = [];
+    if (range) pipeline.push({ $match: { date: range } });
 
     // Get all farmers with their performance metrics
-    const farmerPerformance = await Delivery.aggregate([
+    pipeline.push(
       {
         $lookup: {
           from: 'farmers',
@@ -362,7 +390,7 @@ exports.getFarmerPerformance = async (req, res) => {
                   $filter: {
                     input: '$payments',
                     as: 'payment',
-                    cond: { $eq: ['$$payment.status', 'Completed'] }
+                    cond: completedInRange
                   }
                 },
                 as: 'p',
@@ -375,7 +403,7 @@ exports.getFarmerPerformance = async (req, res) => {
               $filter: {
                 input: '$payments',
                 as: 'payment',
-                cond: { $eq: ['$$payment.status', 'Completed'] }
+                cond: completedInRange
               }
             }
           }
@@ -436,7 +464,8 @@ exports.getFarmerPerformance = async (req, res) => {
                { totalKgs: -1 }
       },
       { $limit: parseInt(limit) }
-    ]);
+    );
+    const farmerPerformance = await Delivery.aggregate(pipeline);
 
     // Classify farmers
     const inactiveFarmers = farmerPerformance.filter(f => f.daysSinceLastDelivery > 30);
@@ -573,7 +602,13 @@ exports.getComparativeAnalytics = async (req, res) => {
 // MEDIUM PRIORITY: Delivery Type Analytics (Cherry vs Parchment)
 exports.getDeliveryTypeAnalytics = async (req, res) => {
   try {
+    const range = dateQuery(req.query.startDate, req.query.endDate);
+    const deliveryMatch = range ? [{ $match: { date: range } }] : [];
+    const paymentMatch = { status: 'Completed', deliveryType: { $exists: true } };
+    if (range) paymentMatch.date = range;
+
     const typeComparison = await Delivery.aggregate([
+      ...deliveryMatch,
       {
         $group: {
           _id: '$type',
@@ -586,7 +621,7 @@ exports.getDeliveryTypeAnalytics = async (req, res) => {
 
     // Get pricing by type
     const pricingByType = await Payment.aggregate([
-      { $match: { status: 'Completed', deliveryType: { $exists: true } } },
+      { $match: paymentMatch },
       {
         $group: {
           _id: '$deliveryType',
@@ -599,6 +634,7 @@ exports.getDeliveryTypeAnalytics = async (req, res) => {
 
     // Type by season
     const typeBySeason = await Delivery.aggregate([
+      ...deliveryMatch,
       {
         $group: {
           _id: { type: '$type', season: '$season' },
@@ -704,9 +740,13 @@ exports.getRegionalProfitability = async (req, res) => {
 // MEDIUM PRIORITY: Operational Efficiency Metrics
 exports.getOperationalMetrics = async (req, res) => {
   try {
+    const range = dateQuery(req.query.startDate, req.query.endDate);
+    const paymentMatch = { status: 'Completed' };
+    if (range) paymentMatch.date = range;
+
     // Average payment cycle time
     const paymentsWithDeliveries = await Payment.find({
-      status: 'Completed',
+      ...paymentMatch,
       deliveries: { $exists: true, $ne: [] }
     }).populate('deliveries');
 
@@ -730,9 +770,9 @@ exports.getOperationalMetrics = async (req, res) => {
     const avgPaymentCycleTime = cycleCount > 0 ? (totalCycleTime / cycleCount).toFixed(2) : 0;
 
     // Cost per transaction
-    const totalPayments = await Payment.countDocuments({ status: 'Completed' });
+    const totalPayments = await Payment.countDocuments(paymentMatch);
     const totalAmount = await Payment.aggregate([
-      { $match: { status: 'Completed' } },
+      { $match: paymentMatch },
       { $group: { _id: null, total: { $sum: '$amountPaid' } } }
     ]);
 
@@ -741,6 +781,7 @@ exports.getOperationalMetrics = async (req, res) => {
 
     // Driver performance
     const driverMetrics = await Delivery.aggregate([
+      ...(range ? [{ $match: { date: range } }] : []),
       {
         $group: {
           _id: '$driver',
@@ -756,16 +797,22 @@ exports.getOperationalMetrics = async (req, res) => {
     // System usage stats
     const last30Days = new Date();
     last30Days.setDate(last30Days.getDate() - 30);
+    const activityStart = range?.$gte || last30Days;
+    const activityEnd = range?.$lte || null;
+    const activityWindow = activityEnd
+      ? { $gte: activityStart, $lte: activityEnd }
+      : { $gte: activityStart };
 
-    const recentDeliveries = await Delivery.countDocuments({ createdAt: { $gte: last30Days } });
-    const recentPayments = await Payment.countDocuments({ createdAt: { $gte: last30Days } });
-    const recentFarmers = await Farmer.countDocuments({ createdAt: { $gte: last30Days } });
+    const recentDeliveries = await Delivery.countDocuments({ createdAt: activityWindow });
+    const recentPayments = await Payment.countDocuments({ createdAt: activityWindow });
+    const recentFarmers = await Farmer.countDocuments({ createdAt: activityWindow });
 
     res.json({
       avgPaymentCycleTime,
       avgTransactionSize,
       driverMetrics,
       systemUsage: {
+        activityLabel: range ? 'Selected Period Activity' : 'Last 30 Days Activity',
         last30Days: {
           deliveries: recentDeliveries,
           payments: recentPayments,
