@@ -64,6 +64,17 @@ export const calculateDistance = async (fromLat, fromLng, toLat, toLng) => {
 };
 
 /**
+ * Look up a Kenyan place/region via the backend Nominatim proxy.
+ * Debounce in the UI (500ms, min 3 characters) before calling.
+ */
+export const geocodeRegion = async (query) => {
+  const { data } = await api.get('/geolocation/geocode', {
+    params: { q: query },
+  });
+  return data;
+};
+
+/**
  * Validate if user's current location is within their assigned region
  * @param {number} lat - User's latitude
  * @param {number} lng - User's longitude

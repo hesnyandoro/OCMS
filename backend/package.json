@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test tests/*.test.js",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
@@ -26,7 +26,8 @@
     "nodemailer": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^7.0.0"
   },
   "overrides": {
     "path-to-regexp": "^0.1.13",

@@ -49,5 +49,6 @@ app.use('/api/drivers', require('./routes/drivers'));
 app.use('/api/tracking', require('./routes/tracking'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/reports', require('./routes/reports'));
+app.use('/api/geolocation', require('./routes/geolocation'));
 
 module.exports = app;

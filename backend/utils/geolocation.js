@@ -1,51 +1,120 @@
 /**
  * Geolocation utility functions
- * Handles distance calculations, region validation, and geographic queries
+ * Handles distance calculations, region validation, geographic queries,
+ * Nominatim geocoding, and OSRM driving distance with Haversine fallback.
  */
 
-/**
- * Calculate distance between two coordinates using Haversine formula
- * @param {number} lat1 - First coordinate latitude
- * @param {number} lon1 - First coordinate longitude
- * @param {number} lat2 - Second coordinate latitude
- * @param {number} lon2 - Second coordinate longitude
- * @returns {number} Distance in kilometers
- */
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in kilometers
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
+const EARTH_RADIUS_KM = 6371;
+const DEFAULT_OSRM_URL = 'https://router.project-osrm.org';
+const DEFAULT_NOMINATIM_URL = 'https://nominatim.openstreetmap.org';
+const USER_AGENT = process.env.GEO_USER_AGENT || 'OCMS/1.0 (Organic Coffee Management System; https://github.com/hesnyandoro/OCMS)';
+const NOMINATIM_MIN_INTERVAL_MS = 1100;
+
+let lastNominatimAt = 0;
+const geocodeCache = new Map();
+const GEOCODE_CACHE_LIMIT = 200;
+
+function toRadians(degrees) {
+  return (degrees * Math.PI) / 180;
 }
 
 /**
- * Check if a point is within a circular geofence
- * @param {number} lat - Point latitude
- * @param {number} lng - Point longitude
- * @param {number} centerLat - Geofence center latitude
- * @param {number} centerLng - Geofence center longitude
- * @param {number} radiusKm - Geofence radius in kilometers
- * @returns {boolean} True if point is within geofence
+ * Calculate distance between two coordinates using Haversine formula
+ * @returns {number} Distance in kilometers
  */
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return EARTH_RADIUS_KM * c;
+}
+
+function parseCoordinate(value) {
+  if (value === null || value === undefined || value === '') return NaN;
+  if (typeof value === 'number') return value;
+  const parsed = Number(String(value).trim());
+  return parsed;
+}
+
+/**
+ * Validate latitude/longitude pair. Returns { ok, lat, lng, error }.
+ */
+function validateCoordinates(latInput, lngInput) {
+  const lat = parseCoordinate(latInput);
+  const lng = parseCoordinate(lngInput);
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+    return { ok: false, error: 'Latitude and longitude must be valid numbers' };
+  }
+  if (lat < -90 || lat > 90) {
+    return { ok: false, error: 'Latitude must be between -90 and 90' };
+  }
+  if (lng < -180 || lng > 180) {
+    return { ok: false, error: 'Longitude must be between -180 and 180' };
+  }
+  return { ok: true, lat, lng };
+}
+
+function toGeoJSONPoint(lat, lng) {
+  return {
+    type: 'Point',
+    coordinates: [lng, lat],
+  };
+}
+
+/**
+ * Normalize a farmLocation payload into numeric lat/lng plus a GeoJSON Point.
+ * @returns {{ error?: string, value?: object, location?: object }}
+ */
+function normalizeFarmLocation(input) {
+  if (input == null || input === '') {
+    return { value: undefined };
+  }
+  if (typeof input !== 'object') {
+    return { error: 'Farm location must include latitude and longitude' };
+  }
+
+  const hasLat = input.lat !== undefined && input.lat !== null && input.lat !== '';
+  const hasLng = input.lng !== undefined && input.lng !== null && input.lng !== '';
+
+  if (!hasLat && !hasLng && !input.address) {
+    return { value: undefined };
+  }
+  if (hasLat !== hasLng) {
+    return { error: 'Both latitude and longitude are required' };
+  }
+  if (!hasLat && !hasLng) {
+    const address = typeof input.address === 'string' ? input.address.trim() : '';
+    return { value: { address: address || undefined } };
+  }
+
+  const coords = validateCoordinates(input.lat, input.lng);
+  if (!coords.ok) {
+    return { error: coords.error };
+  }
+
+  const address = typeof input.address === 'string' ? input.address.trim() : '';
+  return {
+    value: {
+      lat: coords.lat,
+      lng: coords.lng,
+      address: address || undefined,
+    },
+    location: toGeoJSONPoint(coords.lat, coords.lng),
+  };
+}
+
 function isWithinGeofence(lat, lng, centerLat, centerLng, radiusKm) {
   const distance = calculateDistance(lat, lng, centerLat, centerLng);
   return distance <= radiusKm;
 }
 
-/**
- * Find the closest location from an array of coordinates
- * @param {number} lat - Reference latitude
- * @param {number} lng - Reference longitude
- * @param {Array} locations - Array of {lat, lng, ...otherFields}
- * @returns {Object} Closest location with distance field
- */
 function findNearest(lat, lng, locations) {
   if (!locations || locations.length === 0) return null;
 
@@ -63,14 +132,6 @@ function findNearest(lat, lng, locations) {
   return nearest;
 }
 
-/**
- * Filter locations within a certain radius
- * @param {number} lat - Reference latitude
- * @param {number} lng - Reference longitude
- * @param {Array} locations - Array of {lat, lng, ...otherFields}
- * @param {number} radiusKm - Search radius in kilometers
- * @returns {Array} Filtered locations with distance field
- */
 function filterByRadius(lat, lng, locations, radiusKm = 50) {
   if (!locations || locations.length === 0) return [];
 
@@ -83,14 +144,6 @@ function filterByRadius(lat, lng, locations, radiusKm = 50) {
     .sort((a, b) => a.distance - b.distance);
 }
 
-/**
- * Validate if field agent's location is within their assigned region
- * Regions are stored as geofences with center + radius
- * @param {number} agentLat - Agent's current latitude
- * @param {number} agentLng - Agent's current longitude
- * @param {Object} regionBounds - {name, centerLat, centerLng, radiusKm}
- * @returns {Object} {isValid: boolean, distance: number, message: string}
- */
 function validateAgentLocation(agentLat, agentLng, regionBounds) {
   if (!regionBounds || !regionBounds.centerLat || !regionBounds.centerLng) {
     return {
@@ -117,16 +170,8 @@ function validateAgentLocation(agentLat, agentLng, regionBounds) {
   };
 }
 
-/**
- * Calculate bounding box for a geographic center point
- * Useful for MongoDB geo-queries
- * @param {number} lat - Center latitude
- * @param {number} lng - Center longitude
- * @param {number} radiusKm - Radius in kilometers
- * @returns {Object} {minLat, maxLat, minLng, maxLng}
- */
 function getBoundingBox(lat, lng, radiusKm = 50) {
-  const latOffset = radiusKm / 111.32; // 1 degree latitude ≈ 111.32 km
+  const latOffset = radiusKm / 111.32;
   const lngOffset = radiusKm / (111.32 * Math.cos((lat * Math.PI) / 180));
 
   return {
@@ -137,28 +182,174 @@ function getBoundingBox(lat, lng, radiusKm = 50) {
   };
 }
 
-/**
- * Format location for storage/display
- * @param {number} lat - Latitude
- * @param {number} lng - Longitude
- * @param {string} address - Optional human-readable address
- * @returns {Object} Formatted location object
- */
 function formatLocation(lat, lng, address = null) {
   return {
-    lat: parseFloat(lat.toFixed(8)),
-    lng: parseFloat(lng.toFixed(8)),
+    lat: parseFloat(Number(lat).toFixed(8)),
+    lng: parseFloat(Number(lng).toFixed(8)),
     address: address || null,
     timestamp: new Date(),
   };
 }
 
+function appendKenya(query) {
+  const trimmed = String(query || '').trim();
+  if (!trimmed) return trimmed;
+  if (/\bkenya\b/i.test(trimmed)) return trimmed;
+  return `${trimmed}, Kenya`;
+}
+
+function rememberGeocode(key, value) {
+  if (geocodeCache.size >= GEOCODE_CACHE_LIMIT) {
+    const firstKey = geocodeCache.keys().next().value;
+    geocodeCache.delete(firstKey);
+  }
+  geocodeCache.set(key, value);
+}
+
+async function waitForNominatimSlot() {
+  const elapsed = Date.now() - lastNominatimAt;
+  if (elapsed < NOMINATIM_MIN_INTERVAL_MS) {
+    await new Promise((resolve) => setTimeout(resolve, NOMINATIM_MIN_INTERVAL_MS - elapsed));
+  }
+  lastNominatimAt = Date.now();
+}
+
+/**
+ * Geocode a region/place via OpenStreetMap Nominatim, scoped to Kenya.
+ */
+async function geocodeNominatim(query, options = {}) {
+  const q = appendKenya(query);
+  if (!q || q.replace(/,?\s*kenya\s*$/i, '').trim().length < 3) {
+    return { error: 'Enter at least 3 characters to search' };
+  }
+
+  const cacheKey = q.toLowerCase();
+  if (!options.skipCache && geocodeCache.has(cacheKey)) {
+    return { results: geocodeCache.get(cacheKey), cached: true };
+  }
+
+  const fetchFn = options.fetch || globalThis.fetch;
+  if (typeof fetchFn !== 'function') {
+    return { error: 'Geocoding is not available in this environment' };
+  }
+
+  const base = options.nominatimUrl || process.env.NOMINATIM_URL || DEFAULT_NOMINATIM_URL;
+  const url = new URL('/search', `${base.replace(/\/$/, '')}/`);
+  url.searchParams.set('q', q);
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('limit', String(options.limit || 5));
+  url.searchParams.set('addressdetails', '1');
+  url.searchParams.set('countrycodes', 'ke');
+
+  if (!options.skipThrottle) {
+    await waitForNominatimSlot();
+  }
+
+  let response;
+  try {
+    response = await fetchFn(url.toString(), {
+      headers: {
+        'User-Agent': USER_AGENT,
+        Accept: 'application/json',
+      },
+    });
+  } catch (err) {
+    return { error: 'Geocoding service is unavailable. Enter coordinates manually.' };
+  }
+
+  if (!response.ok) {
+    return { error: 'Geocoding service is unavailable. Enter coordinates manually.' };
+  }
+
+  const raw = await response.json();
+  const results = (Array.isArray(raw) ? raw : []).map((item) => ({
+    displayName: item.display_name,
+    lat: parseFloat(item.lat),
+    lng: parseFloat(item.lon),
+    type: item.type,
+    importance: item.importance,
+  })).filter((item) => Number.isFinite(item.lat) && Number.isFinite(item.lng));
+
+  rememberGeocode(cacheKey, results);
+  return { results };
+}
+
+function haversineResult(fromLat, fromLng, toLat, toLng) {
+  const distance = calculateDistance(fromLat, fromLng, toLat, toLng);
+  return {
+    distance,
+    unit: 'km',
+    source: 'haversine',
+  };
+}
+
+/**
+ * Real driving distance via public OSRM. Falls back to Haversine on any failure.
+ */
+async function getDrivingDistance(fromLat, fromLng, toLat, toLng, options = {}) {
+  const from = validateCoordinates(fromLat, fromLng);
+  const to = validateCoordinates(toLat, toLng);
+  if (!from.ok) return { error: from.error };
+  if (!to.ok) return { error: to.error };
+
+  const fallback = haversineResult(from.lat, from.lng, to.lat, to.lng);
+  const fetchFn = options.fetch || globalThis.fetch;
+  if (typeof fetchFn !== 'function') {
+    return { ...fallback, fallbackReason: 'fetch_unavailable' };
+  }
+
+  const base = (options.osrmUrl || process.env.OSRM_URL || DEFAULT_OSRM_URL).replace(/\/$/, '');
+  const coords = `${from.lng},${from.lat};${to.lng},${to.lat}`;
+  const url = `${base}/route/v1/driving/${coords}?overview=false`;
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 4000);
+    const response = await fetchFn(url, {
+      headers: {
+        'User-Agent': USER_AGENT,
+        Accept: 'application/json',
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      return { ...fallback, fallbackReason: `osrm_http_${response.status}` };
+    }
+
+    const payload = await response.json();
+    const route = payload?.routes?.[0];
+    if (!route || !Number.isFinite(route.distance)) {
+      return { ...fallback, fallbackReason: 'osrm_empty' };
+    }
+
+    return {
+      distance: route.distance / 1000,
+      unit: 'km',
+      source: 'osrm',
+      durationSeconds: Number.isFinite(route.duration) ? route.duration : undefined,
+      haversineKm: fallback.distance,
+    };
+  } catch (err) {
+    return { ...fallback, fallbackReason: err.name === 'AbortError' ? 'osrm_timeout' : 'osrm_error' };
+  }
+}
+
 module.exports = {
   calculateDistance,
+  validateCoordinates,
+  parseCoordinate,
+  toGeoJSONPoint,
+  normalizeFarmLocation,
   isWithinGeofence,
   findNearest,
   filterByRadius,
   validateAgentLocation,
   getBoundingBox,
   formatLocation,
+  appendKenya,
+  geocodeNominatim,
+  getDrivingDistance,
+  USER_AGENT,
 };

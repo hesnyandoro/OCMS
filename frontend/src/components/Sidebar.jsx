@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Truck, DollarSign, FileText, UserPlus, Coffee, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, Truck, DollarSign, FileText, UserPlus, Coffee, Settings, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const allNavItems = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard", roles: ['admin', 'fieldagent'] },
     { name: "Farmers", icon: Users, path: "/dashboard/farmers", roles: ['admin', 'fieldagent'] },
+    { name: "Farm Map", icon: MapPin, path: "/dashboard/farmers/map", roles: ['admin', 'fieldagent'] },
     { name: "Deliveries", icon: Truck, path: "/dashboard/deliveries", roles: ['admin', 'fieldagent'] },
     { name: "Payments", icon: DollarSign, path: "/dashboard/payments", roles: ['admin', 'fieldagent'] },
     { name: "Reports", icon: FileText, path: "/dashboard/reports", roles: ['admin'] },
@@ -14,6 +15,10 @@ const allNavItems = [
 
 const isItemActive = (pathname, path) => {
     if (path === '/dashboard') return pathname === '/dashboard';
+    if (path === '/dashboard/farmers/map') return pathname === path;
+    if (path === '/dashboard/farmers') {
+        return pathname === path || (pathname.startsWith(`${path}/`) && pathname !== '/dashboard/farmers/map');
+    }
     return pathname === path || pathname.startsWith(`${path}/`);
 };
 

@@ -36,6 +36,7 @@ const ensureCriticalIndexes = async () => {
     const Trip = require('../models/Trip');
     const TripPing = require('../models/TripPing');
     const Delivery = require('../models/Delivery');
+    const Farmer = require('../models/Farmer');
 
     await Session.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }).catch(() => {});
     await Session.collection.createIndex({ userId: 1 }).catch(() => {});
@@ -53,6 +54,8 @@ const ensureCriticalIndexes = async () => {
     await TripPing.collection.createIndex({ recordedAt: 1 }, { expireAfterSeconds: 48 * 60 * 60 }).catch(() => {});
 
     await Delivery.collection.createIndex({ trackingStatus: 1, region: 1 }).catch(() => {});
+    await Farmer.collection.createIndex({ location: '2dsphere' }, { sparse: true }).catch(() => {});
+    await Farmer.collection.createIndex({ weighStation: 1 }).catch(() => {});
 
     cached.indexesCreated = true;
   } catch (err) {

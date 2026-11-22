@@ -81,15 +81,24 @@ const Farmers = () => {
             <h1 className="text-3xl font-bold text-[#1B4332] dark:text-gray-100">Farmers</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">Manage and view registered farmers</p>
           </div>
-          {canCreate(authState?.role, 'farmers') && (
+          <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => navigate('/dashboard/farmers/new')}
-              className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
+              onClick={() => navigate('/dashboard/farmers/map')}
+              className="flex items-center gap-2 bg-white dark:bg-gray-700 text-[#1B4332] dark:text-gray-100 border border-[#1B4332] dark:border-gray-500 px-6 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
             >
-              <Plus size={20} />
-              <span>Add New Farmer</span>
+              <MapPin size={20} />
+              <span>Map view</span>
             </button>
-          )}
+            {canCreate(authState?.role, 'farmers') && (
+              <button
+                onClick={() => navigate('/dashboard/farmers/new')}
+                className="flex items-center gap-2 bg-[#1B4332] dark:bg-dark-green-primary text-white px-6 py-3 rounded-lg hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover transition-all shadow-md hover:shadow-lg"
+              >
+                <Plus size={20} />
+                <span>Add New Farmer</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

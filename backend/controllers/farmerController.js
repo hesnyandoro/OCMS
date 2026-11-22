@@ -3,6 +3,9 @@ const Farmer = require('../models/Farmer');
 const User = require('../models/User');
 const Delivery = require('../models/Delivery');
 const Payment = require('../models/Payment');
+const { normalizeFarmLocation } = require('../utils/geolocation');
+
+const FARMER_FIELDS = ['name', 'cellNumber', 'nationalId', 'season', 'weighStation'];
 
 function duplicateFarmerMessage(err) {
   if (err?.code !== 11000) return null;
@@ -12,19 +15,55 @@ function duplicateFarmerMessage(err) {
   return 'A farmer with these details already exists';
 }
 
+function buildFarmerPayload(body) {
+  const payload = {};
+  for (const field of FARMER_FIELDS) {
+    if (body[field] !== undefined) payload[field] = body[field];
+  }
+
+  if (body.farmLocation !== undefined) {
+    const normalized = normalizeFarmLocation(body.farmLocation);
+    if (normalized.error) {
+      return { error: normalized.error };
+    }
+    if (normalized.value) {
+      payload.farmLocation = normalized.value;
+    }
+    if (normalized.location) {
+      payload.location = normalized.location;
+    }
+  }
+
+  return { payload };
+}
+
+async function assignedRegionFor(userId) {
+  const user = await User.findById(userId);
+  return user?.assignedRegion || null;
+}
+
+function regionDenied(assignedRegion, weighStation) {
+  if (!assignedRegion) return null;
+  if (weighStation !== assignedRegion) {
+    return `You can only register farmers in your assigned region: ${assignedRegion}`;
+  }
+  return null;
+}
+
 exports.getFarmers = async (req, res) => {
   try {
     let query = {};
 
-    // Field agents can only see farmers in their assigned region
     if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      // If field agent has assigned region, filter by it
-      if (user && user.assignedRegion) {
-        // Filter by region (assuming weighStation represents region)
-        query.weighStation = user.assignedRegion;
+      const assignedRegion = await assignedRegionFor(req.user.id);
+      if (assignedRegion) {
+        query.weighStation = assignedRegion;
       }
-      // If no region assigned, they can see all farmers
+    }
+
+    if (req.query.hasLocation === '1' || req.query.hasLocation === 'true') {
+      query['farmLocation.lat'] = { $exists: true, $ne: null };
+      query['farmLocation.lng'] = { $exists: true, $ne: null };
     }
 
     const requestedLimit = parseInt(req.query.limit, 10);
@@ -47,10 +86,9 @@ exports.getFarmer = async (req, res) => {
     const farmer = await Farmer.findById(req.params.id).populate('createdBy', 'username name');
     if (!farmer) return res.status(404).json({ msg: 'Farmer not found' });
 
-    // Field agents can only view farmers in their region
     if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      if (farmer.weighStation !== user.assignedRegion) {
+      const assignedRegion = await assignedRegionFor(req.user.id);
+      if (assignedRegion && farmer.weighStation !== assignedRegion) {
         return res.status(403).json({ msg: 'Access denied. Farmer not in your assigned region' });
       }
     }
@@ -67,33 +105,27 @@ exports.createFarmer = async (req, res) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
-    // Add createdBy field
+    const built = buildFarmerPayload(req.body);
+    if (built.error) return res.status(400).json({ msg: built.error });
+
     const farmerData = {
-      ...req.body,
-      createdBy: req.user.id
+      ...built.payload,
+      createdBy: req.user.id,
     };
 
-    // Field agents with assigned region can only create farmers in that region
     if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      if (user && user.assignedRegion) {
-        // Ensure the weighStation matches assigned region
-        if (farmerData.weighStation !== user.assignedRegion) {
-          return res.status(403).json({ 
-            msg: `You can only register farmers in your assigned region: ${user.assignedRegion}` 
-          });
-        }
-      }
-      // If no region assigned, they can create farmers in any region
+      const assignedRegion = await assignedRegionFor(req.user.id);
+      const denied = regionDenied(assignedRegion, farmerData.weighStation);
+      if (denied) return res.status(403).json({ msg: denied });
     }
 
     const farmer = new Farmer(farmerData);
     await farmer.save();
-    
+
     const populatedFarmer = await Farmer.findById(farmer._id).populate('createdBy', 'username name');
     res.json(populatedFarmer);
   } catch (err) {
-    console.error("FARMER CREATION FAILED", err);
+    console.error('FARMER CREATION FAILED', err);
     if (err.name === 'ValidationError') {
       return res.status(400).json({ msg: 'Validation failed on required fields', errors: err.errors });
     }
@@ -104,27 +136,37 @@ exports.createFarmer = async (req, res) => {
 };
 
 exports.updateFarmer = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
   try {
-    const updatedFarmer = await Farmer.findByIdAndUpdate(req.params.id,
-      {$set: req.body },
+    const built = buildFarmerPayload(req.body);
+    if (built.error) return res.status(400).json({ msg: built.error });
+
+    if (req.user.role === 'fieldagent' && built.payload.weighStation) {
+      const assignedRegion = await assignedRegionFor(req.user.id);
+      const denied = regionDenied(assignedRegion, built.payload.weighStation);
+      if (denied) return res.status(403).json({ msg: denied });
+    }
+
+    const updatedFarmer = await Farmer.findByIdAndUpdate(
+      req.params.id,
+      { $set: built.payload },
       { new: true, runValidators: true }
     );
-
 
     if (!updatedFarmer) {
       return res.status(404).json({ msg: 'Farmer not found' });
     }
     res.json(updatedFarmer);
-    
   } catch (err) {
-    console.error("FARMER UPDATE FAILED", err.message);
+    console.error('FARMER UPDATE FAILED', err.message);
     if (err.name === 'CastError' || err.name === 'ValidationError') {
       return res.status(400).json({ msg: 'Invalid ID or validation failed' });
     }
     const duplicateMessage = duplicateFarmerMessage(err);
     if (duplicateMessage) return res.status(400).json({ msg: duplicateMessage });
     res.status(500).send('Server error');
-
   }
 };
 
@@ -135,7 +177,7 @@ exports.deleteFarmer = async (req, res) => {
 
     const [deliveryCount, paymentCount] = await Promise.all([
       Delivery.countDocuments({ farmer: farmer._id }),
-      Payment.countDocuments({ farmer: farmer._id })
+      Payment.countDocuments({ farmer: farmer._id }),
     ]);
     if (deliveryCount > 0 || paymentCount > 0) {
       const parts = [];
@@ -146,7 +188,7 @@ exports.deleteFarmer = async (req, res) => {
         parts.push(`${paymentCount} ${paymentCount === 1 ? 'payment' : 'payments'}`);
       }
       return res.status(400).json({
-        msg: `This farmer still has ${parts.join(' and ')}. Remove those records before deleting the farmer.`
+        msg: `This farmer still has ${parts.join(' and ')}. Remove those records before deleting the farmer.`,
       });
     }
 
@@ -158,7 +200,6 @@ exports.deleteFarmer = async (req, res) => {
   }
 };
 
-// Search farmers by name (for searchable dropdown)
 exports.searchFarmers = async (req, res) => {
   try {
     const { q } = req.query;
@@ -167,25 +208,26 @@ exports.searchFarmers = async (req, res) => {
     }
 
     let query = {
-      name: { $regex: q, $options: 'i' }
+      name: { $regex: q, $options: 'i' },
     };
 
-    // Field agents can only search farmers in their assigned region
     if (req.user.role === 'fieldagent') {
-      const user = await User.findById(req.user.id);
-      if (user && user.assignedRegion) {
-        query.weighStation = user.assignedRegion;
+      const assignedRegion = await assignedRegionFor(req.user.id);
+      if (assignedRegion) {
+        query.weighStation = assignedRegion;
       }
     }
 
     const farmers = await Farmer.find(query)
-      .select('_id name cellNumber weighStation')
+      .select('_id name cellNumber weighStation farmLocation')
       .limit(20)
       .sort({ name: 1 });
-    
+
     res.json(farmers);
   } catch (err) {
     console.error('Search farmers error:', err);
     res.status(500).send('Server error');
   }
-}; 
+};
+
+exports.buildFarmerPayload = buildFarmerPayload;
