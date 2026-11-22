@@ -76,6 +76,11 @@ describe('appendKenya', () => {
   it('does not duplicate Kenya', () => {
     assert.equal(geo.appendKenya('Kericho, Kenya'), 'Kericho, Kenya');
   });
+
+  it('strips a Kenya suffix without a regular expression on the query', () => {
+    assert.equal(geo.stripKenyaSuffix('Kericho, Kenya'), 'Kericho');
+    assert.equal(geo.stripKenyaSuffix(`${' '.repeat(50)}xyz`), 'xyz');
+  });
 });
 
 describe('geocodeNominatim', () => {

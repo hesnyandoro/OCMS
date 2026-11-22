@@ -191,11 +191,37 @@ function formatLocation(lat, lng, address = null) {
   };
 }
 
+const MAX_GEOCODE_QUERY_LENGTH = 200;
+
+function clampQuery(query) {
+  return String(query || '').trim().slice(0, MAX_GEOCODE_QUERY_LENGTH);
+}
+
+function stripKenyaSuffix(query) {
+  const trimmed = clampQuery(query);
+  const lower = trimmed.toLowerCase();
+  if (lower.endsWith(', kenya')) return trimmed.slice(0, -7).trim();
+  if (lower.endsWith(' kenya')) return trimmed.slice(0, -6).trim();
+  if (lower.endsWith('kenya')) return trimmed.slice(0, -5).trim();
+  return trimmed;
+}
+
 function appendKenya(query) {
-  const trimmed = String(query || '').trim();
+  const trimmed = clampQuery(query);
   if (!trimmed) return trimmed;
-  if (/\bkenya\b/i.test(trimmed)) return trimmed;
+  if (stripKenyaSuffix(trimmed) !== trimmed) return trimmed;
   return `${trimmed}, Kenya`;
+}
+
+function allowedOrigin(raw, fallback) {
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return fallback;
+    if (!/^[a-z0-9.-]+$/i.test(parsed.hostname)) return fallback;
+    return `${parsed.protocol}//${parsed.hostname}`;
+  } catch {
+    return fallback;
+  }
 }
 
 function rememberGeocode(key, value) {
@@ -219,7 +245,7 @@ async function waitForNominatimSlot() {
  */
 async function geocodeNominatim(query, options = {}) {
   const q = appendKenya(query);
-  if (!q || q.replace(/,?\s*kenya\s*$/i, '').trim().length < 3) {
+  if (stripKenyaSuffix(q).length < 3) {
     return { error: 'Enter at least 3 characters to search' };
   }
 
@@ -233,8 +259,12 @@ async function geocodeNominatim(query, options = {}) {
     return { error: 'Geocoding is not available in this environment' };
   }
 
-  const base = options.nominatimUrl || process.env.NOMINATIM_URL || DEFAULT_NOMINATIM_URL;
-  const url = new URL('/search', `${base.replace(/\/$/, '')}/`);
+  const origin = allowedOrigin(
+    options.nominatimUrl || process.env.NOMINATIM_URL || DEFAULT_NOMINATIM_URL,
+    DEFAULT_NOMINATIM_URL
+  );
+  const url = new URL('/search', `${origin}/`);
+  url.hostname = new URL(origin).hostname;
   url.searchParams.set('q', q);
   url.searchParams.set('format', 'json');
   url.searchParams.set('limit', String(options.limit || 5));
@@ -298,14 +328,23 @@ async function getDrivingDistance(fromLat, fromLng, toLat, toLng, options = {}) 
     return { ...fallback, fallbackReason: 'fetch_unavailable' };
   }
 
-  const base = (options.osrmUrl || process.env.OSRM_URL || DEFAULT_OSRM_URL).replace(/\/$/, '');
-  const coords = `${from.lng},${from.lat};${to.lng},${to.lat}`;
-  const url = `${base}/route/v1/driving/${coords}?overview=false`;
+  const origin = allowedOrigin(
+    options.osrmUrl || process.env.OSRM_URL || DEFAULT_OSRM_URL,
+    DEFAULT_OSRM_URL
+  );
+  const lng1 = from.lng.toFixed(8);
+  const lat1 = from.lat.toFixed(8);
+  const lng2 = to.lng.toFixed(8);
+  const lat2 = to.lat.toFixed(8);
+  const url = new URL(`https://router.project-osrm.org/route/v1/driving/${lng1},${lat1};${lng2},${lat2}`);
+  url.protocol = new URL(origin).protocol;
+  url.hostname = new URL(origin).hostname;
+  url.search = 'overview=false';
 
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 4000);
-    const response = await fetchFn(url, {
+    const response = await fetchFn(url.toString(), {
       headers: {
         'User-Agent': USER_AGENT,
         Accept: 'application/json',
@@ -349,6 +388,7 @@ module.exports = {
   getBoundingBox,
   formatLocation,
   appendKenya,
+  stripKenyaSuffix,
   geocodeNominatim,
   getDrivingDistance,
   USER_AGENT,

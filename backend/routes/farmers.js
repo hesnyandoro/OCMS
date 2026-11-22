@@ -1,9 +1,18 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const { body } = require('express-validator');
 const { verifyToken, authorize } = require('../middleware/auth');
 const { getFarmers, getFarmer, createFarmer, updateFarmer, deleteFarmer, searchFarmers } = require('../controllers/farmerController');
 
 const router = express.Router();
+
+const farmerWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many farmer updates. Wait a moment and try again.' },
+});
 
 const farmLocationValidators = [
   body('farmLocation.lat')
@@ -42,9 +51,9 @@ router.get('/search', verifyToken, authorize('admin', 'fieldagent'), searchFarme
 router.get('/', verifyToken, authorize('admin', 'fieldagent'), getFarmers);
 router.get('/:id', verifyToken, authorize('admin', 'fieldagent'), getFarmer);
 
-router.post('/', verifyToken, authorize('admin', 'fieldagent'), createFarmerValidators, createFarmer);
+router.post('/', farmerWriteLimiter, verifyToken, authorize('admin', 'fieldagent'), createFarmerValidators, createFarmer);
 
-router.put('/:id', verifyToken, authorize('admin'), updateFarmerValidators, updateFarmer);
+router.put('/:id', farmerWriteLimiter, verifyToken, authorize('admin'), updateFarmerValidators, updateFarmer);
 router.delete('/:id', verifyToken, authorize('admin'), deleteFarmer);
 
 module.exports = router;
