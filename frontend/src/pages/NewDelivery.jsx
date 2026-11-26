@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import api from '../services/api';
+import { calculateDistance } from '../services/geolocationService';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
 import ReactDatePicker from 'react-datepicker';
@@ -34,8 +35,9 @@ const NewDelivery = () => {
   const [selectedWeigh, setSelectedWeigh] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [_selectedFarmer, setSelectedFarmer] = useState(null);
+  const [selectedFarmer, setSelectedFarmer] = useState(null);
   const [pickupLocation, setPickupLocation] = useState(null);
+  const [transport, setTransport] = useState(null);
   const [drivers, setDrivers] = useState([]);
   const dropdownRef = useRef(null);
   
@@ -91,13 +93,14 @@ const NewDelivery = () => {
     setValue('farmer', farmer._id);
     setShowDropdown(false);
     setSelectedWeigh('');
-    
+    setTransport(null);
+
     try {
       const res = await api.get(`/farmers/${farmer._id}`);
       const f = res.data;
+      setSelectedFarmer(f);
       if (f?.weighStation) {
         setSelectedWeigh(f.weighStation);
-        // Auto-fill region field with farmer's weighStation if user has no assigned region
         if (!userHasRegion) {
           setValue('region', f.weighStation);
         }
@@ -106,6 +109,26 @@ const NewDelivery = () => {
       console.error('Load farmer failed', err);
     }
   };
+
+  useEffect(() => {
+    const farm = selectedFarmer?.farmLocation;
+    if (!pickupLocation?.lat || !farm?.lat || !farm?.lng) {
+      setTransport(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+    calculateDistance(farm.lat, farm.lng, pickupLocation.lat, pickupLocation.lng)
+      .then((payload) => {
+        if (!cancelled) setTransport(payload?.data || null);
+      })
+      .catch(() => {
+        if (!cancelled) setTransport(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedFarmer, pickupLocation]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -238,6 +261,14 @@ const NewDelivery = () => {
               initialLocation={pickupLocation}
             />
           </div>
+
+          {transport?.distance != null && (
+            <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-sm text-emerald-900 dark:text-emerald-200">
+              Transport distance: <strong>{Number(transport.distance).toFixed(1)} km</strong>
+              {transport.source === 'osrm' ? ' driving (OSRM)' : ' straight-line (Haversine fallback)'}
+              {transport.durationSeconds ? ` · about ${Math.round(transport.durationSeconds / 60)} min` : ''}
+            </div>
+          )}
 
           <div className="d-flex gap-2">
             <button className="btn bg-[#1B4332] dark:bg-dark-green-primary hover:bg-[#2D6A4F] dark:hover:bg-dark-green-hover text-white border-0" type="submit">Save Delivery</button>

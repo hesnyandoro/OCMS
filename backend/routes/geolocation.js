@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { verifyToken } = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
+const { verifyToken, authorize } = require('../middleware/auth');
 const {
   getNearbyFarmers,
   getNearestDeliveries,
@@ -7,32 +8,40 @@ const {
   calculateDistanceBetweenPoints,
   recordPickupLocation,
   recordDropoffLocation,
+  geocodeRegion,
 } = require('../controllers/geolocationController');
 
-/**
- * Public geolocation endpoints (no auth required for distance calculations)
- */
+const geocodeLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many geocoding requests. Wait a moment and try again.' },
+});
 
-// Find farmers near a location
-router.get('/farmers/nearby', getNearbyFarmers);
+const distanceLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many distance requests. Wait a moment and try again.' },
+});
 
-// Calculate distance between two points
-router.get('/distance', calculateDistanceBetweenPoints);
+const geoLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { msg: 'Too many geolocation requests. Wait a moment and try again.' },
+});
 
-/**
- * Protected geolocation endpoints (require authentication)
- */
+router.get('/farmers/nearby', geoLimiter, verifyToken, authorize('admin', 'fieldagent'), getNearbyFarmers);
+router.get('/distance', distanceLimiter, verifyToken, calculateDistanceBetweenPoints);
+router.get('/geocode', geocodeLimiter, verifyToken, geocodeRegion);
 
-// Find nearest deliveries to driver
-router.get('/deliveries/nearest', verifyToken, getNearestDeliveries);
-
-// Validate user's current location against assigned region
-router.post('/validate-location', verifyToken, validateUserLocation);
-
-// Record pickup location for a delivery
-router.post('/deliveries/:id/pickup', verifyToken, recordPickupLocation);
-
-// Record dropoff location for a delivery
-router.post('/deliveries/:id/dropoff', verifyToken, recordDropoffLocation);
+router.get('/deliveries/nearest', geoLimiter, verifyToken, getNearestDeliveries);
+router.post('/validate-location', geoLimiter, verifyToken, validateUserLocation);
+router.post('/deliveries/:id/pickup', geoLimiter, verifyToken, recordPickupLocation);
+router.post('/deliveries/:id/dropoff', geoLimiter, verifyToken, recordDropoffLocation);
 
 module.exports = router;

@@ -70,6 +70,7 @@ export const getAccessibleNavItems = (role) => {
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', roles: ['admin', 'fieldagent'] },
     { name: 'Farmers', path: '/dashboard/farmers', roles: ['admin', 'fieldagent'] },
+    { name: 'Farm Map', path: '/dashboard/farmers/map', roles: ['admin', 'fieldagent'] },
     { name: 'Deliveries', path: '/dashboard/deliveries', roles: ['admin', 'fieldagent'] },
     { name: 'Payments', path: '/dashboard/payments', roles: ['admin', 'fieldagent'] },
     { name: 'Reports', path: '/dashboard/reports', roles: ['admin'] },

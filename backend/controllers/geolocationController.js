@@ -3,6 +3,19 @@ const Delivery = require('../models/Delivery');
 const User = require('../models/User');
 const geo = require('../utils/geolocation');
 
+function mapFarmerForGeo(farmer) {
+  return {
+    _id: farmer._id,
+    name: farmer.name,
+    lat: farmer.farmLocation?.lat,
+    lng: farmer.farmLocation?.lng,
+    address: farmer.farmLocation?.address,
+    weighStation: farmer.weighStation,
+    cellNumber: farmer.cellNumber,
+    season: farmer.season,
+  };
+}
+
 /**
  * Find nearby farmers within a specified radius
  * GET /geolocation/farmers/nearby?lat=X&lng=Y&radius=50
@@ -10,33 +23,23 @@ const geo = require('../utils/geolocation');
 exports.getNearbyFarmers = async (req, res) => {
   try {
     const { lat, lng, radius = 50 } = req.query;
-
-    if (!lat || !lng) {
-      return res
-        .status(400)
-        .json({ msg: 'Latitude and longitude are required' });
+    const coords = geo.validateCoordinates(lat, lng);
+    if (!coords.ok) {
+      return res.status(400).json({ msg: coords.error });
     }
 
-    // Fetch all farmers with farm location
+    const radiusKm = parseFloat(radius);
+    // Use stored lat/lng so existing farmers without a GeoJSON `location` still match.
     const farmers = await Farmer.find({
-      'farmLocation.lat': { $exists: true },
-      'farmLocation.lng': { $exists: true },
+      'farmLocation.lat': { $exists: true, $ne: null },
+      'farmLocation.lng': { $exists: true, $ne: null },
     }).populate('createdBy', 'name');
 
-    // Filter by radius
     const nearbyFarmers = geo.filterByRadius(
-      parseFloat(lat),
-      parseFloat(lng),
-      farmers.map((f) => ({
-        _id: f._id,
-        name: f.name,
-        lat: f.farmLocation.lat,
-        lng: f.farmLocation.lng,
-        address: f.farmLocation.address,
-        weighStation: f.weighStation,
-        cellNumber: f.cellNumber,
-      })),
-      parseFloat(radius)
+      coords.lat,
+      coords.lng,
+      farmers.map(mapFarmerForGeo),
+      Number.isFinite(radiusKm) ? radiusKm : 50
     );
 
     res.json({
@@ -57,33 +60,30 @@ exports.getNearbyFarmers = async (req, res) => {
 exports.getNearestDeliveries = async (req, res) => {
   try {
     const { lat, lng, limit = 10 } = req.query;
-
-    if (!lat || !lng) {
-      return res
-        .status(400)
-        .json({ msg: 'Latitude and longitude are required' });
+    const coords = geo.validateCoordinates(lat, lng);
+    if (!coords.ok) {
+      return res.status(400).json({ msg: coords.error });
     }
 
-    // Fetch pending deliveries (no pickup location yet)
     const pendingDeliveries = await Delivery.find({
       pickupLocation: { $exists: false },
     })
       .populate('farmer', 'name farmLocation weighStation')
       .lean();
 
-    // Add distance to farmer locations
     const deliveriesWithDistance = pendingDeliveries
+      .filter((d) => Number.isFinite(d.farmer?.farmLocation?.lat) && Number.isFinite(d.farmer?.farmLocation?.lng))
       .map((d) => ({
         ...d,
         distance: geo.calculateDistance(
-          parseFloat(lat),
-          parseFloat(lng),
+          coords.lat,
+          coords.lng,
           d.farmer.farmLocation.lat,
           d.farmer.farmLocation.lng
         ),
       }))
       .sort((a, b) => a.distance - b.distance)
-      .slice(0, parseInt(limit));
+      .slice(0, parseInt(limit, 10));
 
     res.json({
       success: true,
@@ -99,17 +99,14 @@ exports.getNearestDeliveries = async (req, res) => {
 /**
  * Validate if user's current location is within their assigned region
  * POST /geolocation/validate-location
- * Body: { lat, lng }
  */
 exports.validateUserLocation = async (req, res) => {
   try {
     const { lat, lng } = req.body;
     const userId = req.user.id;
-
-    if (!lat || !lng) {
-      return res
-        .status(400)
-        .json({ msg: 'Latitude and longitude are required' });
+    const coords = geo.validateCoordinates(lat, lng);
+    if (!coords.ok) {
+      return res.status(400).json({ msg: coords.error });
     }
 
     const user = await User.findById(userId);
@@ -120,8 +117,8 @@ exports.validateUserLocation = async (req, res) => {
     }
 
     const validation = geo.validateAgentLocation(
-      parseFloat(lat),
-      parseFloat(lng),
+      coords.lat,
+      coords.lng,
       user.regionBounds
     );
 
@@ -136,32 +133,21 @@ exports.validateUserLocation = async (req, res) => {
 };
 
 /**
- * Calculate distance between two points
+ * Driving distance via OSRM with Haversine fallback.
  * GET /geolocation/distance?fromLat=X&fromLng=Y&toLat=X&toLng=Y
  */
 exports.calculateDistanceBetweenPoints = async (req, res) => {
   try {
     const { fromLat, fromLng, toLat, toLng } = req.query;
 
-    if (!fromLat || !fromLng || !toLat || !toLng) {
-      return res.status(400).json({
-        msg: 'All coordinates (fromLat, fromLng, toLat, toLng) are required',
-      });
+    const result = await geo.getDrivingDistance(fromLat, fromLng, toLat, toLng);
+    if (result.error) {
+      return res.status(400).json({ msg: result.error });
     }
-
-    const distance = geo.calculateDistance(
-      parseFloat(fromLat),
-      parseFloat(fromLng),
-      parseFloat(toLat),
-      parseFloat(toLng)
-    );
 
     res.json({
       success: true,
-      data: {
-        distance,
-        unit: 'km',
-      },
+      data: result,
     });
   } catch (err) {
     console.error('Failed to calculate distance:', err);
@@ -170,25 +156,57 @@ exports.calculateDistanceBetweenPoints = async (req, res) => {
 };
 
 /**
+ * Nominatim proxy — identifies the app and throttles requests.
+ * GET /geolocation/geocode?q=Kericho
+ */
+exports.geocodeRegion = async (req, res) => {
+  try {
+    const query = req.query.q;
+    if (!query || String(query).trim().length < 3) {
+      return res.status(400).json({ msg: 'Enter at least 3 characters to search' });
+    }
+
+    const result = await geo.geocodeNominatim(query);
+    if (result.error) {
+      return res.status(502).json({ msg: result.error, results: [] });
+    }
+
+    if (!result.results.length) {
+      return res.json({
+        success: true,
+        results: [],
+        msg: 'No matching place found in Kenya. Enter coordinates manually or pick a point on the map.',
+      });
+    }
+
+    res.json({
+      success: true,
+      results: result.results,
+      cached: Boolean(result.cached),
+    });
+  } catch (err) {
+    console.error('Failed to geocode region:', err);
+    res.status(500).json({ msg: 'Server error while geocoding region' });
+  }
+};
+
+/**
  * Record pickup location for a delivery
  * POST /geolocation/deliveries/:id/pickup
- * Body: { lat, lng, address }
  */
 exports.recordPickupLocation = async (req, res) => {
   try {
     const { id } = req.params;
     const { lat, lng, address } = req.body;
-
-    if (!lat || !lng) {
-      return res
-        .status(400)
-        .json({ msg: 'Latitude and longitude are required' });
+    const coords = geo.validateCoordinates(lat, lng);
+    if (!coords.ok) {
+      return res.status(400).json({ msg: coords.error });
     }
 
     const delivery = await Delivery.findByIdAndUpdate(
       id,
       {
-        pickupLocation: geo.formatLocation(lat, lng, address),
+        pickupLocation: geo.formatLocation(coords.lat, coords.lng, address),
       },
       { new: true }
     );
@@ -212,23 +230,20 @@ exports.recordPickupLocation = async (req, res) => {
 /**
  * Record dropoff location for a delivery
  * POST /geolocation/deliveries/:id/dropoff
- * Body: { lat, lng, address }
  */
 exports.recordDropoffLocation = async (req, res) => {
   try {
     const { id } = req.params;
     const { lat, lng, address } = req.body;
-
-    if (!lat || !lng) {
-      return res
-        .status(400)
-        .json({ msg: 'Latitude and longitude are required' });
+    const coords = geo.validateCoordinates(lat, lng);
+    if (!coords.ok) {
+      return res.status(400).json({ msg: coords.error });
     }
 
     const delivery = await Delivery.findByIdAndUpdate(
       id,
       {
-        dropoffLocation: geo.formatLocation(lat, lng, address),
+        dropoffLocation: geo.formatLocation(coords.lat, coords.lng, address),
       },
       { new: true }
     );

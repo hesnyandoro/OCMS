@@ -12,6 +12,7 @@ const TrackTrip = lazy(() => import('./pages/TrackTrip.jsx'));
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Farmers = lazy(() => import('./pages/Farmers.jsx'));
 const NewFarmer = lazy(() => import('./pages/NewFarmer.jsx'));
+const FarmerMap = lazy(() => import('./pages/FarmerMap.jsx'));
 const Deliveries = lazy(() => import('./pages/Deliveries.jsx'));
 const NewDelivery = lazy(() => import('./pages/NewDelivery.jsx'));
 const EditDelivery = lazy(() => import('./pages/EditDelivery.jsx'));
@@ -52,6 +53,7 @@ const App = () => {
                   <Routes>
                     <Route path="" element={<Dashboard />} />
                     <Route path="farmers/new" element={<NewFarmer />} />
+                    <Route path="farmers/map" element={<FarmerMap />} />
                     <Route path="farmers" element={<Farmers />} />
                     <Route path="deliveries" element={<Deliveries />} />
                     <Route path="deliveries/new" element={<NewDelivery />} />
