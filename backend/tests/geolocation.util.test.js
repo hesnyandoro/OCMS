@@ -79,7 +79,13 @@ describe('appendKenya', () => {
 
   it('strips a Kenya suffix without a regular expression on the query', () => {
     assert.equal(geo.stripKenyaSuffix('Kericho, Kenya'), 'Kericho');
+    assert.equal(geo.stripKenyaSuffix('Kericho,Kenya'), 'Kericho');
     assert.equal(geo.stripKenyaSuffix(`${' '.repeat(50)}xyz`), 'xyz');
+  });
+
+  it('keeps place names that merely end with the letters kenya', () => {
+    assert.equal(geo.stripKenyaSuffix('Lukenya'), 'Lukenya');
+    assert.equal(geo.appendKenya('Lukenya'), 'Lukenya, Kenya');
   });
 });
 
@@ -101,6 +107,22 @@ describe('geocodeNominatim', () => {
     assert.match(calls[0].url, /q=Kericho%2C\+Kenya/);
     assert.match(calls[0].url, /countrycodes=ke/);
     assert.equal(calls[0].options.headers['User-Agent'], geo.USER_AGENT);
+  });
+
+  it('geocodes a place whose name ends with kenya', async () => {
+    const calls = [];
+    const fetchFn = async (url) => {
+      calls.push(url);
+      return {
+        ok: true,
+        json: async () => [{ display_name: 'Lukenya, Machakos, Kenya', lat: '-1.47', lon: '37.07', type: 'locality' }],
+      };
+    };
+
+    const result = await geo.geocodeNominatim('Lukenya', { fetch: fetchFn, skipThrottle: true, skipCache: true });
+    assert.equal(result.error, undefined);
+    assert.equal(result.results.length, 1);
+    assert.match(calls[0], /q=Lukenya%2C\+Kenya/);
   });
 
   it('returns a not-found-friendly empty list', async () => {

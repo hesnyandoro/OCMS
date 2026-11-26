@@ -200,9 +200,10 @@ function clampQuery(query) {
 function stripKenyaSuffix(query) {
   const trimmed = clampQuery(query);
   const lower = trimmed.toLowerCase();
+  // Only a separate country token. "Lukenya" ends in those letters but is a place name.
   if (lower.endsWith(', kenya')) return trimmed.slice(0, -7).trim();
+  if (lower.endsWith(',kenya')) return trimmed.slice(0, -6).trim();
   if (lower.endsWith(' kenya')) return trimmed.slice(0, -6).trim();
-  if (lower.endsWith('kenya')) return trimmed.slice(0, -5).trim();
   return trimmed;
 }
 
